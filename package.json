@@ -4,11 +4,19 @@
   "description": "Zeus webpack helpers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec test/plugins/*.js",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec test/plugins/*.js"
   },
   "author": "Kevin Decker",
   "license": "private",
   "private": true,
   "dependencies": {
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "istanbul": "^0.3.2",
+    "mocha": "^1.21.4",
+    "temp": "^0.8.1",
+    "webpack": "^1.4.0-beta5"
   }
 }
