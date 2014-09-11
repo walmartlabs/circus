@@ -1,0 +1,3 @@
+Zeus.loader([]);
+
+Zeus.loader();

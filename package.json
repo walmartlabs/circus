@@ -11,6 +11,7 @@
   "license": "private",
   "private": true,
   "dependencies": {
+    "webpack-core": "^0.4.8"
   },
   "devDependencies": {
     "chai": "^1.9.1",
