@@ -4,8 +4,8 @@
   "description": "Zeus webpack helpers",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec test/plugins/*.js",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec test/plugins/*.js"
+    "test": "mocha --reporter spec test/plugins/*.js test/loaders/*.js",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec test/plugins/*.js test/loaders/*.js"
   },
   "author": "Kevin Decker",
   "license": "private",
