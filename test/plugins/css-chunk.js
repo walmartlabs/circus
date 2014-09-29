@@ -46,12 +46,38 @@ describe('css chunk plugin', function() {
       expect(output).to.not.match(/\.baz/);
 
       // Verify the file records
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', 'bundle.css']);
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css']);
 
       // Verify the actual css content
-      output = fs.readFileSync(outputDir + '/bundle.css').toString();
+      output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
       expect(output).to.match(/\.foo/);
       expect(output).to.match(/\.baz/);
+
+      done();
+    });
+  });
+
+  it('should include chunk hash in the path name', function(done) {
+    var cssChunkPlugin = new CssChunkPlugin(),
+        entry = path.resolve(__dirname + '/../fixtures/css-chunk.js');
+
+    webpack({
+      entry: entry,
+      output: {
+        path: outputDir,
+        chunkFilename: '[hash:2].[id].[chunkhash:2].bundle.[hash:4].js'
+      },
+
+      plugins: [
+        cssChunkPlugin
+      ]
+    }, function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      // Verify the file records
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', 'c6.0.fd.bundle.c66f.css']);
 
       done();
     });
