@@ -1,3 +1,5 @@
+'use strict';
+
 /*
   gulpfile.js
   ===========
@@ -7,4 +9,7 @@
   To add a new task, simply add a new task file to ./build/tasks.
 */
 
-require('./build');
+var requireDir = require('require-dir');
+
+// Require all tasks in gulp/tasks, including subfolders
+requireDir('./build/tasks', { recurse: true });
