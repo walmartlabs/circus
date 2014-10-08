@@ -18,6 +18,13 @@
     "istanbul": "^0.3.2",
     "mocha": "^1.21.4",
     "temp": "^0.8.1",
-    "webpack": "^1.4.0-beta5"
+    "webpack": "^1.4.0-beta5",
+    "require-dir": "^0.1.0",
+
+    "gulp": "^3.8.8",
+    "gulp-notify": "^1.8.0",
+    "gulp-plumber": "^0.6.6",
+    "gulp-jshint": "^1.8.5",
+    "jshint-stylish": "^1.0.0"
   }
 }
