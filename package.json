@@ -18,7 +18,7 @@
     "istanbul": "^0.3.2",
     "mocha": "^1.21.4",
     "temp": "^0.8.1",
-    "webpack": "^1.4.0-beta5",
+    "webpack": "^1.4.5",
     "require-dir": "^0.1.0",
 
     "gulp": "^3.8.8",
