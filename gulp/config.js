@@ -4,10 +4,10 @@ module.exports = {
   source: [
     'lib/**/*.js',
   ],
-  build: [
-    'build/**/*.js',
+  gulp: [
+    'gulp/**/*.js',
   ],
   tests: [
-    'test/**/*.spec.js',
+    'test/**/*.js',
   ]
 };
