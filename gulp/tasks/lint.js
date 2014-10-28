@@ -1,11 +1,11 @@
-var gulp = require('gulp');
-var config = require('../config');
+var gulp = require('gulp'),
+    config = require('../config'),
 
-var plumber = require('gulp-plumber');
-var jscs = require('gulp-jscs');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
-var handleError = require('../util/handle-errors');
+    plumber = require('gulp-plumber'),
+    jscs = require('gulp-jscs'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish'),
+    handleError = require('../util/handle-errors');
 
 gulp.task('jshint', function() {
   var allJavascript = Array.prototype.concat(config.source, config.gulp, config.tests);
