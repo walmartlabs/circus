@@ -7,5 +7,6 @@ module.exports = {
   ],
   tests: [
     'test/**/*.js',
+    '!test/fixtures/**/*.js'
   ]
 };

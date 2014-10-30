@@ -17,7 +17,7 @@ gulp.task('jshint', function() {
     .on('error', handleError);
 });
 
-gulp.task('jscs', function () {
+gulp.task('jscs', function() {
   var allJavascript = Array.prototype.concat(config.source, config.gulp, config.tests);
 
   return gulp.src(allJavascript)

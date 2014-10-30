@@ -4,8 +4,7 @@
   "description": "Zeus webpack helpers",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec test/plugins/*.js test/loaders/*.js",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec test/plugins/*.js test/loaders/*.js"
+    "test": "./node_modules/.bin/gulp coverage"
   },
   "author": "Kevin Decker",
   "license": "private",
@@ -16,8 +15,10 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "gulp": "^3.8.8",
+    "gulp-istanbul": "^0.3.1",
     "gulp-jscs": "^1.1.2",
     "gulp-jshint": "^1.8.5",
+    "gulp-mocha": "^1.1.1",
     "gulp-notify": "^1.8.0",
     "gulp-plumber": "^0.6.6",
     "istanbul": "^0.3.2",
