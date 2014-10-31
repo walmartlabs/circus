@@ -24,6 +24,7 @@
     "istanbul": "^0.3.2",
     "jshint-stylish": "^1.0.0",
     "mocha": "^1.21.4",
+    "phantomjs": "^1.9.12",
     "require-dir": "^0.1.0",
     "temp": "^0.8.1",
     "webpack": "^1.4.5"
