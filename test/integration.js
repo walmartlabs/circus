@@ -17,7 +17,7 @@ describe('loader integration', function() {
         throw err;
       }
 
-      outputDir = dirPath = __dirname + '/../tmp';
+      outputDir = dirPath;
 
       var runner = fs.readFileSync(__dirname + '/client/runner.js');
       fs.writeFileSync(outputDir + '/runner.js', runner);
@@ -32,7 +32,7 @@ describe('loader integration', function() {
   it('should load js+css on initial route', function(done) {
     var entry = path.resolve(__dirname + '/fixtures/multiple-chunks.js');
 
-    webpack({
+    webpack(Pack.config({
       entry: entry,
       output: {
         libraryTarget: 'umd',
@@ -40,11 +40,8 @@ describe('loader integration', function() {
 
         path: outputDir,
         chunkFilename: '[hash:3].[id].bundle.js'
-      },
-
-      plugins: Pack.plugins()
-    }, function(err, status) {
-
+      }
+    }), function(err, status) {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;

@@ -10,6 +10,7 @@
   "license": "private",
   "private": true,
   "dependencies": {
+    "lodash": "^2.4.1",
     "webpack-core": "^0.4.8"
   },
   "devDependencies": {
