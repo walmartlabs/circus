@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "lodash": "^2.4.1",
+    "stylus-loader": "^0.4.0",
     "webpack-core": "^0.4.8"
   },
   "devDependencies": {

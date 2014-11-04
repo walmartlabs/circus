@@ -32,15 +32,20 @@ describe('loader integration', function() {
   describe('#config', function() {
     it('should extend config', function() {
       var config = Pack.config({
+        module: {
+          loaders: [2]
+        },
         resolve: {
           bar: 'baz'
         },
         plugins: [1]
       });
+      expect(config.module.loaders.length).to.equal(2);
+      expect(config.module.loaders[1]).to.equal(2);
       expect(config.resolve).to.eql({
         modulesDirectories: ['web_modules', 'node_modules', 'bower_components'],
         bar: 'baz'
-      })
+      });
       expect(config.plugins.length).to.equal(3);
       expect(config.plugins[2]).to.equal(1);
     });
@@ -121,6 +126,32 @@ describe('loader integration', function() {
 
         done();
       });
+    });
+  });
+  it('should compile stylus into external css files', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/stylus.js');
+
+    webpack(Pack.config({
+      entry: entry,
+      output: {
+        libraryTarget: 'umd',
+        library: 'Zeus',
+
+        path: outputDir
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css']);
+
+      // Verify the actual css content
+      var output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
+      expect(output).to.match(/\.foo\s*\{/);
+      expect(output).to.match(/\.baz\s*\{/);
+
+      done();
     });
   });
 });
