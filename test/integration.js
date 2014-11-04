@@ -70,4 +70,40 @@ describe('loader integration', function() {
       });
     });
   });
+  it('should resolve bower and npm packages', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/packages.js');
+
+    webpack(Pack.config({
+      entry: entry,
+      output: {
+        libraryTarget: 'umd',
+        library: 'Zeus',
+
+        path: outputDir,
+        chunkFilename: '[hash:3].[id].bundle.js'
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      var html = fs.readFileSync(__dirname + '/client/initial-route.html');
+      fs.writeFileSync(outputDir + '/index.html', html);
+
+      childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {
+        if (err) {
+          throw new Error('Phantom failed code: ' + err.code + '\n\n' + stdout + '\n\n' + stderr);
+        }
+        expect(stderr).to.equal('');
+
+        var loaded = JSON.parse(stdout);
+
+        expect(loaded.log).to.eql([
+          '_: true Handlebars: true'
+        ]);
+
+        done();
+      });
+    });
+  });
 });

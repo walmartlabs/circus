@@ -31,10 +31,16 @@ page.open(system.args[1] + '/index.html', function(status) {
         return script.href;
       });
     });
+    var log = page.evaluate(function() {
+      return [].map.call(document.querySelectorAll('log'), function(script) {
+        return script.info;
+      });
+    });
 
     console.log(JSON.stringify({
       scripts: scripts,
-      styles: styles
+      styles: styles,
+      log: log
     }));
     phantom.exit(0);
   }, 10);
