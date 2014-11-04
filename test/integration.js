@@ -29,6 +29,23 @@ describe('loader integration', function() {
     temp.cleanupSync();
   });
 
+  describe('#config', function() {
+    it('should extend config', function() {
+      var config = Pack.config({
+        resolve: {
+          bar: 'baz'
+        },
+        plugins: [1]
+      });
+      expect(config.resolve).to.eql({
+        modulesDirectories: ['web_modules', 'node_modules', 'bower_components'],
+        bar: 'baz'
+      })
+      expect(config.plugins.length).to.equal(3);
+      expect(config.plugins[2]).to.equal(1);
+    });
+  });
+
   it('should load js+css on initial route', function(done) {
     var entry = path.resolve(__dirname + '/fixtures/multiple-chunks.js');
 
