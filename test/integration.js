@@ -43,8 +43,8 @@ describe('loader integration', function() {
         },
         plugins: [1]
       });
-      expect(config.module.loaders.length).to.equal(2);
-      expect(config.module.loaders[1]).to.equal(2);
+      expect(config.module.loaders.length).to.equal(3);
+      expect(config.module.loaders[2]).to.equal(2);
       expect(config.resolve).to.eql({
         modulesDirectories: ['web_modules', 'node_modules', 'bower_components'],
         bar: 'baz'
@@ -135,6 +135,31 @@ describe('loader integration', function() {
       expect(output).to.match(/\.baz\s*\{/);
 
       done();
+    });
+  });
+  it('should precompile handlebars templates', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/handlebars-render.js');
+
+    webpack(Pack.config({
+      entry: entry,
+      output: {
+        libraryTarget: 'umd',
+        library: 'Zeus',
+
+        path: outputDir
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      runPhantom(function(err, loaded) {
+        expect(loaded.log).to.eql([
+          'it worked'
+        ]);
+
+        done();
+      });
     });
   });
 
