@@ -22,6 +22,9 @@ describe('loader integration', function() {
       var runner = fs.readFileSync(__dirname + '/client/runner.js');
       fs.writeFileSync(outputDir + '/runner.js', runner);
 
+      var html = fs.readFileSync(__dirname + '/client/initial-route.html');
+      fs.writeFileSync(outputDir + '/index.html', html);
+
       done();
     });
   });
@@ -68,17 +71,7 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
-      var html = fs.readFileSync(__dirname + '/client/initial-route.html');
-      fs.writeFileSync(outputDir + '/index.html', html);
-
-      childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {
-        if (err) {
-          throw new Error('Phantom failed code: ' + err.code + '\n\n' + stdout + '\n\n' + stderr);
-        }
-        expect(stderr).to.equal('');
-
-        var loaded = JSON.parse(stdout);
-
+      runPhantom(function(err, loaded) {
         // Opposite order as the loader injects into the top of head
         expect(loaded.scripts.length).to.eql(2);
         expect(loaded.scripts[0]).to.match(/\.1\.bundle\.js$/);
@@ -109,17 +102,7 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
-      var html = fs.readFileSync(__dirname + '/client/initial-route.html');
-      fs.writeFileSync(outputDir + '/index.html', html);
-
-      childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {
-        if (err) {
-          throw new Error('Phantom failed code: ' + err.code + '\n\n' + stdout + '\n\n' + stderr);
-        }
-        expect(stderr).to.equal('');
-
-        var loaded = JSON.parse(stdout);
-
+      runPhantom(function(err, loaded) {
         expect(loaded.log).to.eql([
           '_: true Handlebars: true'
         ]);
@@ -154,4 +137,18 @@ describe('loader integration', function() {
       done();
     });
   });
+
+
+  function runPhantom(callback) {
+    childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {
+      if (err) {
+        throw new Error('Phantom failed code: ' + err.code + '\n\n' + stdout + '\n\n' + stderr);
+      }
+      expect(stderr).to.equal('');
+
+      var loaded = JSON.parse(stdout);
+
+      callback(undefined, loaded);
+    });
+  }
 });

@@ -33,11 +33,15 @@ page.open(system.args[1] + '/index.html', function(status) {
     });
     var log = page.evaluate(function() {
       return [].map.call(document.querySelectorAll('log'), function(script) {
-        return script.info;
+        return script.info || script.getAttribute('info');
       });
+    });
+    var html = page.evaluate(function() {
+      return document.body.innerHTML;
     });
 
     console.log(JSON.stringify({
+      html: html,
       scripts: scripts,
       styles: styles,
       log: log
