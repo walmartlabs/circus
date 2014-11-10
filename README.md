@@ -39,5 +39,16 @@ Will generate two different chunks, one for the home router and one for the item
 Generally a loader is used for simple bootstrapping of an application, along with the Zeus core library.
 
 
+## CSS Loading
+
+Zeus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
+
+```javascript
+var css = require.css('./home.styl');
+```
+
+When required, the css file will automatically be inserted into the document. The require call returns a reference to the HTML element that the style will be loaded through.
+
+
 [backbone-router]: http://backbonejs.org/#Router
 [backbone-query-parameters]: https://github.com/jhudson8/backbone-query-parameters
