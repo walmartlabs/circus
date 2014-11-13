@@ -1,4 +1,5 @@
-var Pack = require('../lib'),
+var _ = require('lodash'),
+    Pack = require('../lib'),
     webpack = require('webpack');
 
 var childProcess = require('child_process'),
@@ -102,6 +103,19 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
+      var pack = JSON.parse(fs.readFileSync(outputDir + '/pack.json').toString());
+      expect(_.pluck(pack.modules, 'name').sort()).to.eql([
+        'handlebars/runtime',
+        'handlebars/runtime/dist/cjs/handlebars.runtime',
+        'handlebars/runtime/dist/cjs/handlebars/base',
+        'handlebars/runtime/dist/cjs/handlebars/exception',
+        'handlebars/runtime/dist/cjs/handlebars/runtime',
+        'handlebars/runtime/dist/cjs/handlebars/safe-string',
+        'handlebars/runtime/dist/cjs/handlebars/utils',
+        'pack/test/fixtures/packages',
+        'underscore'
+      ]);
+
       runPhantom(function(err, loaded) {
         expect(loaded.log).to.eql([
           '_: true Handlebars: true'
@@ -127,7 +141,7 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css']);
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css', 'pack.json']);
 
       // Verify the actual css content
       var output = fs.readFileSync(outputDir + '/0.bundle.css').toString();

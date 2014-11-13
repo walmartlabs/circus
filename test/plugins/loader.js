@@ -53,7 +53,7 @@ describe('loader plugin', function() {
 
       // Verify the module map output
       var pack = fs.readFileSync(outputDir + '/pack.json').toString();
-      expect(pack).to.equal('{"modules":{"1":{"chunk":1},"2":{"chunk":2}},"routes":{"/foo":2,"/bar":2}}');
+      expect(pack).to.equal('{"modules":{"0":{"chunk":0,"name":"pack/test/fixtures/loader"},"1":{"chunk":1,"name":"pack/test/fixtures/router1"},"2":{"chunk":2,"name":"pack/test/fixtures/router-imported"},"3":{"chunk":3,"name":"pack/test/fixtures/router-no-routes"}},"routes":{"/foo":2,"/bar":2}}');
 
       done();
     });
@@ -88,7 +88,7 @@ describe('loader plugin', function() {
 
       // Verify the module map output
       var pack = fs.readFileSync(outputDir + '/pack.json').toString();
-      expect(pack).to.equal('{"modules":{"1":{"chunk":1},"2":{"chunk":2}},"routes":{"/foo":2,"/bar":2}}');
+      expect(pack).to.equal('{"modules":{"0":{"chunk":0,"name":"pack/test/fixtures/loader-multiple"},"1":{"chunk":1,"name":"pack/test/fixtures/router1"},"2":{"chunk":2,"name":"pack/test/fixtures/router-imported"}},"routes":{"/foo":2,"/bar":2}}');
 
       done();
     });
