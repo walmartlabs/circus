@@ -1,4 +1,5 @@
 var _ = require('underscore'),
+    Handlebars = require('handlebars/runtime'),
     Handlebars = require('handlebars/runtime');
 
 var log = document.createElement('log');

@@ -1,4 +1,4 @@
-var PackPlugin = require('../../lib/plugins'),
+var Pack = require('../../lib'),
     webpack = require('webpack');
 
 var expect = require('chai').expect,
@@ -24,20 +24,15 @@ describe('pack plugin', function() {
   });
 
   it('should output css loader', function(done) {
-    var pack = new PackPlugin(),
-        entry = path.resolve(__dirname + '/../fixtures/css-chunk.js');
+    var entry = path.resolve(__dirname + '/../fixtures/css-chunk.js');
 
-    webpack({
+    webpack(Pack.config({
       entry: entry,
       output: {
         path: outputDir,
         chunkFilename: '[hash:3].[id].bundle.js'
-      },
-
-      plugins: [
-        pack
-      ]
-    }, function(err, status) {
+      }
+    }), function(err, status) {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
@@ -46,7 +41,7 @@ describe('pack plugin', function() {
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
       expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["1b9\.0\.bundle\.css"]/);
+      expect(output).to.match(/cssPaths = \["349\.0\.bundle\.css"]/);
       expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
 
       done();
@@ -54,29 +49,24 @@ describe('pack plugin', function() {
   });
 
   it('should handle multiple chunks', function(done) {
-    var pack = new PackPlugin(),
-        entry = path.resolve(__dirname + '/../fixtures/multiple-chunks.js');
+    var entry = path.resolve(__dirname + '/../fixtures/multiple-chunks.js');
 
-    webpack({
+    webpack(Pack.config({
       entry: entry,
       output: {
         path: outputDir,
         chunkFilename: '[hash:3].[chunkhash:4].[id].bundle.js'
-      },
-
-      plugins: [
-        pack
-      ]
-    }, function(err, status) {
+      }
+    }), function(err, status) {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
       expect(Object.keys(status.compilation.assets)).to.eql([
         'bundle.js',
-        '7ab.a1eb.1.bundle.js',
-        '7ab.5885.0.bundle.css',
-        '7ab.fd9c.1.bundle.css',
+        '871.6f49.1.bundle.js',
+        '871.5885.0.bundle.css',
+        '871.fd9c.1.bundle.css',
         'pack.json'
       ]);
 
@@ -84,8 +74,8 @@ describe('pack plugin', function() {
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
       expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["7ab\.5885.0\.bundle\.css","7ab\.fd9c\.1\.bundle\.css"\]/);
-      expect(output).to.match(/jsPaths = \[0,"7ab\.a1eb\.1\.bundle\.js"\]/);
+      expect(output).to.match(/cssPaths = \["871\.5885.0\.bundle\.css","871\.fd9c\.1\.bundle\.css"\]/);
+      expect(output).to.match(/jsPaths = \[0,"871\.6f49\.1\.bundle\.js"\]/);
       expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
 
       // Sanity checks to help us avoid issues if upstream changes under us
@@ -96,17 +86,12 @@ describe('pack plugin', function() {
   });
 
   it('should not output css loader if not needed', function(done) {
-    var pack = new PackPlugin(),
-        entry = path.resolve(__dirname + '/../fixtures/router1.js');
+    var entry = path.resolve(__dirname + '/../fixtures/router1.js');
 
-    webpack({
+    webpack(Pack.config({
       entry: entry,
-      output: {path: outputDir},
-
-      plugins: [
-        pack
-      ]
-    }, function(err, status) {
+      output: {path: outputDir}
+    }), function(err, status) {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;

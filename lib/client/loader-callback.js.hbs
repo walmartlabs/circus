@@ -1,0 +1,36 @@
+{{!
+  Derived from:
+  https://github.com/webpack/webpack/blob/master/lib/JsonpMainTemplatePlugin.js
+
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+}}
+// install a JSONP callback for chunk loading
+var parentJsonpFunction = window[{{jsonp-function}}];
+window[{{jsonp-function}}] = function webpackJsonpCallback(chunkIds, moreModules) {
+  // add "moreModules" to the modules object,
+  // then flag all "chunkIds" as loaded and fire callback
+  var moduleId, chunkId, i = 0, callbacks = [];
+  for (;i < chunkIds.length; i++) {
+    chunkId = chunkIds[i];
+    if (installedChunks[chunkId]) {
+      callbacks.push.apply(callbacks, installedChunks[chunkId]);
+    }
+    installedChunks[chunkId] = 0;
+  }
+  for(moduleId in moreModules) {
+    {{add-modules}}
+  }
+  if (parentJsonpFunction) {
+    parentJsonpFunction(chunkIds, moreModules);
+  }
+  while(callbacks.length) {
+    callbacks.shift().call(null, {{require-fn}});
+  }
+  {{#if mode-modules}}
+    if (moreModules[0]) {
+      installedModules[0] = 0;
+      {{require-fn}}(0);
+    }
+  {{/if}}
+};
