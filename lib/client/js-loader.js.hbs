@@ -1,3 +1,7 @@
+if (moduleExports[chunkId] != null) {
+  chunkId = moduleChunks[moduleExports[chunkId]];
+}
+
 if (installedChunks[chunkId] === 0) {
   return callback.call(null, __webpack_require__);
 }

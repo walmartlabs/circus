@@ -23,6 +23,78 @@ describe('pack plugin', function() {
     temp.cleanupSync();
   });
 
+  describe('external names', function() {
+    it('should output all module names', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          path: outputDir,
+          chunkFilename: '[hash:3].[id].bundle.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+
+        expect(output).to.match(/moduleExports = \{"pack":0,.*"handlebars\/runtime":\d+,.*\}/);
+
+        done();
+      });
+    });
+    it('should hide internals', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          hideInternals: true,
+
+          path: outputDir,
+          chunkFilename: '[hash:3].[id].bundle.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+
+        expect(output).to.match(/moduleExports = \{"pack":0\};/);
+
+        done();
+      });
+    });
+    it('should hide matching internals', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          hideInternals: /handlebars.*\/dist/,
+
+          path: outputDir,
+          chunkFilename: '[hash:3].[id].bundle.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+
+        expect(output).to.match(/moduleExports = \{"pack":0,"pack\/test\/fixtures\/packages":0,"handlebars\/runtime":\d+,"underscore":\d+\}/);
+
+        done();
+      });
+    });
+  });
   it('should output css loader', function(done) {
     var entry = path.resolve(__dirname + '/../fixtures/css-chunk.js');
 

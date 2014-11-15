@@ -13,6 +13,10 @@
 
 {{#if cssChunkNames}}
   // The css file cache
-  var cssSheets = {};
-  var cssPaths = {{cssChunkNames}};
+  var cssSheets = {},
+      cssPaths = {{cssChunkNames}};
 {{/if}}
+
+// Maps friendly module names to internal names for exports
+var moduleExports = {{moduleExports}},
+    moduleChunks = {{moduleChunks}};
