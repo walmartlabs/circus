@@ -1,0 +1,18 @@
+{{#if installedChunks}}
+  // object to store loaded and loading chunks
+  // "0" means "already loaded"
+  // Array means "loading", array contains callbacks
+  var installedChunks = {
+    {{installedChunks}}
+  };
+{{/if}}
+
+{{#if jsChunkNames}}
+  var jsPaths = {{jsChunkNames}};
+{{/if}}
+
+{{#if cssChunkNames}}
+  // The css file cache
+  var cssSheets = {};
+  var cssPaths = {{cssChunkNames}};
+{{/if}}
