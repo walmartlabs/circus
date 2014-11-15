@@ -7,9 +7,13 @@
 }}
 // install a JSONP callback for chunk loading
 var parentJsonpFunction = window[{{jsonpFunction}}];
-window[{{jsonpFunction}}] = function webpackJsonpCallback(chunkIds, moreModules) {
+window[{{jsonpFunction}}] = function webpackJsonpCallback(componentId, chunkIds, moreModules) {
   if (parentJsonpFunction) {
-    parentJsonpFunction(chunkIds, moreModules);
+    parentJsonpFunction(componentId, chunkIds, moreModules);
+  }
+
+  if (componentId !== {{componentId}}) {
+    return;
   }
 
   // add "moreModules" to the modules object,

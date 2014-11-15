@@ -31,7 +31,7 @@ describe('loader plugin', function() {
     webpack({
       entry: entry,
       output: {
-        package: 'pack',
+        component: 'pack',
         path: outputDir
       },
 
@@ -68,7 +68,7 @@ describe('loader plugin', function() {
     webpack({
       entry: entry,
       output: {
-        package: 'pack',
+        component: 'pack',
         path: outputDir
       },
 
