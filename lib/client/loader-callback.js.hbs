@@ -6,31 +6,32 @@
   Author Tobias Koppers @sokra
 }}
 // install a JSONP callback for chunk loading
-var parentJsonpFunction = window[{{jsonp-function}}];
-window[{{jsonp-function}}] = function webpackJsonpCallback(chunkIds, moreModules) {
+var parentJsonpFunction = window[{{jsonpFunction}}];
+window[{{jsonpFunction}}] = function webpackJsonpCallback(chunkIds, moreModules) {
+  if (parentJsonpFunction) {
+    parentJsonpFunction(chunkIds, moreModules);
+  }
+
   // add "moreModules" to the modules object,
   // then flag all "chunkIds" as loaded and fire callback
   var moduleId, chunkId, i = 0, callbacks = [];
-  for (;i < chunkIds.length; i++) {
+  for (; i < chunkIds.length; i++) {
     chunkId = chunkIds[i];
     if (installedChunks[chunkId]) {
       callbacks.push.apply(callbacks, installedChunks[chunkId]);
     }
     installedChunks[chunkId] = 0;
   }
-  for(moduleId in moreModules) {
-    {{add-modules}}
+  for (moduleId in moreModules) {
+    {{addModules}}
   }
-  if (parentJsonpFunction) {
-    parentJsonpFunction(chunkIds, moreModules);
+  while (callbacks.length) {
+    callbacks.shift().call(null, {{requireFn}});
   }
-  while(callbacks.length) {
-    callbacks.shift().call(null, {{require-fn}});
-  }
-  {{#if mode-modules}}
+  {{#if moreModules}}
     if (moreModules[0]) {
       installedModules[0] = 0;
-      {{require-fn}}(0);
+      {{requireFn}}(0);
     }
   {{/if}}
 };
