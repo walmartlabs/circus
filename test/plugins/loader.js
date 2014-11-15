@@ -30,7 +30,10 @@ describe('loader plugin', function() {
 
     webpack({
       entry: entry,
-      output: {path: outputDir},
+      output: {
+        package: 'pack',
+        path: outputDir
+      },
 
       externals: {
         'zeus': 'Zeus'
@@ -64,7 +67,11 @@ describe('loader plugin', function() {
 
     webpack({
       entry: entry,
-      output: {path: outputDir},
+      output: {
+        package: 'pack',
+        path: outputDir
+      },
+
 
       externals: {
         'zeus': 'Zeus'
