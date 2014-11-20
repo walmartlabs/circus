@@ -65,7 +65,7 @@ describe('pack plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"pack":0\};/);
+        expect(output).to.match(/moduleExports = \{"pack":0\}/);
 
         done();
       });

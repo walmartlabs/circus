@@ -12,10 +12,5 @@ if(installedChunks[chunkId] !== undefined) {
 } else {
   // start chunk loading
   installedChunks[chunkId] = [callback];
-  var head = document.getElementsByTagName('head')[0];
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.charset = 'utf-8';
-  script.src = __webpack_require__.p + jsPaths[chunkId];
-  head.appendChild(script);
+  loadScript(jsPaths[chunkId]);
 }
