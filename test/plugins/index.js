@@ -113,7 +113,7 @@ describe('pack plugin', function() {
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
       expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["349\.0\.bundle\.css"]/);
+      expect(output).to.match(/cssPaths = \["973\.0\.bundle\.css"]/);
       expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
 
       done();
@@ -136,18 +136,20 @@ describe('pack plugin', function() {
 
       expect(Object.keys(status.compilation.assets)).to.eql([
         'bundle.js',
-        '871.6f49.1.bundle.js',
-        '871.5885.0.bundle.css',
-        '871.fd9c.1.bundle.css',
-        'pack.json'
+        '030.1c9e.1.bundle.js',
+        '030.5885.0.bundle.css',
+        '030.fd9c.1.bundle.css',
+        'pack.json',
+        'bundle.js.map',
+        '030.1c9e.1.bundle.js.map',
       ]);
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
       expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["871\.5885.0\.bundle\.css","871\.fd9c\.1\.bundle\.css"\]/);
-      expect(output).to.match(/jsPaths = \[0,"871\.6f49\.1\.bundle\.js"\]/);
+      expect(output).to.match(/cssPaths = \["030\.5885.0\.bundle\.css","030\.fd9c\.1\.bundle\.css"\]/);
+      expect(output).to.match(/jsPaths = \[0,"030\.1c9e\.1\.bundle\.js"\]/);
       expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
 
       // Sanity checks to help us avoid issues if upstream changes under us

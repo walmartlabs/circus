@@ -141,7 +141,7 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css', 'pack.json']);
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css', 'pack.json', 'bundle.js.map']);
 
       // Verify the actual css content
       var output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
