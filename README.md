@@ -2,9 +2,29 @@
 
 Webpack Builder For Zeus Projects
 
+## Linking
+
+Zeus projects are built around components that are versioned and compiled to shared locations.
+
+These components should follow all of the [semver](http://semver.org/) rules, with the most important being breaking changes MUST increment the MAJOR version component.
+
+Bower is used to link these packages together and enforce versioning checks. NPM may also be used, but it is generally preferred to us bower for Zeus components as this will ensure there are not version incompatibilities between components.
+
+Stored in each released package are the paths to the resources that are required for that component. This may be any arbitrary number of JavaScript or CSS files, but generally it's preferred to minimize the number of files. At build time the WebPack will resolve these paths based on the dependencies of the application and components, creating a single entry point module that is able to load all components needed for this application.
+
+Components may be referenced using normal dependency loading with the following specific behaviors:
+
+1. `require('component')` will load the main entry point for the component named `component`
+2. `require('component/src/lib/file')` will load the module `src/lib/file` within `component`
+3. `require('module')` will load the generic module named `module` from any component that defines it. Generally this is intended for system-wide modules such as `require('thorax')`, etc.
+
+All of the above exports will automatically be available from a given component. Components that do not wish to expose anything outside of the first and second options may specific the `options.output.hideInternals` flag. This will optimize the output of the given component by omitting the linker tables and also provide further isolation for the component, should this be desired. This value may either be `true` to omit all child modules or a regular expression which will omit any matching module names.
+
+
+
 ## Routers
 
-Routers are the primary exeuction component for Zeus applications. As in generic backbone applications, they allow for specific behaviors to occur in response to the current url of the page.
+Routers are the primary execution component for Zeus applications. As in generic backbone applications, they allow for specific behaviors to occur in response to the current url of the page.
 
 ```javascript
 Zeus.router({

@@ -177,6 +177,66 @@ describe('loader integration', function() {
     });
   });
 
+  describe('externals', function() {
+    it('should load externals from resolved packages', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      outputDir = 'tmp/';
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Zeus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[hash:3].[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(3);
+            expect(loaded.scripts[0]).to.match(/vendor.js$/);
+            expect(loaded.scripts[1]).to.match(/\.1\.vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/bundle.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
+  });
+
 
   function runPhantom(callback) {
     childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {

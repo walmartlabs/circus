@@ -1,0 +1,68 @@
+
+{{#if exports}}
+// Global Component Registry
+var __webpack_components__ = this.__webpack_components__ = this.__webpack_components__ || {};
+function loadComplete() {
+  var callbacks = __webpack_components__[{{exports}}];
+  __webpack_components__[{{exports}}] = {{requireFn}};
+
+  while (callbacks && callbacks.length) {
+    callbacks.shift()();
+  }
+}
+{{/if}}
+
+{{#if imports}}
+// Retrieves a currently loaded external module.
+{{requireFn}}.l/*ink*/ = function(id) {
+  var module = linkedModules[id],
+      componentName = componentNames[module.c/*omponent*/],
+      component = __webpack_components__[componentName];
+
+  if (!component || !component.call) {
+    throw new Error('Component "' + componentName + '" required but not loaded');
+  }
+
+  return component(module.n/*ame*/);
+};
+
+// Loads the external component hosting a given module.
+{{requireFn}}.ec/*ensureComponent*/ = function(id, callback) {
+  // Allow array inputs.
+  if (id.length) {
+    var run = 0;
+    for (var i = 0, len = id.length; i < len; i++) {
+      {{requireFn}}.ec(id[i], function() {
+        if (++run === len) {
+          callback();
+        }
+      });
+    }
+    return;
+  }
+
+  var module = linkedModules[id],
+      componentId = module.c/*omponent*/,
+      componentName = componentNames[componentId],
+      component = __webpack_components__[componentName];
+
+  // If the component is loaded, then ensure that the necessary chunks are
+  // loaded as well.
+  if (component && component.e) {
+    return component.e/*nsure*/(module.n/*ame*/, callback);
+  }
+
+  function bound() {
+    {{requireFn}}.ec/*ensureComponent*/(id, callback);
+  }
+
+  if (component) {
+    // Wait for the existing load
+    component.push(bound);
+  } else {
+    // Nothing started, load the entry point for this module
+    __webpack_components__[componentName] = [bound];
+    loadScript(componentPaths[componentId]);
+  }
+};
+{{/if}}
