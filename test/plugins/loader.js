@@ -55,8 +55,38 @@ describe('loader plugin', function() {
       expect(output).to.match(/Zeus.loader\(__webpack_require__, \{"modules":\{"1":\{"chunk":1\},"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
 
       // Verify the module map output
-      var pack = fs.readFileSync(outputDir + '/pack.json').toString();
-      expect(pack).to.equal('{"modules":{"0":{"chunk":0,"name":"pack/test/fixtures/loader"},"1":{"chunk":1,"name":"pack/test/fixtures/router1"},"2":{"chunk":2,"name":"pack/test/fixtures/router-imported"},"3":{"chunk":3,"name":"pack/test/fixtures/router-no-routes"}},"routes":{"/foo":2,"/bar":2},"entry":"bundle.js"}');
+      var pack = JSON.parse(fs.readFileSync(outputDir + '/pack.json').toString());
+      expect(pack).to.eql({
+        "modules": {
+          "0": {
+            "chunk": 0,
+            "name": "pack/test/fixtures/loader"
+          },
+          "1": {
+            "chunk": 1,
+            "name": "pack/test/fixtures/router1"
+          },
+          "2": {
+            "chunk": 2,
+            "name": "pack/test/fixtures/router-imported"
+          },
+          "3": {
+            "chunk": 3,
+            "name": "pack/test/fixtures/router-no-routes"
+          }
+        },
+        "routes": {
+          "/foo": 2,
+          "/bar": 2
+        },
+        "files": [
+          "bundle.js",
+          "1.bundle.js",
+          "2.bundle.js",
+          "3.bundle.js"
+        ],
+        "entry": "bundle.js"
+      });
 
       done();
     });
@@ -94,8 +124,33 @@ describe('loader plugin', function() {
       expect(output).to.match(/Zeus.loader\(__webpack_require__, \{"modules":\{"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
 
       // Verify the module map output
-      var pack = fs.readFileSync(outputDir + '/pack.json').toString();
-      expect(pack).to.equal('{"modules":{"0":{"chunk":0,"name":"pack/test/fixtures/loader-multiple"},"1":{"chunk":1,"name":"pack/test/fixtures/router1"},"2":{"chunk":2,"name":"pack/test/fixtures/router-imported"}},"routes":{"/foo":2,"/bar":2},"entry":"bundle.js"}');
+      var pack = JSON.parse(fs.readFileSync(outputDir + '/pack.json').toString());
+      expect(pack).to.eql({
+            "modules": {
+              "0": {
+                "chunk": 0,
+                "name": "pack/test/fixtures/loader-multiple"
+              },
+              "1": {
+                "chunk": 1,
+                "name": "pack/test/fixtures/router1"
+              },
+              "2": {
+                "chunk": 2,
+                "name": "pack/test/fixtures/router-imported"
+              }
+            },
+            "routes": {
+              "/foo": 2,
+              "/bar": 2
+            },
+            "files": [
+              "bundle.js",
+              "1.bundle.js",
+              "2.bundle.js"
+            ],
+            "entry": "bundle.js"
+          });
 
       done();
     });
