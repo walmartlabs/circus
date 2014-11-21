@@ -49,11 +49,6 @@ Circus.router({
 
 Defines a [Backbone router][backbone-router] on the routes `/` and `/home` but have the important distinction of being parse-able at build time so they may be demand loaded with the `Circus.loader` and integrated into the server routing tables for push state and SSJS support.
 
-### Generated Code
-
-```
-
-
 ## Loaders
 
 Loaders serve as entry points into routers. They will demand load a given router and it's dependencies in response to the current route on the page.
@@ -71,7 +66,7 @@ Generally a loader is used for simple bootstrapping of an application, along wit
 
 ### Generated Code
 
-```
+```javascript
 Circus.loader(__webpack_requre__, moduleJSON);
 ```
 
