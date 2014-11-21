@@ -1,6 +1,6 @@
 {
   "name": "circus",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Webpack Versioned Component Plugin",
   "main": "index.js",
   "scripts": {
