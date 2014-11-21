@@ -1,8 +1,10 @@
 # Circus
 
-External Webpack Component Plugin
+Webpack for large teams.
 
-Allows for distinct versioned Webpack components to link to one another at runtime. Allows for code to be generated an served from a shared location while still allowing flexibility in component release cycles.
+Allows for distinct versioned Webpack components to link to one another at runtime, using independent builds and releases schedules.
+
+Usage:
 
 ```javascript
 webpack(Circus.config({
@@ -28,9 +30,25 @@ Components may be referenced using normal dependency loading with the following 
 
 All of the above exports will automatically be available from a given component. Components that do not wish to expose anything outside of the first and second options may specific the `options.output.hideInternals` flag. This will optimize the output of the given component by omitting the linker tables and also provide further isolation for the component, should this be desired. This value may either be `true` to omit all child modules or a regular expression which will omit any matching module names.
 
+Component projects are resolved using the `require.moduleDependencies` webpack configuration flag. Any child directory of these paths that contains a `circus.json` declaration file (automatically build by Circus) is a candidate for linking vs. being compiled into the current build.
 
 
-## Routers
+## CSS Loading
+
+Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
+
+```javascript
+var css = require.css('./home.css');
+```
+
+When required, the css file will automatically be inserted into the document. The require call returns a reference to the HTML element that the style will be loaded through.
+
+
+## Route-based Loading
+
+Carousel also has build-time support for route-based on demand chunk loading. This allows the application to device a single build up into individual front end components, with only the pertinent code being loaded when the user hits that portion of the site.
+
+### Routers
 
 Routers are the primary execution component for Circus applications. As in generic backbone applications, they allow for specific behaviors to occur in response to the current url of the page.
 
@@ -49,7 +67,9 @@ Circus.router({
 
 Defines a [Backbone router][backbone-router] on the routes `/` and `/home` but have the important distinction of being parse-able at build time so they may be demand loaded with the `Circus.loader` and integrated into the server routing tables for push state and SSJS support.
 
-## Loaders
+This does not necessarily need to be a Backbone router, and can be anything as long as the first parameter is an object with the field `routes` who's keys define routes in a manner that can be consumed by `Circus.loader`.
+
+### Loaders
 
 Loaders serve as entry points into routers. They will demand load a given router and it's dependencies in response to the current route on the page.
 
@@ -66,20 +86,14 @@ Generally a loader is used for simple bootstrapping of an application, along wit
 
 ### Generated Code
 
+The loader will generate a javascript construct similar to the following:
+
 ```javascript
 Circus.loader(__webpack_requre__, moduleJSON);
 ```
 
-## CSS Loading
+and `Circus.router` calls are not modified at build time. Implementors are expected to provide their own implementations of these methods that integrates with their framework of choice.
 
-Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
-
-```javascript
-var css = require.css('./home.css');
-```
-
-When required, the css file will automatically be inserted into the document. The require call returns a reference to the HTML element that the style will be loaded through.
-
-
+For those who wish to use a different root object, the `Circus` name may be changed by passing a `circusNamespace` option to the `Circus.config` compiler method.
 
 [backbone-router]: http://backbonejs.org/#Router
