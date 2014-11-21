@@ -1,8 +1,8 @@
 # Circus
 
-Webpack for large teams.
+[Webpack](http://webpack.github.io) for large teams.
 
-Allows for distinct versioned Webpack components to link to one another at runtime, using independent builds and releases schedules.
+Allows for distinct versioned Webpack components to link to one another at runtime, using independent builds and release schedules.
 
 Usage:
 
