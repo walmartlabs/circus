@@ -1,5 +1,5 @@
-Zeus.router({
+Circus.router({
   foo: 'bar'
 });
 
-Zeus.router();
+Circus.router();

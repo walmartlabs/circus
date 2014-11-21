@@ -1,14 +1,15 @@
 {
-  "name": "pack",
+  "name": "circus",
   "version": "0.0.0",
-  "description": "Zeus webpack helpers",
+  "description": "Webpack Versioned Component Plugin",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/gulp coverage"
   },
-  "author": "Kevin Decker",
-  "license": "private",
-  "private": true,
+  "authors": [
+    "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)"
+  ],
+  "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
     "loader-utils": "^0.2.5",

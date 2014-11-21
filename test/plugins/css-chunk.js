@@ -77,7 +77,7 @@ describe('css chunk plugin', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       // Verify the file records
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '4b.0.fd.bundle.4bd5.css']);
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', 'ca.0.fd.bundle.ca25.css']);
 
       done();
     });

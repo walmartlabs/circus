@@ -1,3 +1,3 @@
-Zeus.loader([
+Circus.loader([
   './not-found'
 ]);

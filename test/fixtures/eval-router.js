@@ -1,6 +1,6 @@
 
-typeof Zeus.router;
+typeof Circus.router;
 
-if (typeof Zeus.router === 'function') {
+if (typeof Circus.router === 'function') {
   true;
 }

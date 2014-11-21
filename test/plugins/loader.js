@@ -34,9 +34,10 @@ describe('loader plugin', function() {
         component: 'pack',
         path: outputDir
       },
+      circusNamespace: 'Circus',
 
       externals: {
-        'zeus': 'Zeus'
+        'circus': 'Circus'
       },
       plugins: [
         loaderPlugin
@@ -45,17 +46,17 @@ describe('loader plugin', function() {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings.length).to.equal(3);
-      expect(status.compilation.warnings[2]).to.match(/loader.js:1 - Zeus.loader used to load module "`.\/router-no-routes.js" declaring no route/);
+      expect(status.compilation.warnings[2]).to.match(/loader.js:1 - Circus.loader used to load module "`.\/router-no-routes.js" declaring no route/);
 
       // Verify the chunk division
       expect(status.compilation.chunks.length).to.equal(4);
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-      expect(output).to.match(/Zeus.loader\(__webpack_require__, \{"modules":\{"1":\{"chunk":1\},"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
+      expect(output).to.match(/Circus.loader\(__webpack_require__, \{"modules":\{"1":\{"chunk":1\},"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
 
       // Verify the module map output
-      var pack = JSON.parse(fs.readFileSync(outputDir + '/pack.json').toString());
+      var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
       expect(pack).to.eql({
         "modules": {
           "0": {
@@ -101,10 +102,10 @@ describe('loader plugin', function() {
         component: 'pack',
         path: outputDir
       },
-
+      circusNamespace: 'Circus',
 
       externals: {
-        'zeus': 'Zeus'
+        'circus': 'Circus'
       },
       plugins: [
         loaderPlugin
@@ -113,18 +114,18 @@ describe('loader plugin', function() {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings.length).to.equal(1);
-      expect(status.compilation.warnings[0]).to.match(/loader-multiple.js:4 - Zeus.loader used multiple times in one chunk/);
+      expect(status.compilation.warnings[0]).to.match(/loader-multiple.js:4 - Circus.loader used multiple times in one chunk/);
 
       // Verify the chunk division
       expect(status.compilation.chunks.length).to.equal(3);
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-      expect(output).to.match(/Zeus.loader\(__webpack_require__, \{"modules":\{"1":\{"chunk":1\}\},"routes":\{"\/foo":1,"\/bar":1\}\}\);/);
-      expect(output).to.match(/Zeus.loader\(__webpack_require__, \{"modules":\{"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
+      expect(output).to.match(/Circus.loader\(__webpack_require__, \{"modules":\{"1":\{"chunk":1\}\},"routes":\{"\/foo":1,"\/bar":1\}\}\);/);
+      expect(output).to.match(/Circus.loader\(__webpack_require__, \{"modules":\{"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
 
       // Verify the module map output
-      var pack = JSON.parse(fs.readFileSync(outputDir + '/pack.json').toString());
+      var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
       expect(pack).to.eql({
             "modules": {
               "0": {
@@ -222,9 +223,10 @@ describe('loader plugin', function() {
     webpack({
       entry: entry,
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       externals: {
-        'zeus': 'Zeus'
+        'circus': 'Circus'
       },
       plugins: [
         loaderPlugin
@@ -243,6 +245,7 @@ describe('loader plugin', function() {
     webpack({
       entry: __dirname + '/../fixtures/eval-loader.js',
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       plugins: [
         loaderPlugin

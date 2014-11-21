@@ -30,6 +30,7 @@ describe('router plugin', function() {
     webpack({
       entry: entry,
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       plugins: [
         routerPlugin
@@ -54,6 +55,7 @@ describe('router plugin', function() {
     webpack({
       entry: entry,
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       plugins: [
         routerPlugin
@@ -77,6 +79,7 @@ describe('router plugin', function() {
     webpack({
       entry: entry,
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       plugins: [
         routerPlugin
@@ -98,9 +101,10 @@ describe('router plugin', function() {
     webpack({
       entry: entry,
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       externals: {
-        'zeus': 'Zeus'
+        'circus': 'Circus'
       },
       plugins: [
         routerPlugin
@@ -124,6 +128,7 @@ describe('router plugin', function() {
     webpack({
       entry: __dirname + '/../fixtures/eval-router.js',
       output: {path: outputDir},
+      circusNamespace: 'Circus',
 
       plugins: [
         routerPlugin

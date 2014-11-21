@@ -1,6 +1,6 @@
-var Zeus = require('zeus');
+var Circus = require('circus');
 
-Zeus.router({
+Circus.router({
   routes: {
     '/foo': 'bar',
     '/bar': 'bat'

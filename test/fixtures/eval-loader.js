@@ -1,6 +1,6 @@
 
-typeof Zeus.loader;
+typeof Circus.loader;
 
-if (typeof Zeus.loader === 'function') {
+if (typeof Circus.loader === 'function') {
   true;
 }

@@ -1,3 +1,3 @@
-Zeus.loader([]);
+Circus.loader([]);
 
-Zeus.loader();
+Circus.loader();

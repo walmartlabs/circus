@@ -1,6 +1,6 @@
-Zeus.loader([
+Circus.loader([
   './router1.js'
 ]);
-Zeus.loader([
+Circus.loader([
   './router-imported.js'
 ]);

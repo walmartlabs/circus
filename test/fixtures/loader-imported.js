@@ -1,5 +1,5 @@
-var Zeus = require('zeus');
+var Circus = require('circus');
 
-Zeus.loader([
+Circus.loader([
   './router1.js'
 ]);

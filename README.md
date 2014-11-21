@@ -1,14 +1,22 @@
-# Zeus Pack
+# Circus
 
-Webpack Builder For Zeus Projects
+External Webpack Component Plugin
+
+Allows for distinct versioned Webpack components to link to one another at runtime. Allows for code to be generated an served from a shared location while still allowing flexibility in component release cycles.
+
+```javascript
+webpack(Circus.config({
+  entry: 'file.js'
+}));
+```
 
 ## Linking
 
-Zeus projects are built around components that are versioned and compiled to shared locations.
+Circus projects are built around components that are versioned and compiled to shared locations.
 
 These components should follow all of the [semver](http://semver.org/) rules, with the most important being breaking changes MUST increment the MAJOR version component.
 
-Bower is used to link these packages together and enforce versioning checks. NPM may also be used, but it is generally preferred to us bower for Zeus components as this will ensure there are not version incompatibilities between components.
+Bower is used to link these packages together and enforce versioning checks. NPM may also be used, but it is generally preferred to us bower for Circus components as this will ensure there are not version incompatibilities between components.
 
 Stored in each released package are the paths to the resources that are required for that component. This may be any arbitrary number of JavaScript or CSS files, but generally it's preferred to minimize the number of files. At build time the WebPack will resolve these paths based on the dependencies of the application and components, creating a single entry point module that is able to load all components needed for this application.
 
@@ -24,10 +32,10 @@ All of the above exports will automatically be available from a given component.
 
 ## Routers
 
-Routers are the primary execution component for Zeus applications. As in generic backbone applications, they allow for specific behaviors to occur in response to the current url of the page.
+Routers are the primary execution component for Circus applications. As in generic backbone applications, they allow for specific behaviors to occur in response to the current url of the page.
 
 ```javascript
-Zeus.router({
+Circus.router({
   routes: {
     '/': 'home',
     '/home': 'home'
@@ -39,16 +47,19 @@ Zeus.router({
 });
 ```
 
-Defines a [Backbone router][backbone-router] on the routes `/` and `/home` but have the important distinction of being parse-able at build time so they may be demand loaded with the `Zeus.loader` and integrated into the server routing tables for push state and SSJS support.
+Defines a [Backbone router][backbone-router] on the routes `/` and `/home` but have the important distinction of being parse-able at build time so they may be demand loaded with the `Circus.loader` and integrated into the server routing tables for push state and SSJS support.
 
-Zeus routers do differ from generic backbone routes as their parameters are parsed using [backbone-query-parameters][backbone-query-parameters]'s named route parameters, so all arguments, path or query, are included in the single `params` argument for route handlers.
+### Generated Code
+
+```
+
 
 ## Loaders
 
 Loaders serve as entry points into routers. They will demand load a given router and it's dependencies in response to the current route on the page.
 
 ```javascript
-Zeus.loader([
+Circus.loader([
   './home',
   './items'
 ]);
@@ -56,12 +67,17 @@ Zeus.loader([
 
 Will generate two different chunks, one for the home router and one for the items route.
 
-Generally a loader is used for simple bootstrapping of an application, along with the Zeus core library.
+Generally a loader is used for simple bootstrapping of an application, along with core libraries.
 
+### Generated Code
+
+```
+Circus.loader(__webpack_requre__, moduleJSON);
+```
 
 ## CSS Loading
 
-Zeus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
+Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
 
 ```javascript
 var css = require.css('./home.styl');
@@ -77,5 +93,6 @@ Handlebars templates will be precompiled upon being required. Any partials refer
 Helpers that are in *src/lib/helpers/* or exported through an external library will also be automatically linked using the `knownHelpers` precompilation option.
 
 
+
+
 [backbone-router]: http://backbonejs.org/#Router
-[backbone-query-parameters]: https://github.com/jhudson8/backbone-query-parameters

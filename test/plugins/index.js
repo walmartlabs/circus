@@ -41,7 +41,7 @@ describe('pack plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"pack":0,.*"handlebars\/runtime":\d+,.*\}/);
+        expect(output).to.match(/moduleExports = \{"circus":0,.*"handlebars\/runtime":\d+,.*\}/);
 
         done();
       });
@@ -65,7 +65,7 @@ describe('pack plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"pack":0\}/);
+        expect(output).to.match(/moduleExports = \{"circus":0\}/);
 
         done();
       });
@@ -89,7 +89,7 @@ describe('pack plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"pack":0,"pack\/test\/fixtures\/packages":0,"handlebars\/runtime":\d+,"underscore":\d+\}/);
+        expect(output).to.match(/moduleExports = \{"circus":0,"circus\/test\/fixtures\/packages":0,"handlebars\/runtime":\d+,"underscore":\d+\}/);
 
         done();
       });
@@ -113,7 +113,7 @@ describe('pack plugin', function() {
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
       expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["973\.0\.bundle\.css"]/);
+      expect(output).to.match(/cssPaths = \["13c\.0\.bundle\.css"]/);
       expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
 
       done();
@@ -136,20 +136,20 @@ describe('pack plugin', function() {
 
       expect(Object.keys(status.compilation.assets)).to.eql([
         'bundle.js',
-        '030.1c9e.1.bundle.js',
-        '030.5885.0.bundle.css',
-        '030.fd9c.1.bundle.css',
-        'pack.json',
+        'fa1.3406.1.bundle.js',
+        'fa1.5885.0.bundle.css',
+        'fa1.fd9c.1.bundle.css',
+        'circus.json',
         'bundle.js.map',
-        '030.1c9e.1.bundle.js.map',
+        'fa1.3406.1.bundle.js.map',
       ]);
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
       expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["030\.5885.0\.bundle\.css","030\.fd9c\.1\.bundle\.css"\]/);
-      expect(output).to.match(/jsPaths = \[0,"030\.1c9e\.1\.bundle\.js"\]/);
+      expect(output).to.match(/cssPaths = \["fa1\.5885.0\.bundle\.css","fa1\.fd9c\.1\.bundle\.css"\]/);
+      expect(output).to.match(/jsPaths = \[0,"fa1\.3406\.1\.bundle\.js"\]/);
       expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
 
       // Sanity checks to help us avoid issues if upstream changes under us
