@@ -8,14 +8,9 @@
 */
 
 var gulp = require('gulp'),
-    requireDir = require('require-dir'),
-    config = require('./gulp/config');
+    requireDir = require('require-dir');
 
 // Require all tasks in gulp/tasks, including subfolders
 requireDir('./gulp/tasks', { recurse: true });
 
-gulp.task('default', ['lint']);
-
-gulp.task('dev', ['lint', 'test'], function() {
-  gulp.watch(config.source.concat(['./test/**/*.js']), ['lint', 'test']);
-});
+gulp.task('default', ['lint', 'test']);

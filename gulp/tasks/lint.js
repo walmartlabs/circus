@@ -1,7 +1,6 @@
 var gulp = require('gulp'),
     config = require('../config'),
 
-    plumber = require('gulp-plumber'),
     jscs = require('gulp-jscs'),
     jshint = require('gulp-jshint'),
     stylish = require('jshint-stylish'),
@@ -11,7 +10,6 @@ gulp.task('jshint', function() {
   var allJavascript = Array.prototype.concat(config.source, config.gulp, config.tests);
 
   return gulp.src(allJavascript)
-    .pipe(plumber())
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
     .on('error', handleError);
@@ -19,7 +17,6 @@ gulp.task('jshint', function() {
 
 gulp.task('jscs', function() {
   return gulp.src(config.source)
-    .pipe(plumber())
     .pipe(jscs())
     .on('error', handleError);
 });

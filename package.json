@@ -26,7 +26,6 @@
     "gulp-jshint": "^1.8.5",
     "gulp-mocha": "^1.1.1",
     "gulp-notify": "^1.8.0",
-    "gulp-plumber": "^0.6.6",
     "handlebars": "^2.0.0",
     "istanbul": "^0.3.2",
     "jshint-stylish": "^1.0.0",
