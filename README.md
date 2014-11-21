@@ -49,10 +49,6 @@ Circus.router({
 
 Defines a [Backbone router][backbone-router] on the routes `/` and `/home` but have the important distinction of being parse-able at build time so they may be demand loaded with the `Circus.loader` and integrated into the server routing tables for push state and SSJS support.
 
-### Generated Code
-
-```
-
 
 ## Loaders
 
@@ -80,18 +76,10 @@ Circus.loader(__webpack_requre__, moduleJSON);
 Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
 
 ```javascript
-var css = require.css('./home.styl');
+var css = require.css('./home.css');
 ```
 
 When required, the css file will automatically be inserted into the document. The require call returns a reference to the HTML element that the style will be loaded through.
-
-
-## Handlebars Compilation
-
-Handlebars templates will be precompiled upon being required. Any partials referenced in the templates will automatically be resolved and included in the module output.
-
-Helpers that are in *src/lib/helpers/* or exported through an external library will also be automatically linked using the `knownHelpers` precompilation option.
-
 
 
 
