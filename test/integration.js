@@ -212,6 +212,220 @@ describe('loader integration', function() {
     });
   });
 
+  describe('permutations', function() {
+    it('should output a config per-input', function() {
+      expect(Pack.config([{}, {}]).length).to.equal(3);
+    });
+    it('should not output root config for 1 entry', function() {
+      expect(Pack.config([{}]).length).to.equal(1);
+    });
+    it('should output root circus.json file', function(done) {
+      var entry = path.resolve(__dirname + '/fixtures/packages.js');
+
+      webpack(Pack.config([
+        {
+          configId: 1,
+          entry: entry,
+          output: {
+            path: outputDir,
+            pathPrefix: '1'
+          }
+        },
+        {
+          configId: 2,
+          entry: entry,
+          output: {
+            path: outputDir,
+            pathPrefix: '2'
+          }
+        }
+      ]), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.stats[0].compilation.errors).to.be.empty;
+        expect(status.stats[0].compilation.warnings).to.be.empty;
+
+        var output = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
+        expect(output).to.eql({
+          children: {
+            1: '1',
+            2: '2'
+          }
+        });
+
+        // Validate that the permutation files exist
+        fs.statSync(outputDir + '/1/circus.json');
+        fs.statSync(outputDir + '/2/circus.json');
+
+        done();
+      });
+    });
+    it('should fail if permutations lack prefix or id', function(done) {
+      var entry = path.resolve(__dirname + '/fixtures/packages.js');
+
+      webpack(Pack.config([
+        {
+          entry: entry,
+          output: {path: outputDir}
+        },
+        {
+          entry: entry,
+          output: {path: outputDir}
+        }
+      ]), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.stats[0].compilation.errors.length).to.equal(1);
+        expect(status.stats[0].compilation.errors[0]).to.match(
+            /Multiconfig specified without configId \(undefined\) or pathPrefix \(undefined\)/);
+        expect(status.stats[0].compilation.warnings).to.be.empty;
+
+        done();
+      });
+    });
+    it('should link to default from permutation', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        webpack(Pack.config({
+          configId: 1,
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            pathPrefix: '1'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          expect(output).to.match(/componentNames = \["vendor"\]/);
+
+          done();
+        });
+      });
+    });
+    it('should link to permutation from permutation', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config([{
+        configId: 1,
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor',
+          pathPrefix: '1'
+        }
+      }, {
+        configId: 2,
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor',
+          pathPrefix: '2'
+        }
+      }]), function(err, status) {
+        expect(err).to.not.exist;
+
+        webpack(Pack.config({
+          configId: 1,
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            pathPrefix: '1'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          expect(output).to.match(/componentNames = \["vendor"\]/);
+
+          done();
+        });
+      });
+    });
+    it('should ignore missing permutations', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config([{
+        configId: 2,
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor',
+          pathPrefix: '2'
+        }
+      }, {
+        configId: 3,
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor',
+          pathPrefix: '3'
+        }
+      }]), function(err, status) {
+        expect(err).to.not.exist;
+
+        webpack(Pack.config({
+          configId: 1,
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            pathPrefix: '1'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(_.pluck(status.compilation.errors, 'name')).to.eql([
+            'ModuleNotFoundError',
+            'ModuleNotFoundError',
+            'ModuleNotFoundError'
+          ]);
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          expect(output).to.not.match(/componentNames = \["vendor"\]/);
+
+          done();
+        });
+      });
+    });
+  });
+
 
   function runPhantom(callback) {
     childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {

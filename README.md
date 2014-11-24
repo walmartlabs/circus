@@ -33,6 +33,45 @@ All of the above exports will automatically be available from a given component.
 Component projects are resolved using the `require.moduleDependencies` webpack configuration flag. Any child directory of these paths that contains a `circus.json` declaration file (automatically build by Circus) is a candidate for linking vs. being compiled into the current build.
 
 
+### Permutations
+
+Circus is able to build and link to projects that build from the same source, yet conditionally compile to different targets. By defining custom plugins, etc, this allows for builds targeting specific environments.
+
+Permutations are defined by passing an array of webpack configurations to `Circus.config`. Two additional pieces of data are required when creating permutations, `configId` and `pathPrefix`. The former is used to link between different permutations and the later is used to output the build artifacts in a separate folder.
+
+```javascript
+webpack(Circus.config([
+  {
+    entry: 'file.js',
+    configId: 'browser',
+    output: {
+      pathPrefix: 'browser'
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        '$isHybrid': true
+      })
+    ]
+  },
+  {
+    entry: 'file.js',
+    configId: 'hybrid',
+    output: {
+      pathPrefix: 'hybrid'
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        '$isHybrid': false
+      })
+    ]
+  }
+]);
+```
+
+Would generate two different builds for the given project, one under `browser/` which targets users visiting via web browsers and one under `hybrid/` which targets users who are viewing the site via a hybrid native application.
+
+When linking to a component that defines permutations, the `configId` value of the configuration will be used to select the permutation to link to. Should a match not be found, then the component will be ignored. When linking to a component that does not define permutations, everything will match by default.
+
 ## CSS Loading
 
 Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
