@@ -22,8 +22,9 @@ function loadScript(src) {
   };
 {{/if}}
 
-{{#if jsChunkNames}}
-  var jsPaths = {{jsChunkNames}};
+{{#if includeJsLoader}}
+  var jsPaths = {{jsChunkNames}},
+      moduleChunks = {{moduleChunks}};
 {{/if}}
 
 {{#if cssChunkNames}}
@@ -33,5 +34,4 @@ function loadScript(src) {
 {{/if}}
 
 // Maps friendly module names to internal names for exports
-var moduleExports = {{moduleExports}},
-    moduleChunks = {{moduleChunks}};
+var moduleExports = {{moduleExports}};
