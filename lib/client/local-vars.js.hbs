@@ -35,3 +35,15 @@ function loadScript(src) {
 
 // Maps friendly module names to internal names for exports
 var moduleExports = {{moduleExports}};
+
+{{#if exportAMD}}
+if (window.define) {
+  for (var name in moduleExports) {
+    (function(name) {
+      define(name, {{#if includeJsLoader}}['chunk_' + {{exports}} + moduleChunks[moduleExports[name]]],{{/if}} function() {
+        return {{requireFn}}(name);
+      });
+    })(name);
+  }
+}
+{{/if}}

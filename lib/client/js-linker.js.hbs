@@ -9,6 +9,13 @@ function loadComplete() {
   while (callbacks && callbacks.length) {
     callbacks.shift()();
   }
+
+  {{#if exportAMD}}
+  // Notify all of the pending AMD modules that this dependency is cleared
+  if (window.define) {
+    define('chunk_' + {{exports}} + '0', function() {});
+  }
+  {{/if}}
 }
 {{/if}}
 

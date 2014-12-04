@@ -210,6 +210,50 @@ describe('loader integration', function() {
         });
       });
     });
+
+    it('should expose externals to amd', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js');
+
+      var html = fs.readFileSync(__dirname + '/client/require.html');
+      fs.writeFileSync(outputDir + '/index.html', html);
+
+      var require = fs.readFileSync(__dirname + '/client/require.js');
+      fs.writeFileSync(outputDir + '/require.js', require);
+
+      var exec = fs.readFileSync(__dirname + '/fixtures/amd-exec.js');
+      fs.writeFileSync(outputDir + '/exec.js', exec);
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          exportAMD: true,
+
+          path: outputDir,
+          filename: 'vendor.js',
+          chunkFilename: '[hash:3].[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        runPhantom(function(err, loaded) {
+          expect(loaded.scripts.length).to.equal(4);
+          expect(loaded.scripts[0]).to.match(/vendor.js$/);
+          expect(loaded.scripts[1]).to.match(/\.1\.vendor.js$/);
+          expect(loaded.scripts[2]).to.match(/require.js$/);
+          expect(loaded.scripts[3]).to.match(/exec.js$/);
+
+          expect(loaded.log).to.eql([
+            '_: true Handlebars: true',
+            'App: _: true Handlebars: true Vendor: true'
+          ]);
+
+          done();
+        });
+      });
+    });
   });
 
   describe('permutations', function() {
