@@ -1,4 +1,5 @@
-var LoaderPlugin = require('../../lib/plugins/loader'),
+var Pack = require('../../lib'),
+    LoaderPlugin = require('../../lib/plugins/loader'),
     ModuleNotFoundError = require('webpack/lib/ModuleNotFoundError'),
     webpack = require('webpack');
 
@@ -25,10 +26,9 @@ describe('loader plugin', function() {
   });
 
   it('should create a chunk for each import', function(done) {
-    var loaderPlugin = new LoaderPlugin(),
-        entry = path.resolve(__dirname + '/../fixtures/loader.js');
+    var entry = path.resolve(__dirname + '/../fixtures/loader.js');
 
-    webpack({
+    webpack(Pack.config({
       entry: entry,
       output: {
         component: 'pack',
@@ -38,22 +38,19 @@ describe('loader plugin', function() {
 
       externals: {
         'circus': 'Circus'
-      },
-      plugins: [
-        loaderPlugin
-      ]
-    }, function(err, status) {
+      }
+    }), function(err, status) {
       expect(err).to.not.exist;
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings.length).to.equal(3);
-      expect(status.compilation.warnings[2]).to.match(/loader.js:1 - Circus.loader used to load module "`.\/router-no-routes.js" declaring no route/);
+      expect(status.compilation.warnings[2]).to.match(/loader.js:\d+ - Circus.loader used to load module "`.\/router-no-routes.js" declaring no route/);
 
       // Verify the chunk division
       expect(status.compilation.chunks.length).to.equal(4);
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-      expect(output).to.match(/Circus.loader\(__webpack_require__, \{"modules":\{"1":\{"chunk":1\},"2":\{"chunk":2\}\},"routes":\{"\/foo":2,"\/bar":2\}\}\);/);
+      expect(output).to.match(/Circus.loader\(__webpack_require__, \{"modules":\{"2":\{"chunk":1\},"3":\{"chunk":2\}\},"routes":\{"\/foo":3,"\/bar":3\}\}\);/);
 
       // Verify the module map output
       var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
@@ -63,28 +60,33 @@ describe('loader plugin', function() {
             "chunk": 0,
             "name": "pack/test/fixtures/loader"
           },
-          "1": {
+          "2": {
             "chunk": 1,
             "name": "pack/test/fixtures/router1"
           },
-          "2": {
+          "3": {
             "chunk": 2,
             "name": "pack/test/fixtures/router-imported"
           },
-          "3": {
+          "4": {
             "chunk": 3,
             "name": "pack/test/fixtures/router-no-routes"
           }
         },
         "routes": {
-          "/foo": 2,
-          "/bar": 2
+          "/foo": 3,
+          "/bar": 3
         },
         "files": [
           "bundle.js",
+          "bundle.js.map",
+          "0.bundle.css",
           "1.bundle.js",
+          "1.bundle.js.map",
           "2.bundle.js",
-          "3.bundle.js"
+          "2.bundle.js.map",
+          "3.bundle.js",
+          "3.bundle.js.map"
         ],
         "entry": "bundle.js"
       });
