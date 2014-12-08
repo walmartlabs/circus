@@ -386,7 +386,7 @@ describe('loader integration', function() {
           path: outputDir + '/vendor',
           pathPrefix: '2'
         }
-      }]), function(err, status) {
+      }]), function(err) {
         expect(err).to.not.exist;
 
         webpack(Pack.config({
@@ -435,7 +435,7 @@ describe('loader integration', function() {
           path: outputDir + '/vendor',
           pathPrefix: '3'
         }
-      }]), function(err, status) {
+      }]), function(err) {
         expect(err).to.not.exist;
 
         webpack(Pack.config({
@@ -479,7 +479,6 @@ describe('loader integration', function() {
       expect(stderr).to.equal('');
 
       var loaded = JSON.parse(stdout);
-
       callback(undefined, loaded);
     });
   }

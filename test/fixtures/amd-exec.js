@@ -13,4 +13,6 @@ require(['underscore', 'handlebars/runtime', 'vendor'], function(_, Handlebars, 
   var log = document.createElement('log');
   log.info = 'App: _: ' + (!!_) + ' Handlebars: ' + (!!Handlebars) + ' Vendor: ' + (!!Vendor);
   document.body.appendChild(log);
+
+  console.log('DONE');
 });
