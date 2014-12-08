@@ -1,5 +1,6 @@
 var _ = require('lodash'),
     Pack = require('../lib'),
+    Resolver = require('../lib/resolver'),
     webpack = require('webpack');
 
 var childProcess = require('child_process'),
@@ -252,6 +253,68 @@ describe('loader integration', function() {
 
           done();
         });
+      });
+    });
+
+    it('should generate amd path config', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[hash:3].[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var components = Resolver.findComponents(undefined, [outputDir]);
+        expect(Resolver.amdPaths(components)).to.eql({
+          'underscore': 'vendor',
+          'handlebars/runtime': 'vendor',
+          'handlebars/runtime/dist/cjs/handlebars.runtime': 'vendor',
+          'handlebars/runtime/dist/cjs/handlebars/base': 'vendor',
+          'handlebars/runtime/dist/cjs/handlebars/exception': 'vendor',
+          'handlebars/runtime/dist/cjs/handlebars/runtime': 'vendor',
+          'handlebars/runtime/dist/cjs/handlebars/safe-string': 'vendor',
+          'handlebars/runtime/dist/cjs/handlebars/utils': 'vendor',
+
+          'vendor': 'vendor',
+          'vendor/test/fixtures/packages': 'vendor',
+          'vendor/test/fixtures/require-packages': 'vendor',
+
+          'chunk_vendor0': 'vendor',
+          'chunk_vendor1': 'vendor'
+        });
+
+        components = Resolver.findComponents(undefined, [outputDir]);
+        expect(Resolver.amdPaths(components, true)).to.eql({
+          'underscore': 'empty:',
+          'handlebars/runtime': 'empty:',
+          'handlebars/runtime/dist/cjs/handlebars.runtime': 'empty:',
+          'handlebars/runtime/dist/cjs/handlebars/base': 'empty:',
+          'handlebars/runtime/dist/cjs/handlebars/exception': 'empty:',
+          'handlebars/runtime/dist/cjs/handlebars/runtime': 'empty:',
+          'handlebars/runtime/dist/cjs/handlebars/safe-string': 'empty:',
+          'handlebars/runtime/dist/cjs/handlebars/utils': 'empty:',
+
+          'vendor': 'empty:',
+          'vendor/test/fixtures/packages': 'empty:',
+          'vendor/test/fixtures/require-packages': 'empty:',
+
+          'chunk_vendor0': 'empty:',
+          'chunk_vendor1': 'empty:'
+        });
+
+        done();
       });
     });
   });
