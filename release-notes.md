@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.2.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.2.1...master)
+
+## v0.2.1 - December 9th, 2014
+- Properly handle externals loaded by child chunks - 41c0951
+- Fix exportAMD flag docs - 671d6f9
+- Handle ../ when determining module path name - 28616ee
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.2.0...v0.2.1)
 
 ## v0.2.0 - December 8th, 2014
 - [#12](https://github.com/walmartlabs/circus/issues/12) - CSS files should be included in circus json ([@kpdecker](https://api.github.com/users/kpdecker))
