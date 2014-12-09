@@ -72,6 +72,10 @@ Would generate two different builds for the given project, one under `browser/` 
 
 When linking to a component that defines permutations, the `configId` value of the configuration will be used to select the permutation to link to. Should a match not be found, then the component will be ignored. When linking to a component that does not define permutations, everything will match by default.
 
+### AMD Compatibility Mode
+
+Circus can be configured to generate builds that can be consumed by require.js and other AMD build environments. This is done by specifying the `exportAMD` build flag, which will cause all exported Circus modules to be registered with the `define` API. Users of this mode will also need to specify the proper path configuration within the AMD environment in order to properly link to the shared file. The `amdPaths(config, optimizer)` helper method is provided as a mechanism to create this mapping.
+
 ## CSS Loading
 
 Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
