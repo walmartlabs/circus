@@ -214,8 +214,6 @@ describe('loader integration', function() {
       var vendorEntry = path.resolve(__dirname + '/fixtures/packages.js'),
           entry = path.resolve(__dirname + '/fixtures/require-packages.js');
 
-      outputDir = 'tmp/';
-
       webpack(Pack.config({
         entry: vendorEntry,
         output: {
