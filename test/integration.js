@@ -210,7 +210,7 @@ describe('loader integration', function() {
         });
       });
     });
-    it.only('should load externals for child chunks', function(done) {
+    it('should load externals for child chunks', function(done) {
       var vendorEntry = path.resolve(__dirname + '/fixtures/packages.js'),
           entry = path.resolve(__dirname + '/fixtures/require-packages.js');
 
