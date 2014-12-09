@@ -36,7 +36,9 @@ function loadComplete() {
 // Loads the external component hosting a given module.
 {{requireFn}}.ec/*ensureComponent*/ = function(id, callback) {
   // Allow array inputs.
-  if (id.length) {
+  if (id.length === 0) {
+    setTimeout(callback, 0);
+  } else if (id.length) {
     var run = 0;
     for (var i = 0, len = id.length; i < len; i++) {
       {{requireFn}}.ec(id[i], function() {
@@ -57,6 +59,9 @@ function loadComplete() {
   // loaded as well.
   if (component && component.e) {
     return component.e/*nsure*/(module.n/*ame*/, callback);
+  } else if (component && component.ec) {
+    // Or we have a component that consists of only one chunk
+    return callback();
   }
 
   function bound() {
@@ -71,5 +76,10 @@ function loadComplete() {
     __webpack_components__[componentName] = [bound];
     loadScript(componentPaths[componentId]);
   }
+};
+{{^}}
+{{! Compatibility shim for the JSONP loader }}
+{{requireFn}}.ec/*ensureComponent*/ = function(chunkDeps, callback) {
+  callback();
 };
 {{/if}}

@@ -210,6 +210,63 @@ describe('loader integration', function() {
         });
       });
     });
+    it.only('should load externals for child chunks', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/require-packages.js');
+
+      outputDir = 'tmp/';
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[hash:3].[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(3);
+            expect(loaded.scripts[0]).to.match(/1\.bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/bundle.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              '_: true Handlebars: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
 
     it('should expose externals to amd', function(done) {
       var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js');
