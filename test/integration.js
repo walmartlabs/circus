@@ -1,6 +1,5 @@
 var _ = require('lodash'),
     Pack = require('../lib'),
-    Resolver = require('../lib/resolver'),
     webpack = require('webpack');
 
 var childProcess = require('child_process'),
@@ -276,8 +275,14 @@ describe('loader integration', function() {
         expect(status.compilation.errors).to.be.empty;
         expect(status.compilation.warnings).to.be.empty;
 
-        var components = Resolver.findComponents(undefined, [outputDir]);
-        expect(Resolver.amdPaths(components)).to.eql({
+        var config = Pack.config({
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        });
+        expect(Pack.amdPaths(config)).to.eql({
           'underscore': 'vendor',
           'handlebars/runtime': 'vendor',
           'handlebars/runtime/dist/cjs/handlebars.runtime': 'vendor',
@@ -295,8 +300,7 @@ describe('loader integration', function() {
           'chunk_vendor1': 'vendor'
         });
 
-        components = Resolver.findComponents(undefined, [outputDir]);
-        expect(Resolver.amdPaths(components, true)).to.eql({
+        expect(Pack.amdPaths(config, true)).to.eql({
           'underscore': 'empty:',
           'handlebars/runtime': 'empty:',
           'handlebars/runtime/dist/cjs/handlebars.runtime': 'empty:',
