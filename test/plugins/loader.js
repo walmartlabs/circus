@@ -238,6 +238,8 @@ describe('loader plugin', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
+      expect(status.compilation.chunks.length).to.equal(2);
+
       done();
     });
   });
