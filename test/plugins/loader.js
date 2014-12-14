@@ -1,5 +1,6 @@
 var Pack = require('../../lib'),
     LoaderPlugin = require('../../lib/plugins/loader'),
+    ModuleExportPlugin = require('../../lib/plugins/module-export'),
     ModuleNotFoundError = require('webpack/lib/ModuleNotFoundError'),
     webpack = require('webpack');
 
@@ -86,13 +87,13 @@ describe('loader plugin', function() {
         "files": [
           "bundle.js",
           "bundle.js.map",
-          "0.bundle.css",
           "1.bundle.js",
           "1.bundle.js.map",
           "2.bundle.js",
           "2.bundle.js.map",
           "3.bundle.js",
-          "3.bundle.js.map"
+          "3.bundle.js.map",
+          "0.bundle.css"
         ],
         "entry": "bundle.js"
       });
@@ -102,6 +103,7 @@ describe('loader plugin', function() {
   });
   it('should warn on multiple imports', function(done) {
     var loaderPlugin = new LoaderPlugin(),
+        moduleExport = new ModuleExportPlugin(),
         entry = path.resolve(__dirname + '/../fixtures/loader-multiple.js');
 
     webpack({
@@ -116,7 +118,8 @@ describe('loader plugin', function() {
         'circus': 'Circus'
       },
       plugins: [
-        loaderPlugin
+        loaderPlugin,
+        moduleExport
       ]
     }, function(err, status) {
       expect(err).to.not.exist;

@@ -139,4 +139,26 @@ and `Circus.router` calls are not modified at build time. Implementors are expec
 
 For those who wish to use a different root object, the `Circus` name may be changed by passing a `circusNamespace` option to the `Circus.config` compiler method.
 
+## circus.json
+
+Circus builds generatge a `circus.json` file which defines all of the metadata that is associated with the current build.
+
+By default this file contains:
+
+- `files` All files built from the component.
+- `chunks` Defines the chunk files for this component.
+- `modules` List of all modules built into this component.
+- `routes` Lists the routes that are served by this component, mapping them to the module that serves that particular route.
+- `entry` Entry point used to link to and load this component. This may be a local path or a shared URL.
+
+Plugins that wish to modify this file prior to output may connect to the `circus-json` plugin point:
+
+```javascript
+  compilation.plugin('circus-json', function(json) {
+    json.isASpecialComponent = true;
+  });
+```
+
+Consumers of the `circus.json` file must accept any additional fields that plugins may define gracefully.
+
 [backbone-router]: http://backbonejs.org/#Router
