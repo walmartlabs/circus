@@ -55,6 +55,12 @@ describe('loader plugin', function() {
       // Verify the module map output
       var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
       expect(pack).to.eql({
+        "chunks": [
+          {"js": "bundle.js", "css": "0.bundle.css"},
+          {"js": "1.bundle.js"},
+          {"js": "2.bundle.js"},
+          {"js": "3.bundle.js"}
+        ],
         "modules": {
           "0": {
             "chunk": 0,
@@ -129,31 +135,36 @@ describe('loader plugin', function() {
       // Verify the module map output
       var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
       expect(pack).to.eql({
-            "modules": {
-              "0": {
-                "chunk": 0,
-                "name": "pack/test/fixtures/loader-multiple"
-              },
-              "1": {
-                "chunk": 1,
-                "name": "pack/test/fixtures/router1"
-              },
-              "2": {
-                "chunk": 2,
-                "name": "pack/test/fixtures/router-imported"
-              }
-            },
-            "routes": {
-              "/foo": 2,
-              "/bar": 2
-            },
-            "files": [
-              "bundle.js",
-              "1.bundle.js",
-              "2.bundle.js"
-            ],
-            "entry": "bundle.js"
-          });
+        "chunks": [
+          {"js": "bundle.js"},
+          {"js": "1.bundle.js"},
+          {"js": "2.bundle.js"}
+        ],
+        "modules": {
+          "0": {
+            "chunk": 0,
+            "name": "pack/test/fixtures/loader-multiple"
+          },
+          "1": {
+            "chunk": 1,
+            "name": "pack/test/fixtures/router1"
+          },
+          "2": {
+            "chunk": 2,
+            "name": "pack/test/fixtures/router-imported"
+          }
+        },
+        "routes": {
+          "/foo": 2,
+          "/bar": 2
+        },
+        "files": [
+          "bundle.js",
+          "1.bundle.js",
+          "2.bundle.js"
+        ],
+        "entry": "bundle.js"
+      });
 
       done();
     });
