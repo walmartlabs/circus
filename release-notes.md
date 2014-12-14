@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.2.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.2.2...master)
+
+## v0.2.2 - December 14th, 2014
+- Handle defined loader instances safely - 7160e26
+- Allow override of any value in circus config - 1a8d74d
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.2.1...v0.2.2)
 
 ## v0.2.1 - December 9th, 2014
 - Properly handle externals loaded by child chunks - 41c0951
