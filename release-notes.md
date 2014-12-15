@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.2.2...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.3.0...master)
+
+## v0.3.0 - December 14th, 2014
+- Refactor circus.json generation into plugins - c577c6c
+- Include chunk files in circus.json output - fbca19b
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.2.2...v0.3.0)
 
 ## v0.2.2 - December 14th, 2014
 - Handle defined loader instances safely - 7160e26
