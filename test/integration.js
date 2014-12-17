@@ -154,7 +154,7 @@ describe('loader integration', function() {
     });
   });
 
-  it.only('should properly rebuild on watch', function(done) {
+  it('should properly rebuild on watch', function(done) {
     var entry = path.resolve(__dirname + '/fixtures/multiple-chunks.js'),
         execCount = 0;
 
@@ -187,8 +187,7 @@ describe('loader integration', function() {
       setTimeout(function() {
         execCount++;
         if (execCount > 1) {
-          watcher.close(function() {});
-          done();
+          watcher.close(done);
         } else {
           // WARN: Yes we are writing to the source file in the test... this is lazy
           // and unsafe, but trying to rebuild the whole fixture tree in a temp dir is
@@ -198,7 +197,6 @@ describe('loader integration', function() {
         }
       }, 10);
     });
-
   });
 
   describe('externals', function() {
