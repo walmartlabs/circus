@@ -160,6 +160,7 @@ describe('loader integration', function() {
 
     var watcher = webpack(Pack.config({
       watch: true,
+      watchDelay: 100,
 
       entry: entry,
       output: {
@@ -195,7 +196,7 @@ describe('loader integration', function() {
           var cssPath = path.resolve(__dirname + '/fixtures/css1.css');
           fs.writeFileSync(cssPath, fs.readFileSync(cssPath));
         }
-      }, 10);
+      }, 100);
     });
   });
 
@@ -419,6 +420,75 @@ describe('loader integration', function() {
         });
 
         done();
+      });
+    });
+
+    it('should properly rebuild on external change', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js'),
+          execCount = 0;
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var watcher = webpack(Pack.config({
+          watch: true,
+          watchDelay: 100,
+
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          expect(Object.keys(status.compilation.assets).sort()).to.eql([
+            '1.vendor.js',
+            '1.vendor.js.map',
+            'bundle.js',
+            'bundle.js.map',
+            'circus.json',
+            'vendor.js',
+            'vendor.js.map'
+          ]);
+
+          setTimeout(function() {
+            execCount++;
+            if (execCount > 1) {
+              var copied = fs.readFileSync(path.resolve(outputDir + '/vendor.js')).toString();
+              expect(copied).to.equal('updator');
+
+              watcher.close(done);
+            } else {
+              var cssPath = path.resolve(outputDir + '/vendor/vendor.js');
+              fs.writeFileSync(cssPath, 'updator');
+            }
+          }, 100);
+        });
       });
     });
   });
