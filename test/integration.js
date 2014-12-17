@@ -154,6 +154,53 @@ describe('loader integration', function() {
     });
   });
 
+  it.only('should properly rebuild on watch', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/multiple-chunks.js'),
+        execCount = 0;
+
+    var watcher = webpack(Pack.config({
+      watch: true,
+
+      entry: entry,
+      output: {
+        libraryTarget: 'umd',
+        library: 'Circus',
+
+        path: outputDir,
+        chunkFilename: '[id].bundle.js'
+      }
+    }), function handler(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      expect(Object.keys(status.compilation.assets)).to.eql([
+        'bundle.js',
+        '1.bundle.js',
+        '0.bundle.css',
+        '1.bundle.css',
+        'circus.json',
+        'bundle.js.map',
+        '1.bundle.js.map'
+      ]);
+
+      setTimeout(function() {
+        execCount++;
+        if (execCount > 1) {
+          watcher.close(function() {});
+          done();
+        } else {
+          // WARN: Yes we are writing to the source file in the test... this is lazy
+          // and unsafe, but trying to rebuild the whole fixture tree in a temp dir is
+          // expensive.
+          var cssPath = path.resolve(__dirname + '/fixtures/css1.css');
+          fs.writeFileSync(cssPath, fs.readFileSync(cssPath));
+        }
+      }, 10);
+    });
+
+  });
+
   describe('externals', function() {
     it('should load externals from resolved packages', function(done) {
       var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
