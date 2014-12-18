@@ -129,7 +129,7 @@ Generally a loader is used for simple bootstrapping of an application, along wit
 
 ### Generated Code
 
-The loader will generate a javascript construct similar to the following:
+The loader will generate a JavaScript construct similar to the following:
 
 ```javascript
 Circus.loader(__webpack_requre__, moduleJSON);
