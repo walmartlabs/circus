@@ -18,7 +18,7 @@ Circus projects are built around components that are versioned and compiled to s
 
 These components should follow all of the [semver](http://semver.org/) rules, with the most important being breaking changes MUST increment the MAJOR version component.
 
-Bower is used to link these packages together and enforce versioning checks. NPM may also be used, but it is generally preferred to us bower for Circus components as this will ensure there are not version incompatibilities between components.
+Bower is used to link these packages together and enforce versioning checks. NPM may also be used, but it is generally preferred to use bower for Circus components as this will ensure there are not version incompatibilities between components.
 
 Stored in each released package are the paths to the resources that are required for that component. This may be any arbitrary number of JavaScript or CSS files, but generally it's preferred to minimize the number of files. At build time the WebPack will resolve these paths based on the dependencies of the application and components, creating a single entry point module that is able to load all components needed for this application.
 
