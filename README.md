@@ -141,7 +141,7 @@ For those who wish to use a different root object, the `Circus` name may be chan
 
 ## circus.json
 
-Circus builds generatge a `circus.json` file which defines all of the metadata that is associated with the current build.
+Circus builds generate a `circus.json` file which defines all of the metadata that is associated with the current build.
 
 By default this file contains:
 
