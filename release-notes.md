@@ -2,7 +2,15 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.3.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.3.1...master)
+
+## v0.3.1 - December 18th, 2014
+- Apply watchDelay to avoid watcher issues - e1eaad6
+- Move module/route json init into loader plugin - 71312d7
+- Fix rebuild on external change - 90cae3c
+- Ensure proper watch support for css dependencies - 0159fda
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.3.0...v0.3.1)
 
 ## v0.3.0 - December 14th, 2014
 - Refactor circus.json generation into plugins - c577c6c
