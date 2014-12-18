@@ -89,7 +89,7 @@ When required, the css file will automatically be inserted into the document. Th
 
 ## Route-based Loading
 
-Carousel also has build-time support for route-based on demand chunk loading. This allows the application to device a single build up into individual front end components, with only the pertinent code being loaded when the user hits that portion of the site.
+Carousel also has build-time support for route-based on demand chunk loading. This allows the application to devisee a single build up into individual front end components, with only the pertinent code being loaded when the user hits that portion of the site.
 
 ### Routers
 
