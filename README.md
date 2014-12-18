@@ -28,7 +28,7 @@ Components may be referenced using normal dependency loading with the following 
 2. `require('component/src/lib/file')` will load the module `src/lib/file` within `component`
 3. `require('module')` will load the generic module named `module` from any component that defines it. Generally this is intended for system-wide modules such as `require('thorax')`, etc.
 
-All of the above exports will automatically be available from a given component. Components that do not wish to expose anything outside of the first and second options may specific the `options.output.hideInternals` flag. This will optimize the output of the given component by omitting the linker tables and also provide further isolation for the component, should this be desired. This value may either be `true` to omit all child modules or a regular expression which will omit any matching module names.
+All of the above exports will automatically be available from a given component. Components that do not wish to expose anything outside of the first and second options may specificy the `options.output.hideInternals` flag. This will optimize the output of the given component by omitting the linker tables and also provide further isolation for the component, should this be desired. This value may either be `true` to omit all child modules or a regular expression which will omit any matching module names.
 
 Component projects are resolved using the `require.moduleDependencies` webpack configuration flag. Any child directory of these paths that contains a `circus.json` declaration file (automatically build by Circus) is a candidate for linking vs. being compiled into the current build.
 
