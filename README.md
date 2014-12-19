@@ -161,4 +161,18 @@ Plugins that wish to modify this file prior to output may connect to the `circus
 
 Consumers of the `circus.json` file must accept any additional fields that plugins may define gracefully.
 
+## Karma Adapter
+
+When using Karma for tests, the Circus Karma adapter should be used to prevent test execution until all components have been loaded.
+
+```javascript
+  config.set({
+    frameworks: ['circus', ...],
+    plugins: [
+      require('circus/karma'),
+      ...
+    ]
+  });
+```
+
 [backbone-router]: http://backbonejs.org/#Router
