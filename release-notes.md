@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.3.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.4.0...master)
+
+## v0.4.0 - December 18th, 2014
+- Implement Karma Adapter - 5faa7a9
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.3.1...v0.4.0)
 
 ## v0.3.1 - December 18th, 2014
 - Apply watchDelay to avoid watcher issues - e1eaad6
