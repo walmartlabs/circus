@@ -8,7 +8,7 @@ __webpack_require__.cs = function(chunkId) {
   var styleElement = cssSheets[chunkId] = document.createElement('link');
   styleElement.rel = 'stylesheet';
   styleElement.type = 'text/css';
-  styleElement.href = cssPaths[chunkId];
+  styleElement.href = resolveUrl(cssPaths[chunkId]);
 
   var head = document.getElementsByTagName('head')[0];
   head.appendChild(styleElement);

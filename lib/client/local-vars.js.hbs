@@ -1,15 +1,18 @@
-function loadScript(src) {
-  // Relative URLs should honor the path prefix
-  if (!/(^\/)|\/\//.test(src)) {
-    src = {{requireFn}}.p + src;
+function resolveUrl(url) {
+    // Relative URLs should honor the path prefix
+  if (!/(^\/)|\/\//.test(url)) {
+    url = {{requireFn}}.p + url;
   }
+  return url;
+}
 
+function loadScript(src, componentName) {
   // Load the actual script
   var head = document.getElementsByTagName('head')[0];
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.charset = 'utf-8';
-  script.src = src;
+  script.src = resolveUrl(src);
   head.appendChild(script);
 }
 
