@@ -13,6 +13,9 @@ function loadScript(src, componentName) {
   script.type = 'text/javascript';
   script.charset = 'utf-8';
   script.src = resolveUrl(src);
+  if (componentName) {
+    script.setAttribute('data-circus-entry', componentName);
+  }
   head.appendChild(script);
 }
 
