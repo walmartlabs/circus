@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.4.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.5.0...master)
+
+## v0.5.0 - December 23rd, 2014
+- Allow for custom defined external module names - f6342e4
+- Use script to calculate prefix path if missing - 57f2041
+- Use path prefix for css urls as well - cd61e16
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.4.0...v0.5.0)
 
 ## v0.4.0 - December 18th, 2014
 - Implement Karma Adapter - 5faa7a9
