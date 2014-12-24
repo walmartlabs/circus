@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.5.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.5.1...master)
+
+## v0.5.1 - December 24th, 2014
+- Add repository link to package.json - 11890c1
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.5.0...v0.5.1)
 
 ## v0.5.0 - December 23rd, 2014
 - Allow for custom defined external module names - f6342e4
