@@ -9,6 +9,10 @@
   "authors": [
     "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/walmartlabs/circus"
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
