@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.6.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.7.0...master)
+
+## v0.7.0 - December 30th, 2014
+- Copy bower.json in build - 96214de
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.6.0...v0.7.0)
 
 ## v0.6.0 - December 30th, 2014
 - Add checkPermutations resolver option - 6cd5a45
