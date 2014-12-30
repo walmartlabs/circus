@@ -652,6 +652,57 @@ describe('loader integration', function() {
         });
       });
     });
+    it('should link between permutation with custom tracker', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config([{
+        configId: 1,
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor',
+          pathPrefix: '1'
+        }
+      }, {
+        configId: 2,
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+          path: outputDir + '/vendor',
+          pathPrefix: '2'
+        }
+      }]), function(err, status) {
+        expect(err).to.not.exist;
+
+        webpack(Pack.config({
+          checkPermutation: function(configId) {
+            return configId === '2';
+          },
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            pathPrefix: '1'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          expect(output).to.match(/componentNames = \["vendor"\]/);
+
+          done();
+        });
+      });
+    });
     it('should ignore missing permutations', function(done) {
       var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
           entry = path.resolve(__dirname + '/fixtures/externals.js');
