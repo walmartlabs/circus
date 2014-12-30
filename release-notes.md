@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.5.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.6.0...master)
+
+## v0.6.0 - December 30th, 2014
+- Add checkPermutations resolver option - 6cd5a45
+- Include output name for root circus.json - b98d64a
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.5.1...v0.6.0)
 
 ## v0.5.1 - December 24th, 2014
 - Add repository link to package.json - 11890c1
