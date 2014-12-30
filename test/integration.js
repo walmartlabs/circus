@@ -45,7 +45,7 @@ describe('loader integration', function() {
         modulesDirectories: ['web_modules', 'node_modules', 'bower_components'],
         bar: 'baz'
       });
-      expect(config.plugins.length).to.equal(3);
+      expect(config.plugins.length).to.equal(4);
       expect(config.plugins[2]).to.equal(1);
     });
   });
@@ -85,6 +85,7 @@ describe('loader integration', function() {
     var entry = path.resolve(__dirname + '/fixtures/packages.js');
 
     webpack(Pack.config({
+      context: path.resolve(__dirname + '/fixtures'),
       entry: entry,
       output: {
         libraryTarget: 'umd',
@@ -98,9 +99,16 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
+      expect(_.keys(status.compilation.assets).sort()).to.eql([
+        'bower.json',
+        'bundle.js',
+        'bundle.js.map',
+        'circus.json'
+      ]);
+
       var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
       expect(_.pluck(pack.modules, 'name').sort()).to.eql([
-        'circus/test/fixtures/packages',
+        'circus/packages',
         'handlebars/runtime',
         'handlebars/runtime/dist/cjs/handlebars.runtime',
         'handlebars/runtime/dist/cjs/handlebars/base',
@@ -505,6 +513,7 @@ describe('loader integration', function() {
 
       webpack(Pack.config([
         {
+          context: path.resolve(__dirname + '/fixtures'),
           configId: 1,
           entry: entry,
           output: {
@@ -513,6 +522,7 @@ describe('loader integration', function() {
           }
         },
         {
+          context: path.resolve(__dirname + '/fixtures'),
           configId: 2,
           entry: entry,
           output: {
@@ -524,6 +534,11 @@ describe('loader integration', function() {
         expect(err).to.not.exist;
         expect(status.stats[0].compilation.errors).to.be.empty;
         expect(status.stats[0].compilation.warnings).to.be.empty;
+
+        expect(_.keys(status.stats[0].compilation.assets).sort()).to.eql([
+          'bower.json',
+          'circus.json'
+        ]);
 
         var output = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
         expect(output).to.eql({
