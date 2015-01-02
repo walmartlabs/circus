@@ -119,12 +119,20 @@ describe('loader integration', function() {
         'underscore'
       ]);
 
-      runPhantom(function(err, loaded) {
-        expect(loaded.log).to.eql([
-          '_: true Handlebars: true'
-        ]);
 
-        done();
+      pack.root = outputDir;
+      Pack.loadConfigs(outputDir, function(err, configs) {
+        expect(configs).to.eql({
+          $default: pack
+        });
+
+        runPhantom(function(err, loaded) {
+          expect(loaded.log).to.eql([
+            '_: true Handlebars: true'
+          ]);
+
+          done();
+        });
       });
     });
   });
@@ -549,10 +557,21 @@ describe('loader integration', function() {
         });
 
         // Validate that the permutation files exist
-        fs.statSync(outputDir + '/1/circus.json');
-        fs.statSync(outputDir + '/2/circus.json');
+        var config1 = JSON.parse(fs.readFileSync(outputDir + '/1/circus.json').toString()),
+            config2 = JSON.parse(fs.readFileSync(outputDir + '/2/circus.json').toString());
+        config1.configId = '1';
+        config1.root = outputDir + '/1';
+        config2.configId = '2';
+        config2.root = outputDir + '/2';
 
-        done();
+        Pack.loadConfigs(outputDir, function(err, configs) {
+          expect(configs).to.eql({
+            1: config1,
+            2: config2
+          });
+
+          done();
+        });
       });
     });
     it('should fail if permutations lack prefix or id', function(done) {
@@ -773,6 +792,25 @@ describe('loader integration', function() {
     });
   });
 
+
+  describe('#loadConfigs', function() {
+    it('should handle root errors', function(done) {
+      Pack.loadConfigs('/foo', function(err, configs) {
+        expect(err).to.exist;
+        expect(configs).to.not.be.ok;
+        done();
+      });
+    });
+    it('should handle child errors', function(done) {
+      fs.writeFileSync(outputDir + '/circus.json', JSON.stringify({children: {bar: 'foo'}}));
+
+      Pack.loadConfigs(outputDir, function(err, configs) {
+        expect(err).to.exist;
+        expect(configs).to.not.be.ok;
+        done();
+      });
+    });
+  });
 
   function runPhantom(callback) {
     childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {
