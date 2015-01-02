@@ -1,9 +1,9 @@
-function initMocha(files) {
+function init(files) {
   files.push({pattern: __dirname + '/src/circus-init.js', included: true, served: true, watched: false});
 }
 
-initMocha.$inject = ['config.files'];
+init.$inject = ['config.files'];
 
 module.exports = {
-  'framework:circus': ['factory', initMocha]
+  'framework:circus': ['factory', init]
 };
