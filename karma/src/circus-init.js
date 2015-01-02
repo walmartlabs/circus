@@ -7,6 +7,10 @@ __karma__.loaded = function() {
     }
   }
 
+  if (typeof __webpack_components__ === 'undefined') {
+    window.__webpack_components__ = {};
+  }
+
   // If there are any pending webpack components then we want to defer test exec until they are complete
   var required = 1;
   for (var name in __webpack_components__) {
