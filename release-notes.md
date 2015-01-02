@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.7.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.8.0...master)
+
+## v0.8.0 - January 2nd, 2015
+- Implement loadConfigs helper - eb3cbff
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.7.0...v0.8.0)
 
 ## v0.7.0 - December 30th, 2014
 - Copy bower.json in build - 96214de
