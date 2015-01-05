@@ -9,18 +9,22 @@
 {{/if}}
 {{#if includeJsLoader}}
   function loadScript(src, componentName) {
-    src = resolveUrl(src);
-
-    // Load the actual script
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.charset = 'utf-8';
-    script.src = src;
-    if (componentName) {
-      script.setAttribute('data-circus-entry', componentName);
-    }
-    head.appendChild(script);
+    {{#if fruitLoops}}
+      FruitLoops.loadInContext(src);
+      $('body').append('<script type="text/javascript" type="utf-8" src="' + resolveUrl(src) + '"'
+            + (componentName ? ' data-circus-entry="' + componentName + '"' : '') + '>');
+    {{else}}
+      // Load the actual script
+      var head = document.getElementsByTagName('head')[0];
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.charset = 'utf-8';
+      script.src = resolveUrl(src);
+      if (componentName) {
+        script.setAttribute('data-circus-entry', componentName);
+      }
+      head.appendChild(script);
+    {{/if}}
   }
 {{/if}}
 {{#if installedChunks}}

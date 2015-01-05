@@ -5,12 +5,16 @@ __webpack_require__.cs = function(chunkId) {
     return cssSheets[chunkId];
   }
 
-  var styleElement = cssSheets[chunkId] = document.createElement('link');
-  styleElement.rel = 'stylesheet';
-  styleElement.type = 'text/css';
-  styleElement.href = resolveUrl(cssPaths[chunkId]);
+  {{#if fruitLoops}}
+    cssSheets[chunkId] = $('head').append('<link rel="stylesheet" href="' + resolveUrl(cssPaths[chunkId]) + '">');
+  {{else}}
+    var styleElement = cssSheets[chunkId] = document.createElement('link');
+    styleElement.rel = 'stylesheet';
+    styleElement.type = 'text/css';
+    styleElement.href = resolveUrl(cssPaths[chunkId]);
 
-  var head = document.getElementsByTagName('head')[0];
-  head.appendChild(styleElement);
-  return cssSheets[chunkId];
+    var head = document.getElementsByTagName('head')[0];
+    head.appendChild(styleElement);
+    return cssSheets[chunkId];
+  {{/if}}
 };
