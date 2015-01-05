@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.8.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.9.0...master)
+
+## v0.9.0 - January 5th, 2015
+- [#8](https://github.com/walmartlabs/circus/issues/8) - Optimize single chunk components ([@kpdecker](https://api.github.com/users/kpdecker))
+- Add support for loading under Fruit Loops envs - f20656f
+- Protect from potentially missing components LUT - 9b9be3a
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.8.0...v0.9.0)
 
 ## v0.8.0 - January 2nd, 2015
 - Implement loadConfigs helper - eb3cbff
