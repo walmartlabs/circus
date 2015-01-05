@@ -1,24 +1,28 @@
-function resolveUrl(url) {
-    // Relative URLs should honor the path prefix
-  if (!/(^\/)|\/\//.test(url)) {
-    url = {{requireFn}}.p + url;
+{{#if includeLoader}}
+  function resolveUrl(url) {
+      // Relative URLs should honor the path prefix
+    if (!/(^\/)|\/\//.test(url)) {
+      url = {{requireFn}}.p + url;
+    }
+    return url;
   }
-  return url;
-}
+{{/if}}
+{{#if includeJsLoader}}
+  function loadScript(src, componentName) {
+    src = resolveUrl(src);
 
-function loadScript(src, componentName) {
-  // Load the actual script
-  var head = document.getElementsByTagName('head')[0];
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.charset = 'utf-8';
-  script.src = resolveUrl(src);
-  if (componentName) {
-    script.setAttribute('data-circus-entry', componentName);
+    // Load the actual script
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.charset = 'utf-8';
+    script.src = src;
+    if (componentName) {
+      script.setAttribute('data-circus-entry', componentName);
+    }
+    head.appendChild(script);
   }
-  head.appendChild(script);
-}
-
+{{/if}}
 {{#if installedChunks}}
   // object to store loaded and loading chunks
   // "0" means "already loaded"
@@ -27,12 +31,10 @@ function loadScript(src, componentName) {
     {{installedChunks}}
   };
 {{/if}}
-
 {{#if includeJsLoader}}
   var jsPaths = {{jsChunkNames}},
       moduleChunks = {{moduleChunks}};
 {{/if}}
-
 {{#if cssChunkNames}}
   // The css file cache
   var cssSheets = {},
