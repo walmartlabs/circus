@@ -1,6 +1,7 @@
 .foo {
   bar: baz;
   background: url('./1px.gif');
+  background: url("./1px.gif");
   background: url(./1px.gif);
   background: url(data:foo);
 }
