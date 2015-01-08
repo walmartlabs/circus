@@ -1,0 +1,18 @@
+.foo {
+  bar: baz;
+  background: url('./1px.gif');
+  background: url(./1px.gif);
+  background: url(data:foo);
+}
+
+
+@media print {
+  .bar {
+    background: url(./1px.gif#foo);
+    background: url(./1px.gif?#foo);
+    background: url(#foo);
+  }
+}
+@foo {
+  bar: bat;
+}

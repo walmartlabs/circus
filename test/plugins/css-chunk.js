@@ -57,6 +57,50 @@ describe('css chunk plugin', function() {
     });
   });
 
+  it('should resolve urls defined in css modules', function(done) {
+    var cssChunkPlugin = new CssChunkPlugin(),
+        entry = path.resolve(__dirname + '/../fixtures/css-image.js');
+
+    webpack({
+      entry: entry,
+      output: {path: outputDir},
+
+      module: {
+        loaders: [
+          { test: /\.gif$/, loader: require.resolve('file-loader') }
+        ]
+      },
+      plugins: [
+        cssChunkPlugin
+      ]
+    }, function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      // Verify the loader boilerplate
+      var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+      expect(output).to.not.match(/\.foo/);
+      expect(output).to.not.match(/\.baz/);
+
+      // Verify the file records
+      expect(Object.keys(status.compilation.assets)).to.eql(['e46d046421eba561b2d062319480f69a.gif', 'bundle.js', '0.bundle.css']);
+
+      // Verify the actual css content
+      output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
+      expect(output).to.match(/\.foo/);
+      expect(output).to.match(/\.baz/);
+      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.gif\);/);
+      expect(output).to.match(/background: url\(data:foo\);/);
+      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.gif#foo\);/);
+      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.gif\?#foo\);/);
+      expect(output).to.match(/background: url\(#foo\);/);
+      expect(output).to.not.match(/undefined/);
+
+      done();
+    });
+  });
+
   it('should include chunk hash in the path name', function(done) {
     var cssChunkPlugin = new CssChunkPlugin(),
         entry = path.resolve(__dirname + '/../fixtures/css-chunk.js');
