@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.9.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.10.0...master)
+
+## v0.10.0 - January 8th, 2015
+- Add support for url bundling from require.css - 5519de7
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.9.0...v0.10.0)
 
 ## v0.9.0 - January 5th, 2015
 - [#8](https://github.com/walmartlabs/circus/issues/8) - Optimize single chunk components ([@kpdecker](https://api.github.com/users/kpdecker))
