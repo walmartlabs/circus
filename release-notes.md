@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.10.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v0.10.1...master)
+
+## v0.10.1 - January 8th, 2015
+- Fix resolve context for css dependencies - 86b741e
+- Fix string handling in css loader - aee2316
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.10.0...v0.10.1)
 
 ## v0.10.0 - January 8th, 2015
 - Add support for url bundling from require.css - 5519de7
