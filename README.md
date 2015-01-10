@@ -161,6 +161,16 @@ Plugins that wish to modify this file prior to output may connect to the `circus
 
 Consumers of the `circus.json` file must accept any additional fields that plugins may define gracefully.
 
+## Publishing
+
+The core Circus library provides the `publish(options)` method to easily publish a built component to whatever public server/service desired. 
+
+Options are:
+- `buildDir`: Path to build directory
+- `sourceMap`: `"local"` to update the source map locally but not to publish. `false` to omit any source maps entierly. Defaults to publishing any defined source maps. 
+- `publish(file, content, callback)`: Called when a particular file should be published. `callback` is of the form `callback(err, name)` where `name` is the url of the published file. This will be used to populate the `published` map key in the manifest file.
+- `callback(err, published)`: Called when all files have been published
+
 ## Karma Adapter
 
 When using Karma for tests, the Circus Karma adapter should be used to prevent test execution until all components have been loaded.

@@ -20,6 +20,8 @@
     "handlebars": "^2.0.0",
     "loader-utils": "^0.2.5",
     "lodash": "^2.4.1",
+    "recast": "^0.9.12",
+    "source-map-resolve": "^0.3.1",
     "webpack-core": "^0.4.8"
   },
   "devDependencies": {
@@ -37,6 +39,8 @@
     "mocha": "^1.21.4",
     "phantomjs": "^1.9.12",
     "require-dir": "^0.1.0",
+    "sinon": "^1.12.2",
+    "sinon-chai": "^2.6.0",
     "stylus-loader": "^0.4.0",
     "temp": "^0.8.1",
     "webpack": "^1.4.5"
