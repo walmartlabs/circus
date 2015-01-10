@@ -12,6 +12,8 @@ var Chai = require('chai'),
 Chai.use(require('sinon-chai'));
 
 describe('publish', function() {
+  this.timeout(5000);
+
   var outputDir;
 
   beforeEach(function(done) {
@@ -292,7 +294,6 @@ describe('publish', function() {
     });
   });
   it('should iterate over permutations', function(done) {
-    this.timeout(3000);
     var entry = path.resolve(__dirname + '/fixtures/packages.js');
 
     webpack(Circus.config([
