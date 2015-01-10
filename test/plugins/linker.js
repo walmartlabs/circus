@@ -43,6 +43,7 @@ describe('linker plugin', function() {
               name: 'handlebars/runtime'
             }
           },
+          published: {'bundle.js': 'bundle.js'},
           entry: 'bundle.js'
         }
       },
@@ -87,6 +88,7 @@ describe('linker plugin', function() {
               name: 'underscore'
             },
           },
+          published: {'bundle.js': 'bundle.js'},
           entry: 'bundle.js'
         },
         zap: {
@@ -95,7 +97,8 @@ describe('linker plugin', function() {
               chunk: 0,
               name: 'handlebars/runtime'
             }
-          }
+          },
+          published: {'bundle.js': 'bundle.js'}
         }
       },
       plugins: [
