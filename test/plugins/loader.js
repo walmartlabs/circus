@@ -95,6 +95,17 @@ describe('loader plugin', function() {
           "3.bundle.js.map",
           "0.bundle.css"
         ],
+        "published": {
+          "bundle.js": "bundle.js",
+          "bundle.js.map": "bundle.js.map",
+          "1.bundle.js": "1.bundle.js",
+          "1.bundle.js.map": "1.bundle.js.map",
+          "2.bundle.js": "2.bundle.js",
+          "2.bundle.js.map": "2.bundle.js.map",
+          "3.bundle.js": "3.bundle.js",
+          "3.bundle.js.map": "3.bundle.js.map",
+          "0.bundle.css": "0.bundle.css"
+        },
         "entry": "bundle.js"
       });
 
@@ -166,6 +177,11 @@ describe('loader plugin', function() {
           "1.bundle.js",
           "2.bundle.js"
         ],
+        "published": {
+          "bundle.js": "bundle.js",
+          "1.bundle.js": "1.bundle.js",
+          "2.bundle.js": "2.bundle.js"
+        },
         "entry": "bundle.js"
       });
 
