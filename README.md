@@ -118,6 +118,56 @@ Options are:
 - `publish(file, content, callback)`: Called when a particular file should be published. `callback` is of the form `callback(err, name)` where `name` is the url of the published file. This will be used to populate the `published` map key in the manifest file.
 - `callback(err, published)`: Called when all files have been published
 
+Tasks such as minimization should be done prior to publishing, if necessary. An example gulp flow is outlined below.
+
+```javascript
+var buildDir = 'build/';
+
+gulp.task('publish', ['build', 'minify-css', 'minify-js'], function(done) {
+  Circus.publish({
+    buildDir: 'build/',
+    sourceMap: 'local',
+    publish: function(name, data, callback) {
+      publishToMyAwesomeService(name, data, callback);
+    },
+    callback: function(err, published) {
+      console.log(published);
+      done(err);
+    }
+  });
+});
+
+gulp.task('minify-css', ['test'], function() {
+  return gulp.src('build/**/*.css')
+    .pipe(cssmin())
+    .pipe(gulp.dest('build/'));
+});
+gulp.task('minify-js', ['test'], function() {
+  return gulp.src('build/**/*.js')
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('build/'))
+    .pipe(gulp.dest('build/'));
+});
+
+Gulp.task('build', ['lint'], function(done) {
+  var webpackConfig = require(Path.join(process.cwd(), 'webpack.config.js'));
+
+  webpack(config, function(err, stats) {
+    if (err) {
+      done(err);
+    }
+  });
+});
+
+```
+
+Once published to the production environment, the bulid should be published to a package manager to allow for linking to to build. The [generator-release]() can be utilized to this end:
+
+```
+yo release:publish --host=$hostName components $componentName build/
+```
+
 ## Karma Adapter
 
 When using Karma for tests, the Circus Karma adapter should be used to prevent test execution until all components have been loaded.
@@ -131,3 +181,5 @@ When using Karma for tests, the Circus Karma adapter should be used to prevent t
     ]
   });
 ```
+
+[generator-release]: https://github.com/walmartlabs/generator-release
