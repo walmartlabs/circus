@@ -1,3 +1,0 @@
-Circus.loader([]);
-
-Circus.loader();

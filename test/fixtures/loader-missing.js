@@ -1,3 +1,0 @@
-Circus.loader([
-  './not-found'
-]);
