@@ -1,3 +1,5 @@
+var thisComponent = {{componentName}};
+
 {{#if includeLoader}}
   function resolveUrl(url) {
       // Relative URLs should honor the path prefix
@@ -8,11 +10,12 @@
   }
 {{/if}}
 {{#if includeJsLoader}}
-  function loadScript(src, componentName) {
+  function loadScript(src, fileId, componentName) {
+    fileId = (componentName || thisComponent) + '_' + fileId;
     {{#if fruitLoops}}
       FruitLoops.loadInContext(src);
       $('body').append('<script type="text/javascript" type="utf-8" src="' + resolveUrl(src) + '"'
-            + (componentName ? ' data-circus-entry="' + componentName + '"' : '') + '>');
+            + ' data-circus-jsid="' + fileId + '">');
     {{else}}
       // Load the actual script
       var head = document.getElementsByTagName('head')[0];
@@ -20,9 +23,7 @@
       script.type = 'text/javascript';
       script.charset = 'utf-8';
       script.src = resolveUrl(src);
-      if (componentName) {
-        script.setAttribute('data-circus-entry', componentName);
-      }
+      script.setAttribute('data-circus-jsid', fileId);
       head.appendChild(script);
     {{/if}}
   }

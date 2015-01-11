@@ -81,6 +81,43 @@ describe('loader integration', function() {
       });
     });
   });
+  it('should not duplicate css', function(done) {
+    var html = fs.readFileSync(__dirname + '/client/existing-link.html');
+    fs.writeFileSync(outputDir + '/index.html', html);
+
+    var entry = path.resolve(__dirname + '/fixtures/multiple-chunks.js');
+
+    webpack(Pack.config({
+      entry: entry,
+      output: {
+        component: 'bundle',
+
+        libraryTarget: 'umd',
+        library: 'Circus',
+
+        path: outputDir,
+        chunkFilename: '[id].bundle.js'
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      runPhantom(function(err, loaded) {
+        // Opposite order as the loader injects into the top of head
+        expect(loaded.scripts.length).to.eql(2);
+        expect(loaded.scripts[0]).to.match(/1\.bundle\.js$/);
+        expect(loaded.scripts[1]).to.match(/\/bundle\.js$/);
+
+        expect(loaded.styles.length).to.eql(2);
+        expect(loaded.styles[0]).to.match(/1\.bundle\.css$/);
+        expect(loaded.styles[1]).to.match(/vendor\.css$/);
+
+        done();
+      });
+    });
+  });
+
   it('should resolve bower and npm packages', function(done) {
     var entry = path.resolve(__dirname + '/fixtures/packages.js');
 
@@ -507,6 +544,64 @@ describe('loader integration', function() {
         });
       });
     });
+    it('should load externals from resolved packages', function(done) {
+      var html = fs.readFileSync(__dirname + '/client/existing-script.html');
+      fs.writeFileSync(outputDir + '/index.html', html);
+
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(3);
+            expect(loaded.scripts[0]).to.match(/1\.vendor.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/bundle.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
   });
 
   describe('permutations', function() {
@@ -706,7 +801,7 @@ describe('loader integration', function() {
           path: outputDir + '/vendor',
           pathPrefix: '2'
         }
-      }]), function(err, status) {
+      }]), function(err) {
         expect(err).to.not.exist;
 
         webpack(Pack.config({

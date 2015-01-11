@@ -20,12 +20,9 @@ page.onConsoleMessage = function(message) {
           return script.info || script.getAttribute('info');
         });
       });
-      var html = page.evaluate(function() {
-        return document.body.innerHTML;
-      });
 
       console.log(JSON.stringify({
-        html: html,
+        html: page.content,
         scripts: scripts,
         styles: styles,
         log: log

@@ -74,7 +74,7 @@ function loadComplete() {
   } else {
     // Nothing started, load the entry point for this module
     __webpack_components__[componentName] = [bound];
-    loadScript(componentPaths[componentId], componentName);
+    loadScript(componentPaths[componentId], 0, componentName);
   }
 };
 {{^}}

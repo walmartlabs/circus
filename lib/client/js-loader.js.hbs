@@ -12,5 +12,5 @@ if(installedChunks[chunkId] !== undefined) {
 } else {
   // start chunk loading
   installedChunks[chunkId] = [callback];
-  loadScript(jsPaths[chunkId]);
+  loadScript(jsPaths[chunkId], chunkId);
 }
