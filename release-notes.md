@@ -2,7 +2,18 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v0.10.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v1.0.0...master)
+
+## v1.0.0 - January 10th, 2015
+- [#6](https://github.com/walmartlabs/circus/issues/6) - Consider moving route-based loading into separate plugin ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#5](https://github.com/walmartlabs/circus/issues/5) - Figure out plugin point to publish to CDN ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#3](https://github.com/walmartlabs/circus/issues/3) - Document build and release process ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#2](https://github.com/walmartlabs/circus/issues/2) - Add checks to prevent duplicate loads for explicitly defined resources ([@kpdecker](https://api.github.com/users/kpdecker))
+- Include css assets in files listing - b380572
+- Use published key to map files to production urls - 74155c3
+- Fix path handling for loader urls in css files - 9390ece
+
+[Commits](https://github.com/walmartlabs/circus/compare/v0.10.1...v1.0.0)
 
 ## v0.10.1 - January 8th, 2015
 - Fix resolve context for css dependencies - 86b741e
