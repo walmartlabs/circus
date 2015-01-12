@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v1.0.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v1.1.0...master)
+
+## v1.1.0 - January 12th, 2015
+- Handle published assets within mixins - 30ac066
+- Switch to rework rather than CSSO - 3aee0bb
+
+[Commits](https://github.com/walmartlabs/circus/compare/v1.0.0...v1.1.0)
 
 ## v1.0.0 - January 10th, 2015
 - [#6](https://github.com/walmartlabs/circus/issues/6) - Consider moving route-based loading into separate plugin ([@kpdecker](https://api.github.com/users/kpdecker))
