@@ -91,11 +91,11 @@ describe('css chunk plugin', function() {
       output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
       expect(output).to.match(/\.foo/);
       expect(output).to.match(/\.baz/);
-      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.gif\);/);
-      expect(output).to.match(/background: url\(data:foo\);/);
-      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.gif#foo\);/);
-      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.gif\?#foo\);/);
-      expect(output).to.match(/background: url\(#foo\);/);
+      expect(output).to.match(/background: url\("e46d046421eba561b2d062319480f69a.gif"\);/);
+      expect(output).to.match(/background: url\("data:foo"\);/);
+      expect(output).to.match(/background: url\("e46d046421eba561b2d062319480f69a.gif#foo"\);/);
+      expect(output).to.match(/background: url\("e46d046421eba561b2d062319480f69a.gif\?#foo"\);/);
+      expect(output).to.match(/background: url\("#foo"\);/);
       expect(output).to.not.match(/undefined/);
 
       done();
@@ -161,11 +161,11 @@ describe('css chunk plugin', function() {
       output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
       expect(output).to.match(/\.foo/);
       expect(output).to.match(/\.baz/);
-      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.foo\);/);
-      expect(output).to.match(/background: url\(data:foo\);/);
-      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.foo#foo\);/);
-      expect(output).to.match(/background: url\(e46d046421eba561b2d062319480f69a.foo\?#foo\);/);
-      expect(output).to.match(/background: url\(#foo\);/);
+      expect(output).to.match(/background: url\("e46d046421eba561b2d062319480f69a.foo"\);/);
+      expect(output).to.match(/background: url\("data:foo"\);/);
+      expect(output).to.match(/background: url\("e46d046421eba561b2d062319480f69a.foo#foo"\);/);
+      expect(output).to.match(/background: url\("e46d046421eba561b2d062319480f69a.foo\?#foo"\);/);
+      expect(output).to.match(/background: url\("#foo"\);/);
       expect(output).to.not.match(/undefined/);
 
       done();
@@ -192,7 +192,7 @@ describe('css chunk plugin', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       // Verify the file records
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', 'ca.0.fd.bundle.ca25.css']);
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', 'ca.0.49.bundle.ca25.css']);
 
       done();
     });

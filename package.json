@@ -16,11 +16,12 @@
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
-    "csso": "^1.3.11",
     "handlebars": "^2.0.0",
     "loader-utils": "^0.2.5",
     "lodash": "^2.4.1",
     "recast": "^0.9.12",
+    "rework": "^1.0.1",
+    "rework-plugin-url": "^1.0.1",
     "source-map-resolve": "^0.3.1",
     "webpack-core": "^0.4.8"
   },
