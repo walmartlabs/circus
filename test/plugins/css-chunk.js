@@ -66,6 +66,10 @@ describe('css chunk plugin', function() {
       entry: entry,
       output: {path: outputDir},
 
+      linker: {
+        local: false
+      },
+
       module: {
         loaders: [
           { test: /\.gif$/, loader: require.resolve('file-loader') }

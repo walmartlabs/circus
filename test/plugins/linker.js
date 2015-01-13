@@ -47,6 +47,9 @@ describe('linker plugin', function() {
           entry: 'bundle.js'
         }
       },
+      linker: {
+        local: false
+      },
       plugins: [
         linkerPlugin
       ]
@@ -100,6 +103,8 @@ describe('linker plugin', function() {
           },
           published: {'bundle.js': 'bundle.js'}
         }
+      },
+      linker: {
       },
       plugins: [
         linkerPlugin
