@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v1.1.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v1.2.0...master)
+
+## v1.2.0 - January 13th, 2015
+- Add publish.filter option - cb2f732
+- Make module linking case insensitive - e1ec296
+- Allow for local vs. CDN linking for builds - 4f755a0
+
+[Commits](https://github.com/walmartlabs/circus/compare/v1.1.0...v1.2.0)
 
 ## v1.1.0 - January 12th, 2015
 - Handle published assets within mixins - 30ac066
