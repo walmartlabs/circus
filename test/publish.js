@@ -347,4 +347,59 @@ describe('publish', function() {
       });
     });
   });
+  it('should filter permutations', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/packages.js');
+
+    webpack(Circus.config([
+      {
+        context: path.resolve(__dirname + '/fixtures'),
+        configId: 1,
+        entry: entry,
+        output: {
+          path: outputDir,
+          pathPrefix: '1'
+        }
+      },
+      {
+        context: path.resolve(__dirname + '/fixtures'),
+        configId: 2,
+        entry: entry,
+        output: {
+          path: outputDir,
+          pathPrefix: '2'
+        }
+      }
+    ]), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.stats[0].compilation.errors).to.be.empty;
+      expect(status.stats[0].compilation.warnings).to.be.empty;
+
+      var spy = sinon.spy(function(file, data, callback) {
+        callback(undefined, file + 'foo');
+      });
+
+      Circus.publish({
+        buildDir: outputDir,
+        filter: function(dir, callback) {
+          callback(dir === '1');
+        },
+        publish: spy,
+        callback: function(err) {
+          expect(err).to.not.exist;
+
+          expect(spy.callCount).to.equal(2);
+          expect(spy.calledWith('1/bundle.js')).to.be.true;
+          expect(spy.calledWith('1/bundle.js.map')).to.be.true;
+
+          var output = JSON.parse(fs.readFileSync(outputDir + '/1/circus.json'));
+          expect(output.published).to.eql({
+            'bundle.js': '1/bundle.jsfoo',
+            'bundle.js.map': '1/bundle.js.mapfoo'
+          });
+
+          done();
+        }
+      });
+    });
+  });
 });

@@ -116,6 +116,7 @@ Options are:
 - `buildDir`: Path to build directory
 - `sourceMap`: `"local"` to update the source map locally but not to publish. `false` to omit any source maps entierly. Defaults to publishing any defined source maps. 
 - `publish(file, content, callback)`: Called when a particular file should be published. `callback` is of the form `callback(err, name)` where `name` is the url of the published file. This will be used to populate the `published` map key in the manifest file.
+- `filter(dir, callback)`: Optional method used to prevent publishing a specific permutation. `callback(filter)` expects a boolean as the first parameter. True responses will publish that permutation.
 - `callback(err, published)`: Called when all files have been published
 
 Tasks such as minimization should be done prior to publishing, if necessary. An example gulp flow is outlined below.
