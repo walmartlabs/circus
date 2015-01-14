@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v1.2.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v1.2.1...master)
+
+## v1.2.1 - January 13th, 2015
+- Force compression in rework output - 87f1ad1
+
+[Commits](https://github.com/walmartlabs/circus/compare/v1.2.0...v1.2.1)
 
 ## v1.2.0 - January 13th, 2015
 - Add publish.filter option - cb2f732
