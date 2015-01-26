@@ -145,6 +145,7 @@ describe('loader integration', function() {
 
       var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
       expect(_.pluck(pack.modules, 'name').sort()).to.eql([
+        'circus/bang',
         'circus/packages',
         'handlebars/runtime',
         'handlebars/runtime/dist/cjs/handlebars.runtime',
@@ -447,6 +448,7 @@ describe('loader integration', function() {
           'handlebars/runtime/dist/cjs/handlebars/utils': 'vendor',
 
           'vendor': 'vendor',
+          'vendor/test/fixtures/bang': 'vendor',
           'vendor/test/fixtures/packages': 'vendor',
           'vendor/test/fixtures/require-packages': 'vendor',
 
@@ -465,6 +467,7 @@ describe('loader integration', function() {
           'handlebars/runtime/dist/cjs/handlebars/utils': 'empty:',
 
           'vendor': 'empty:',
+          'vendor/test/fixtures/bang': 'empty:',
           'vendor/test/fixtures/packages': 'empty:',
           'vendor/test/fixtures/require-packages': 'empty:',
 

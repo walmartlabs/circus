@@ -89,7 +89,7 @@ describe('pack plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"circus":0,"circus\/test\/fixtures\/packages":0,"handlebars\/runtime":\d+,"underscore":\d+\}/);
+        expect(output).to.match(/moduleExports = \{"circus":0,"circus\/test\/fixtures\/packages":0,"circus\/test\/fixtures\/bang":\d+,"handlebars\/runtime":\d+,"underscore":\d+\}/);
 
         done();
       });
