@@ -147,13 +147,13 @@ describe('loader integration', function() {
       expect(_.pluck(pack.modules, 'name').sort()).to.eql([
         'circus/bang',
         'circus/packages',
+        'handlebars/dist/cjs/handlebars.runtime',
+        'handlebars/dist/cjs/handlebars/base',
+        'handlebars/dist/cjs/handlebars/exception',
+        'handlebars/dist/cjs/handlebars/runtime',
+        'handlebars/dist/cjs/handlebars/safe-string',
+        'handlebars/dist/cjs/handlebars/utils',
         'handlebars/runtime',
-        'handlebars/runtime/dist/cjs/handlebars.runtime',
-        'handlebars/runtime/dist/cjs/handlebars/base',
-        'handlebars/runtime/dist/cjs/handlebars/exception',
-        'handlebars/runtime/dist/cjs/handlebars/runtime',
-        'handlebars/runtime/dist/cjs/handlebars/safe-string',
-        'handlebars/runtime/dist/cjs/handlebars/utils',
         'underscore'
       ]);
 
@@ -439,18 +439,18 @@ describe('loader integration', function() {
         });
         expect(Pack.amdPaths(config)).to.eql({
           'underscore': 'vendor',
+          'handlebars/dist/cjs/handlebars.runtime': 'vendor',
+          'handlebars/dist/cjs/handlebars/base': 'vendor',
+          'handlebars/dist/cjs/handlebars/exception': 'vendor',
+          'handlebars/dist/cjs/handlebars/runtime': 'vendor',
+          'handlebars/dist/cjs/handlebars/safe-string': 'vendor',
+          'handlebars/dist/cjs/handlebars/utils': 'vendor',
           'handlebars/runtime': 'vendor',
-          'handlebars/runtime/dist/cjs/handlebars.runtime': 'vendor',
-          'handlebars/runtime/dist/cjs/handlebars/base': 'vendor',
-          'handlebars/runtime/dist/cjs/handlebars/exception': 'vendor',
-          'handlebars/runtime/dist/cjs/handlebars/runtime': 'vendor',
-          'handlebars/runtime/dist/cjs/handlebars/safe-string': 'vendor',
-          'handlebars/runtime/dist/cjs/handlebars/utils': 'vendor',
 
           'vendor': 'vendor',
-          'vendor/test/fixtures/bang': 'vendor',
-          'vendor/test/fixtures/packages': 'vendor',
-          'vendor/test/fixtures/require-packages': 'vendor',
+          'fixtures/bang': 'vendor',
+          'fixtures/packages': 'vendor',
+          'fixtures/require-packages': 'vendor',
 
           'chunk_vendor0': 'vendor',
           'chunk_vendor1': 'vendor'
@@ -458,18 +458,18 @@ describe('loader integration', function() {
 
         expect(Pack.amdPaths(config, true)).to.eql({
           'underscore': 'empty:',
+          'handlebars/dist/cjs/handlebars.runtime': 'empty:',
+          'handlebars/dist/cjs/handlebars/base': 'empty:',
+          'handlebars/dist/cjs/handlebars/exception': 'empty:',
+          'handlebars/dist/cjs/handlebars/runtime': 'empty:',
+          'handlebars/dist/cjs/handlebars/safe-string': 'empty:',
+          'handlebars/dist/cjs/handlebars/utils': 'empty:',
           'handlebars/runtime': 'empty:',
-          'handlebars/runtime/dist/cjs/handlebars.runtime': 'empty:',
-          'handlebars/runtime/dist/cjs/handlebars/base': 'empty:',
-          'handlebars/runtime/dist/cjs/handlebars/exception': 'empty:',
-          'handlebars/runtime/dist/cjs/handlebars/runtime': 'empty:',
-          'handlebars/runtime/dist/cjs/handlebars/safe-string': 'empty:',
-          'handlebars/runtime/dist/cjs/handlebars/utils': 'empty:',
 
           'vendor': 'empty:',
-          'vendor/test/fixtures/bang': 'empty:',
-          'vendor/test/fixtures/packages': 'empty:',
-          'vendor/test/fixtures/require-packages': 'empty:',
+          'fixtures/bang': 'empty:',
+          'fixtures/packages': 'empty:',
+          'fixtures/require-packages': 'empty:',
 
           'chunk_vendor0': 'empty:',
           'chunk_vendor1': 'empty:'
