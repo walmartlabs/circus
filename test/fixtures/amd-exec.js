@@ -1,11 +1,11 @@
 require.config({
   paths: {
-    'underscore': 'vendor',
-    'handlebars/runtime': 'vendor',
-    'vendor': 'vendor',
+    'underscore': 'bootstrap',
+    'handlebars/runtime': 'bootstrap',
+    'vendor': 'bootstrap',
 
-    'chunk_vendor0': 'vendor',
-    'chunk_vendor1': 'vendor'
+    'chunk_vendor0': 'bootstrap',
+    'chunk_vendor1': 'bootstrap'
   }
 });
 

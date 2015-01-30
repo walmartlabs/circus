@@ -102,6 +102,7 @@ describe('publish', function() {
       context: path.resolve(__dirname + '/fixtures'),
       entry: entry,
       output: {
+        bootstrap: true,
         path: outputDir
       }
     }), function(err, status) {

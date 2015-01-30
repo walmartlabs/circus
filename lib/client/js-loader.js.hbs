@@ -1,16 +1,1 @@
-if (moduleExports[chunkId] != null) {
-  chunkId = moduleChunks[moduleExports[chunkId]];
-}
-
-if (installedChunks[chunkId] === 0) {
-  return callback.call(null, __webpack_require__);
-}
-
-// an array means "currently loading".
-if(installedChunks[chunkId] !== undefined) {
-  installedChunks[chunkId].push(callback);
-} else {
-  // start chunk loading
-  installedChunks[chunkId] = [callback];
-  loadScript(jsPaths[chunkId], chunkId);
-}
+__webpack_components__.e(__webpack_require__, thisComponent, chunkId, callback);

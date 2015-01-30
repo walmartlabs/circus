@@ -123,7 +123,6 @@ describe('linker plugin', function() {
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
       expect(output).to.match(/linkedModules = .*\{"c":0,"n":"underscore"\}/);
-      expect(output).to.match(/componentPaths = \["bundle.js",null\]/);
       expect(output).to.not.match(/_ = __webpack_require__\.l\/\*ink\*\/\(0\)/);
 
       output = fs.readFileSync(outputDir + '/1.bundle.js').toString();
