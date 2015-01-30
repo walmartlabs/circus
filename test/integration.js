@@ -286,6 +286,77 @@ describe('loader integration', function() {
         expect(status.compilation.errors).to.be.empty;
         expect(status.compilation.warnings).to.be.empty;
 
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          linker: {
+            local: true
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.not.match(/foo.js/);
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/\.1\.vendor.js$/);
+            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
+    it('should load externals from published packages', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[hash:3].[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
         webpack(Pack.config({
           entry: entry,
 
@@ -304,20 +375,10 @@ describe('loader integration', function() {
           expect(status.compilation.errors).to.be.empty;
           expect(status.compilation.warnings).to.be.empty;
 
-          runPhantom(function(err, loaded) {
-            expect(loaded.scripts.length).to.equal(4);
-            expect(loaded.scripts[0]).to.match(/bundle.js$/);
-            expect(loaded.scripts[1]).to.match(/vendor.js$/);
-            expect(loaded.scripts[2]).to.match(/\.1\.vendor.js$/);
-            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.match(/foo.js/);
 
-            expect(loaded.log).to.eql([
-              '_: true Handlebars: true',
-              'App: _: true Handlebars: true Vendor: true'
-            ]);
-
-            done();
-          });
+          done();
         });
       });
     });
