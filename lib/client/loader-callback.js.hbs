@@ -11,25 +11,24 @@ if (window[{{jsonpFunction}}]) {
 
 // install a JSONP callback for chunk loading
 window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreModules) {
-  // Ensure that the root component is loaded before we do anything
+  // Ensure that the entry chunk is loaded before we do anything
   loadComponent(componentName, function() {
     var component = installedComponents[componentName];
 
     component.ec/*ensureComponent*/(chunkDeps, function() {
+      var moduleId, chunkId, i = 0, callbacks = [], amdLoad = [];
+
       // add "moreModules" to the modules object,
       // then flag all "chunkIds" as loaded and fire callback
-      var moduleId, chunkId, i = 0, callbacks = [];
-      {{#if exportAMD}}
-      var amdLoad = [];
-      {{/if}}
       for (; i < chunkIds.length; i++) {
         chunkId = chunkIds[i];
-        if (installedChunks[componentName][chunkId]) {
-          callbacks.push.apply(callbacks, installedChunks[componentName][chunkId]);
-        }
+
+        // Queue any pending callbacks and then mark as loaded
+        callbacks.push.apply(callbacks, installedChunks[componentName][chunkId] || []);
         installedChunks[componentName][chunkId] = 0;
 
         {{#if exportAMD}}
+        // Notify AMD that our chunk is loaded
         if (window.define) {
           var amdChunkName = 'chunk_' + componentName + chunkId;
           define(amdChunkName, function() {});

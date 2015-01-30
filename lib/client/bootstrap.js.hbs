@@ -15,7 +15,7 @@ var isArray = Array.isArray || function(arg) {
 };
 
 function resolveUrl(url) {
-    // Relative URLs should honor the path prefix
+  // Relative URLs should honor the path prefix
   if (!/(^\/)|\/\//.test(url)) {
     url = (__webpack_components__.p || '') + url;
   }
@@ -144,7 +144,6 @@ __webpack_components__.r/*equire*/ = function(requireFn, componentName, moduleId
 
 // Component loading: Loads the entry point for a particular component, which can
 // then load any necessary chunks and other required components.
-
 function loadComponent(componentName, callback) {
   var callbacks = installedComponents[componentName];
   if (isArray(callbacks)) {
@@ -163,8 +162,6 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
   var callbacks = installedComponents[componentName];
   installedComponents[componentName] = requireFn;
   installedChunks[componentName] = initialChunks;
-  requireFn.ex = moduleExports[componentName];
-  requireFn.mc = moduleChunks[componentName];
 
   requireFn(0);
 
@@ -183,7 +180,7 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
 };
 
 {{#if exportAMD}}
-// Notify all of the pending AMD modules that this dependency is cleared
+// Report the modules that we export and what chunks must load to load them.
 if (window.define) {
   for (var componentName in moduleExports) {
     var exports = moduleExports[componentName],
