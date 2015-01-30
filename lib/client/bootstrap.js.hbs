@@ -7,6 +7,9 @@ var __webpack_components__ = this.__webpack_components__ = {},
     jsPaths = {{jsChunkNames}},
     cssPaths = {{cssChunkNames}};
 
+// Exposing for testing/debugging purposes.
+__webpack_components__.ex = moduleExports;
+
 var isArray = Array.isArray || function(arg) {
   return Object.prototype.toString.call(arg) === '[object Array]';
 };
