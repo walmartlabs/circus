@@ -56,9 +56,6 @@ describe('loader integration', function() {
     webpack(Pack.config({
       entry: entry,
       output: {
-        libraryTarget: 'umd',
-        library: 'Circus',
-
         path: outputDir,
         chunkFilename: '[hash:3].[id].bundle.js'
       }
@@ -69,9 +66,10 @@ describe('loader integration', function() {
 
       runPhantom(function(err, loaded) {
         // Opposite order as the loader injects into the top of head
-        expect(loaded.scripts.length).to.eql(2);
-        expect(loaded.scripts[0]).to.match(/\.1\.bundle\.js$/);
-        expect(loaded.scripts[1]).to.match(/\/bundle\.js$/);
+        expect(loaded.scripts.length).to.eql(3);
+        expect(loaded.scripts[0]).to.match(/\/bundle\.js$/);
+        expect(loaded.scripts[1]).to.match(/\.1\.bundle\.js$/);
+        expect(loaded.scripts[2]).to.match(/\/bootstrap\.js$/);
 
         expect(loaded.styles.length).to.eql(2);
         expect(loaded.styles[0]).to.match(/\.0\.bundle\.css$/);
@@ -105,9 +103,10 @@ describe('loader integration', function() {
 
       runPhantom(function(err, loaded) {
         // Opposite order as the loader injects into the top of head
-        expect(loaded.scripts.length).to.eql(2);
-        expect(loaded.scripts[0]).to.match(/1\.bundle\.js$/);
-        expect(loaded.scripts[1]).to.match(/\/bundle\.js$/);
+        expect(loaded.scripts.length).to.eql(3);
+        expect(loaded.scripts[0]).to.match(/\/bundle\.js$/);
+        expect(loaded.scripts[1]).to.match(/1\.bundle\.js$/);
+        expect(loaded.scripts[2]).to.match(/\/bootstrap\.js$/);
 
         expect(loaded.styles.length).to.eql(2);
         expect(loaded.styles[0]).to.match(/1\.bundle\.css$/);
@@ -137,6 +136,8 @@ describe('loader integration', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       expect(_.keys(status.compilation.assets).sort()).to.eql([
+        'bootstrap.js',
+        'bootstrap.js.map',
         'bower.json',
         'bundle.js',
         'bundle.js.map',
@@ -197,7 +198,14 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '0.bundle.css', 'circus.json', 'bundle.js.map']);
+      expect(Object.keys(status.compilation.assets).sort()).to.eql([
+        '0.bundle.css',
+        'bootstrap.js',
+        'bootstrap.js.map',
+        'bundle.js',
+        'bundle.js.map',
+        'circus.json',
+      ]);
 
       // Verify the actual css content
       var output = fs.readFileSync(outputDir + '/0.bundle.css').toString();
@@ -229,14 +237,16 @@ describe('loader integration', function() {
       expect(status.compilation.errors).to.be.empty;
       expect(status.compilation.warnings).to.be.empty;
 
-      expect(Object.keys(status.compilation.assets)).to.eql([
-        'bundle.js',
-        '1.bundle.js',
+      expect(Object.keys(status.compilation.assets).sort()).to.eql([
         '0.bundle.css',
         '1.bundle.css',
-        'circus.json',
+        '1.bundle.js',
+        '1.bundle.js.map',
+        'bootstrap.js',
+        'bootstrap.js.map',
+        'bundle.js',
         'bundle.js.map',
-        '1.bundle.js.map'
+        'circus.json'
       ]);
 
       setTimeout(function() {
@@ -276,6 +286,77 @@ describe('loader integration', function() {
         expect(status.compilation.errors).to.be.empty;
         expect(status.compilation.warnings).to.be.empty;
 
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          linker: {
+            local: true
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.not.match(/foo.js/);
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/\.1\.vendor.js$/);
+            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
+    it('should load externals from published packages', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/externals.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[hash:3].[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
         webpack(Pack.config({
           entry: entry,
 
@@ -294,19 +375,10 @@ describe('loader integration', function() {
           expect(status.compilation.errors).to.be.empty;
           expect(status.compilation.warnings).to.be.empty;
 
-          runPhantom(function(err, loaded) {
-            expect(loaded.scripts.length).to.equal(3);
-            expect(loaded.scripts[0]).to.match(/vendor.js$/);
-            expect(loaded.scripts[1]).to.match(/\.1\.vendor.js$/);
-            expect(loaded.scripts[2]).to.match(/bundle.js$/);
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.match(/foo.js/);
 
-            expect(loaded.log).to.eql([
-              '_: true Handlebars: true',
-              'App: _: true Handlebars: true Vendor: true'
-            ]);
-
-            done();
-          });
+          done();
         });
       });
     });
@@ -350,10 +422,11 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           runPhantom(function(err, loaded) {
-            expect(loaded.scripts.length).to.equal(3);
-            expect(loaded.scripts[0]).to.match(/1\.bundle.js$/);
-            expect(loaded.scripts[1]).to.match(/vendor.js$/);
-            expect(loaded.scripts[2]).to.match(/bundle.js$/);
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/1\.bundle.js$/);
+            expect(loaded.scripts[2]).to.match(/vendor.js$/);
+            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
 
             expect(loaded.log).to.eql([
               '_: true Handlebars: true',
@@ -394,11 +467,12 @@ describe('loader integration', function() {
         expect(status.compilation.warnings).to.be.empty;
 
         runPhantom(function(err, loaded) {
-          expect(loaded.scripts.length).to.equal(4);
-          expect(loaded.scripts[0]).to.match(/vendor.js$/);
-          expect(loaded.scripts[1]).to.match(/\.1\.vendor.js$/);
-          expect(loaded.scripts[2]).to.match(/require.js$/);
-          expect(loaded.scripts[3]).to.match(/exec.js$/);
+          expect(loaded.scripts.length).to.equal(5);
+          expect(loaded.scripts[0]).to.match(/bootstrap.js$/);
+          expect(loaded.scripts[1]).to.match(/vendor.js$/);
+          expect(loaded.scripts[2]).to.match(/\.1\.vendor.js$/);
+          expect(loaded.scripts[3]).to.match(/require.js$/);
+          expect(loaded.scripts[4]).to.match(/exec.js$/);
 
           expect(loaded.log).to.eql([
             '_: true Handlebars: true',
@@ -525,6 +599,8 @@ describe('loader integration', function() {
           expect(Object.keys(status.compilation.assets).sort()).to.eql([
             '1.vendor.js',
             '1.vendor.js.map',
+            'bootstrap.js',
+            'bootstrap.js.map',
             'bundle.js',
             'bundle.js.map',
             'circus.json',
@@ -590,10 +666,11 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           runPhantom(function(err, loaded) {
-            expect(loaded.scripts.length).to.equal(3);
-            expect(loaded.scripts[0]).to.match(/1\.vendor.js$/);
-            expect(loaded.scripts[1]).to.match(/vendor.js$/);
-            expect(loaded.scripts[2]).to.match(/bundle.js$/);
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/1\.vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/bootstrap.js$/);
+            expect(loaded.scripts[3]).to.match(/vendor.js$/);
 
             expect(loaded.log).to.eql([
               '_: true Handlebars: true',

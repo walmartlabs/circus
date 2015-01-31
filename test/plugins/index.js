@@ -39,9 +39,9 @@ describe('pack plugin', function() {
         expect(status.compilation.warnings).to.be.empty;
 
         // Verify the loader boilerplate
-        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"circus":0,.*"handlebars\/runtime":\d+,.*\}/);
+        expect(output).to.match(/moduleExports = \{"circus":\{"circus":0,.*"handlebars\/runtime":\d+,.*\}/);
 
         done();
       });
@@ -63,9 +63,9 @@ describe('pack plugin', function() {
         expect(status.compilation.warnings).to.be.empty;
 
         // Verify the loader boilerplate
-        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"circus":0\}/);
+        expect(output).to.match(/moduleExports = \{"circus":\{"circus":0\}/);
 
         done();
       });
@@ -87,9 +87,9 @@ describe('pack plugin', function() {
         expect(status.compilation.warnings).to.be.empty;
 
         // Verify the loader boilerplate
-        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
-        expect(output).to.match(/moduleExports = \{"circus":0,"fixtures\/packages":0,"fixtures\/bang":\d+,"handlebars\/runtime":\d+,"underscore":\d+\}/);
+        expect(output).to.match(/moduleExports = \{"circus":\{"circus":0,"fixtures\/packages":0,"fixtures\/bang":\d+,"handlebars\/runtime":\d+,"underscore":\d+\}/);
 
         done();
       });
@@ -110,11 +110,10 @@ describe('pack plugin', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       // Verify the loader boilerplate
-      var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+      var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
-      expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["[0-9a-f]{3}\.0\.bundle\.css"]/);
-      expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
+      expect(output).to.match(/cssPaths = \{"circus":\["[0-9a-f]{3}\.0\.bundle\.css"]/);
+      expect(output).to.match(/__webpack_components__.cs = function\s*\(/);
 
       done();
     });
@@ -137,43 +136,18 @@ describe('pack plugin', function() {
       var assets = Object.keys(status.compilation.assets);
       expect(assets[0]).to.match(/bundle.js/);
       expect(assets[1]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js/);
-      expect(assets[2]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.0\.bundle\.css/);
-      expect(assets[3]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.css/);
-      expect(assets[4]).to.match(/circus.json/);
-      expect(assets[5]).to.match(/bundle.js.map/);
-      expect(assets[6]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js.map/);
+      expect(assets[2]).to.match(/bootstrap.js/);
+      expect(assets[3]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.0\.bundle\.css/);
+      expect(assets[4]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.css/);
+      expect(assets[5]).to.match(/circus.json/);
+      expect(assets[6]).to.match(/bundle.js.map/);
+      expect(assets[7]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js.map/);
 
       // Verify the loader boilerplate
-      var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+      var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
-      expect(output).to.match(/cssSheets = \{\}/);
-      expect(output).to.match(/cssPaths = \["[0-9a-f]{3}\.[0-9a-f]{4}.0\.bundle\.css","[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.css"\]/);
-      expect(output).to.match(/jsPaths = \[0,"[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js"\]/);
-      expect(output).to.match(/__webpack_require__.cs = function\s*\(chunkId\)/);
-
-      // Sanity checks to help us avoid issues if upstream changes under us
-      expect(output).to.match(/var installedModules\b/);
-
-      done();
-    });
-  });
-
-  it('should not output css loader if not needed', function(done) {
-    var entry = path.resolve(__dirname + '/../fixtures/router1.js');
-
-    webpack(Pack.config({
-      entry: entry,
-      output: {path: outputDir}
-    }), function(err, status) {
-      expect(err).to.not.exist;
-      expect(status.compilation.errors).to.be.empty;
-      expect(status.compilation.warnings).to.be.empty;
-
-      // Verify the loader boilerplate
-      var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-
-      expect(output).to.not.match(/cssSheets = \{\}/);
-      expect(output).to.not.match(/__webpack_require__.cs = function\(chunkId\)/);
+      expect(output).to.match(/cssPaths = \{"circus":\["[0-9a-f]{3}\.[0-9a-f]{4}.0\.bundle\.css","[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.css"\]/);
+      expect(output).to.match(/jsPaths = \{"circus":\[0,"[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js"\]/);
 
       done();
     });

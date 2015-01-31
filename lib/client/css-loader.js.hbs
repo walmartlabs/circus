@@ -1,28 +1,5 @@
 
 // Expose the css loader
 __webpack_require__.cs = function(chunkId) {
-  var fileId = thisComponent + '_' + chunkId;
-
-  if (cssSheets[chunkId] || !cssPaths[chunkId]) {
-    return cssSheets[chunkId];
-  }
-
-  {{#if fruitLoops}}
-    cssSheets[chunkId] = $('head').append('<link rel="stylesheet" href="' + resolveUrl(cssPaths[chunkId]) + '" data-circus-cssid="' + fileId + '">');
-  {{else}}
-    cssSheets[chunkId] = document.querySelector('[data-circus-cssid=' + fileId + ']');
-
-    if (!cssSheets[chunkId]) {
-      var styleElement = cssSheets[chunkId] = document.createElement('link');
-      styleElement.rel = 'stylesheet';
-      styleElement.type = 'text/css';
-      styleElement.href = resolveUrl(cssPaths[chunkId]);
-      styleElement.setAttribute('data-circus-cssid', fileId);
-
-      var head = document.getElementsByTagName('head')[0];
-      head.appendChild(styleElement);
-    }
-
-    return cssSheets[chunkId];
-  {{/if}}
+  __webpack_components__.cs(thisComponent, chunkId);
 };

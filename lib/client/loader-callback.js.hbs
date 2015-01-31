@@ -5,60 +5,53 @@
   MIT License http://www.opensource.org/licenses/mit-license.php
   Author Tobias Koppers @sokra
 }}
+if (window[{{jsonpFunction}}]) {
+  throw new Error('Duplicate bootstrap defined');
+}
+
 // install a JSONP callback for chunk loading
-var parentJsonpFunction = window[{{jsonpFunction}}];
-window[{{jsonpFunction}}] = function webpackJsonpCallback(componentId, chunkIds, chunkDeps, moreModules) {
-  if (parentJsonpFunction) {
-    parentJsonpFunction(componentId, chunkIds, chunkDeps, moreModules);
-  }
+window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreModules) {
+  // Ensure that the entry chunk is loaded before we do anything
+  loadComponent(componentName, function() {
+    var component = installedComponents[componentName];
 
-  if (componentId !== {{componentId}}) {
-    return;
-  }
+    component.ec/*ensureComponent*/(chunkDeps, function() {
+      var moduleId, chunkId, i = 0, callbacks = [], amdLoad = [];
 
-  {{requireFn}}.ec/*ensureComponent*/(chunkDeps, function() {
-    // add "moreModules" to the modules object,
-    // then flag all "chunkIds" as loaded and fire callback
-    var moduleId, chunkId, i = 0, callbacks = [];
-    {{#if exportAMD}}
-    var amdLoad = [];
-    {{/if}}
-    for (; i < chunkIds.length; i++) {
-      chunkId = chunkIds[i];
-      if (installedChunks[chunkId]) {
-        callbacks.push.apply(callbacks, installedChunks[chunkId]);
+      // add "moreModules" to the modules object,
+      // then flag all "chunkIds" as loaded and fire callback
+      for (; i < chunkIds.length; i++) {
+        chunkId = chunkIds[i];
+
+        // Queue any pending callbacks and then mark as loaded
+        callbacks.push.apply(callbacks, installedChunks[componentName][chunkId] || []);
+        installedChunks[componentName][chunkId] = 0;
+
+        {{#if exportAMD}}
+        // Notify AMD that our chunk is loaded
+        if (window.define) {
+          var amdChunkName = 'chunk_' + componentName + chunkId;
+          define(amdChunkName, function() {});
+          amdLoad.push(amdChunkName);
+        }
+        {{/if}}
       }
-      installedChunks[chunkId] = 0;
+      for (moduleId in moreModules) {
+        component.m[moduleId] = moreModules[moduleId];
+      }
+      while (callbacks.length) {
+        callbacks.shift().call(null, component);
+      }
 
       {{#if exportAMD}}
       if (window.define) {
-        var amdChunkName = 'chunk_' + {{componentId}} + chunkId;
-        define(amdChunkName, function() {});
-        amdLoad.push(amdChunkName);
+        // This call is needed to force the above defines to be properly registered
+        // within the module system. require.js does not recognize `define` statements
+        // that occur in scripts that are loaded through external means, without a call
+        // such as this.
+        require(amdLoad);
       }
       {{/if}}
-    }
-    for (moduleId in moreModules) {
-      {{addModules}}
-    }
-    while (callbacks.length) {
-      callbacks.shift().call(null, {{requireFn}});
-    }
-    {{#if moreModules}}
-      if (moreModules[0]) {
-        installedModules[0] = 0;
-        {{requireFn}}(0);
-      }
-    {{/if}}
-
-    {{#if exportAMD}}
-    if (window.define) {
-      // This call is needed to force the above defines to be properly registered
-      // within the module system. require.js does not recognize `define` statements
-      // that occur in scripts that are loaded through external means, without a call
-      // such as this.
-      require(amdLoad);
-    }
-    {{/if}}
+    });
   });
 };
