@@ -175,6 +175,63 @@ describe('loader integration', function() {
       });
     });
   });
+
+  it('should handle context resolves', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/context.js');
+
+    webpack(Pack.config({
+      context: path.resolve(__dirname + '/fixtures'),
+      entry: entry,
+      output: {
+        path: outputDir,
+        chunkFilename: '[id].bundle.js'
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      expect(_.keys(status.compilation.assets).sort()).to.eql([
+        'bootstrap.js',
+        'bootstrap.js.map',
+        'bower.json',
+        'bundle.js',
+        'bundle.js.map',
+        'circus.json'
+      ]);
+
+      var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
+      expect(_.pluck(pack.modules, 'name').sort()).to.eql([
+        'circus/bang',
+        'circus/context',
+        'circus/packages',
+        'handlebars/dist/cjs/handlebars.runtime',
+        'handlebars/dist/cjs/handlebars/base',
+        'handlebars/dist/cjs/handlebars/exception',
+        'handlebars/dist/cjs/handlebars/runtime',
+        'handlebars/dist/cjs/handlebars/safe-string',
+        'handlebars/dist/cjs/handlebars/utils',
+        'handlebars/runtime',
+        'underscore'
+      ]);
+
+
+      pack.root = outputDir;
+      Pack.loadConfigs(outputDir, function(err, configs) {
+        expect(configs).to.eql({
+          $default: pack
+        });
+
+        runPhantom(function(err, loaded) {
+          expect(loaded.log).to.eql([
+            '_: true Handlebars: true'
+          ]);
+
+          done();
+        });
+      });
+    });
+  });
   it('should run loaders for external css files', function(done) {
     var entry = path.resolve(__dirname + '/fixtures/stylus.js');
 
