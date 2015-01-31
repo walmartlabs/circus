@@ -444,6 +444,7 @@ describe('loader integration', function() {
           entry = path.resolve(__dirname + '/fixtures/require-packages.js');
 
       webpack(Pack.config({
+        context: path.resolve(__dirname + '/fixtures'),
         entry: vendorEntry,
         output: {
           component: 'vendor',
@@ -739,6 +740,7 @@ describe('loader integration', function() {
       var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js');
 
       webpack(Pack.config({
+        context: path.resolve(__dirname + '/fixtures'),
         entry: vendorEntry,
         output: {
           component: 'vendor',
@@ -773,9 +775,9 @@ describe('loader integration', function() {
           'handlebars/runtime': 'vendor',
 
           'vendor': 'vendor',
-          'fixtures/bang': 'vendor',
-          'fixtures/packages': 'vendor',
-          'fixtures/require-packages': 'vendor',
+          'vendor/bang': 'vendor',
+          'vendor/packages': 'vendor',
+          'vendor/require-packages': 'vendor',
 
           'chunk_vendor0': 'vendor',
           'chunk_vendor1': 'vendor'
@@ -792,9 +794,9 @@ describe('loader integration', function() {
           'handlebars/runtime': 'empty:',
 
           'vendor': 'empty:',
-          'fixtures/bang': 'empty:',
-          'fixtures/packages': 'empty:',
-          'fixtures/require-packages': 'empty:',
+          'vendor/bang': 'empty:',
+          'vendor/packages': 'empty:',
+          'vendor/require-packages': 'empty:',
 
           'chunk_vendor0': 'empty:',
           'chunk_vendor1': 'empty:'

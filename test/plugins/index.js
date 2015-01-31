@@ -94,7 +94,141 @@ describe('pack plugin', function() {
         done();
       });
     });
+
+    it('should remap custom external names', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          path: outputDir,
+          chunkFilename: '[id].bundle.js',
+          externals: {
+            'handlebars/runtime': 'foo'
+          }
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+
+        expect(output).to.match(/moduleExports = \{"circus":\{"circus":0,.*"foo":\d+,.*\}/);
+
+        done();
+      });
+    });
+    it('should give priority to custom external names', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          path: outputDir,
+          chunkFilename: '[id].bundle.js',
+          externals: {
+            'handlebars/runtime': 'fixtures/packages'
+          }
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+
+        expect(output).to.match(/"circus":0/);
+        expect(output).to.not.match(/"fixtures\/packages":0/);
+        expect(output).to.match(/"fixtures\/packages":\d+/);
+
+        done();
+      });
+    });
+    it('should give priority to custom external names (reverse)', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          path: outputDir,
+          externals: {
+            'fixtures/packages': 'handlebars/runtime'
+          }
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+
+        expect(output).to.not.match(/"fixtures\/packages":0/);
+        expect(output).to.match(/"handlebars\/runtime":0/);
+
+        done();
+      });
+    });
+    it('should fail if the component name is remapped', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          path: outputDir,
+          externals: {
+            'circus': 'handlebars/runtime'
+          }
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.have.length(1);
+        expect(status.compilation.warnings).to.be.empty;
+
+        done();
+      });
+    });
+    it('should fail if the an imported component module is overwritten', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+
+        components: {
+          zeus: {
+            modules: {
+              0: {
+                chunk: 0,
+                name: 'foo'
+              },
+              1: {
+                chunk: 0,
+                name: 'handlebars/runtime'
+              }
+            },
+            published: {'bundle.js': 'bundle.js'},
+            entry: 'bundle.js'
+          }
+        },
+
+        output: {
+          path: outputDir,
+          externals: {
+            'fixtures/bang': 'handlebars/runtime'
+          }
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors[0]).to.match(/Unable to overwrite exported module "handlebars\/runtime" in component "zeus"/);
+
+        done();
+      });
+    });
   });
+
   it('should output css loader', function(done) {
     var entry = path.resolve(__dirname + '/../fixtures/css-chunk.js');
 
