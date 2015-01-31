@@ -170,68 +170,6 @@ describe('bootstrap', function() {
     });
   });
 
-  it('should load dependencies that have inlined bootstrap', function(done) {
-    var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
-        entry = path.resolve(__dirname + '/fixtures/externals.js');
-
-    var html = fs.readFileSync(__dirname + '/client/inlined-bootstrap.html');
-    fs.writeFileSync(outputDir + '/index.html', html);
-
-    webpack(Pack.config({
-      entry: vendorEntry,
-      output: {
-        bootstrap: true,
-        component: 'vendor',
-
-        libraryTarget: 'umd',
-        library: 'Circus',
-
-        path: outputDir + '/vendor',
-        filename: 'vendor.js',
-        chunkFilename: '[hash:3].[id].vendor.js'
-      }
-    }), function(err, status) {
-      expect(err).to.not.exist;
-      expect(status.compilation.errors).to.be.empty;
-      expect(status.compilation.warnings).to.be.empty;
-
-      // Verify the bootstrap
-      var output = fs.readFileSync(outputDir + '/vendor/vendor.js').toString();
-      expect(output).to.match(/componentPaths = \{\}/);
-
-      webpack(Pack.config({
-        entry: entry,
-
-        output: {
-          bootstrap: true,
-
-          path: outputDir,
-          filename: 'bundle.js'
-        },
-
-        resolve: {
-          modulesDirectories: [
-            outputDir
-          ]
-        }
-      }), function(err, status) {
-        expect(err).to.not.exist;
-        expect(status.compilation.errors).to.be.empty;
-        expect(status.compilation.warnings).to.be.empty;
-
-        // Verify the bootstrap
-        output = fs.readFileSync(outputDir + '/bundle.js').toString();
-        expect(output).to.match(/componentPaths = \{"vendor":"vendor.js"\}/);
-
-        runPhantom(function(err) {
-          expect(err).to.match(/Duplicate bootstrap/);
-
-          done();
-        });
-      });
-    });
-  });
-
   function runPhantom(callback) {
     childProcess.execFile(phantom.path, [outputDir + '/runner.js', outputDir], function(err, stdout, stderr) {
       if (err) {
