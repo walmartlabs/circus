@@ -133,4 +133,85 @@ describe('linker plugin', function() {
       done();
     });
   });
+
+  describe('alias', function() {
+    it('should alias modules', function(done) {
+      testAlias({bar: 'bak'}, function(status) {
+        expect(status.compilation.errors.length).to.equal(0);
+        expect(status.compilation.warnings.length).to.equal(0);
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
+
+        done();
+      });
+    });
+    it('should alias based on length', function(done) {
+      testAlias({bar: 'bak', 'bar/bar': 'bak'}, function(status) {
+        expect(status.compilation.errors.length).to.equal(0);
+        expect(status.compilation.warnings.length).to.equal(0);
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        expect(output).to.match(/linkedModules.*"n":"bak"/);
+        expect(output).to.not.match(/"n":"bak\/bar"/);
+
+        done();
+      });
+    });
+    it('should alias only module root', function(done) {
+      testAlias({bar$: 'bak'}, function(status) {
+        expect(status.compilation.errors.length).to.equal(1);
+        expect(status.compilation.warnings.length).to.equal(0);
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        expect(output).to.match(/linkedModules.*"n":"bak"/);
+        expect(output).to.not.match(/"n":"bak\/bar"/);
+
+        done();
+      });
+    });
+
+    function testAlias(alias, callback) {
+      var linkerPlugin = new LinkerPlugin(),
+          entry = path.resolve(__dirname + '/../fixtures/alias.js');
+
+      webpack({
+        entry: entry,
+        output: {path: outputDir},
+
+        components: {
+          zeus: {
+            modules: {
+              0: {
+                chunk: 0,
+                name: 'bak'
+              },
+              1: {
+                chunk: 0,
+                name: 'bak/bar'
+              }
+            },
+            published: {'bundle.js': 'bundle.js'},
+            entry: 'bundle.js'
+          }
+        },
+        resolve: {
+          alias: alias
+        },
+        linker: {
+          local: false
+        },
+        plugins: [
+          linkerPlugin
+        ]
+      }, function(err, status) {
+        expect(err).to.not.exist;
+
+        callback(status);
+      });
+    }
+  });
 });
