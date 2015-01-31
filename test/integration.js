@@ -495,7 +495,201 @@ describe('loader integration', function() {
         });
       });
     });
+    it('should load externals via amd require', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/amd-require.js');
 
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          linker: {
+            local: true
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.not.match(/foo.js/);
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/1\.vendor.js$/);
+            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
+    it('should load externals via require ensure', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/amd-require.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          linker: {
+            local: true
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.not.match(/foo.js/);
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/1\.vendor.js$/);
+            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
+    it('should load externals via amd define', function(done) {
+      var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js'),
+          entry = path.resolve(__dirname + '/fixtures/amd-define.js');
+
+      webpack(Pack.config({
+        entry: vendorEntry,
+        output: {
+          component: 'vendor',
+
+          libraryTarget: 'umd',
+          library: 'Circus',
+
+          path: outputDir + '/vendor',
+          filename: 'vendor.js',
+          chunkFilename: '[id].vendor.js'
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        var config = JSON.parse(fs.readFileSync(outputDir + '/vendor/circus.json') + '');
+        config.published['vendor.js'] = 'foo.js';
+        fs.writeFileSync(outputDir + '/vendor/circus.json', JSON.stringify(config));
+
+        webpack(Pack.config({
+          entry: entry,
+
+          output: {
+            path: outputDir,
+            filename: 'bundle.js'
+          },
+
+          linker: {
+            local: true
+          },
+
+          resolve: {
+            modulesDirectories: [
+              outputDir
+            ]
+          }
+        }), function(err, status) {
+          expect(err).to.not.exist;
+          expect(status.compilation.errors).to.be.empty;
+          expect(status.compilation.warnings).to.be.empty;
+
+          var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+          expect(output).to.not.match(/foo.js/);
+
+          runPhantom(function(err, loaded) {
+            expect(loaded.scripts.length).to.equal(4);
+            expect(loaded.scripts[0]).to.match(/bundle.js$/);
+            expect(loaded.scripts[1]).to.match(/vendor.js$/);
+            expect(loaded.scripts[2]).to.match(/1\.vendor.js$/);
+            expect(loaded.scripts[3]).to.match(/bootstrap.js$/);
+
+            expect(loaded.log).to.eql([
+              '_: true Handlebars: true',
+              'App: _: true Handlebars: true Vendor: true'
+            ]);
+
+            done();
+          });
+        });
+      });
+    });
     it('should expose externals to amd', function(done) {
       var vendorEntry = path.resolve(__dirname + '/fixtures/require-packages.js');
 
