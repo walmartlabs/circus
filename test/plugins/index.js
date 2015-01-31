@@ -95,6 +95,33 @@ describe('pack plugin', function() {
       });
     });
 
+    it('should remap aliases', function(done) {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      webpack(Pack.config({
+        entry: entry,
+        output: {
+          path: outputDir,
+          chunkFilename: '[id].bundle.js'
+        },
+        resolve: {
+          alias: {
+            'handlebars/runtime': './bang'
+          }
+        }
+      }), function(err, status) {
+        expect(err).to.not.exist;
+        expect(status.compilation.errors).to.be.empty;
+        expect(status.compilation.warnings).to.be.empty;
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+        expect(output).to.match(/moduleExports = \{"circus":\{"circus":0,.*"handlebars\/runtime":1,.*\}/);
+
+        done();
+      });
+    });
+
     it('should remap custom external names', function(done) {
       var entry = path.resolve(__dirname + '/../fixtures/packages.js');
 
