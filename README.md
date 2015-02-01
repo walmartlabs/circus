@@ -76,6 +76,14 @@ When linking to a component that defines permutations, the `configId` value of t
 
 Circus can be configured to generate builds that can be consumed by require.js and other AMD build environments. This is done by specifying the `output.exportAMD` build flag, which will cause all exported Circus modules to be registered with the `define` API. Users of this mode will also need to specify the proper path configuration within the AMD environment in order to properly link to the shared file. The `amdPaths(config, optimizer)` helper method is provided as a mechanism to create this mapping.
 
+## Bootstrap File
+
+Circus will only generate one copy of it's bootstrap code for a given project. For components that are intended to be consumed by other components, a `bootstrap.js` file is generated with all of the necessary data to load the component within a test environment.
+
+For top-level applications that users interact with directly, it's recommended that the `output.bootstrap` configuration option be set to true. This will inline the bootstrap code into the application entry point as well as optimize the output for this case. When in this mode, it is not possible for other components to import this component as a dependency.
+
+This bootstrap logic allows for circus components to dynamically link to one another without the overhead of having multiple copies of the initialization logic or potentially loading different versions of the same component.
+
 ## CSS Loading
 
 Circus webpack builds will also generate a single CSS module for each output JS file, when CSS files are included via the `require.css` call.
@@ -182,5 +190,7 @@ When using Karma for tests, the Circus Karma adapter should be used to prevent t
     ]
   });
 ```
+
+The circus config should also be set to inline the bootstrap code, otherwise errors due to having multiple entry points may occur.
 
 [generator-release]: https://github.com/walmartlabs/generator-release
