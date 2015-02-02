@@ -16,7 +16,7 @@ window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreMod
     var component = installedComponents[componentName];
 
     component.ec/*ensureComponent*/(chunkDeps, function() {
-      var moduleId, chunkId, i = 0, callbacks = [], amdLoad = [];
+      var moduleId, chunkId, i = 0, callbacks = [];
 
       // add "moreModules" to the modules object,
       // then flag all "chunkIds" as loaded and fire callback
@@ -26,15 +26,6 @@ window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreMod
         // Queue any pending callbacks and then mark as loaded
         callbacks.push.apply(callbacks, installedChunks[componentName][chunkId] || []);
         installedChunks[componentName][chunkId] = 0;
-
-        {{#if exportAMD}}
-        // Notify AMD that our chunk is loaded
-        if (window.define) {
-          var amdChunkName = 'chunk_' + componentName + chunkId;
-          define(amdChunkName, function() {});
-          amdLoad.push(amdChunkName);
-        }
-        {{/if}}
       }
       for (moduleId in moreModules) {
         component.m[moduleId] = moreModules[moduleId];
@@ -42,16 +33,6 @@ window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreMod
       while (callbacks.length) {
         callbacks.shift().call(null, component);
       }
-
-      {{#if exportAMD}}
-      if (window.define) {
-        // This call is needed to force the above defines to be properly registered
-        // within the module system. require.js does not recognize `define` statements
-        // that occur in scripts that are loaded through external means, without a call
-        // such as this.
-        require(amdLoad);
-      }
-      {{/if}}
     });
   });
 };

@@ -168,34 +168,7 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
   while (callbacks && callbacks.length) {
     callbacks.shift()();
   }
-
-  {{#if exportAMD}}
-  // Notify all of the pending AMD modules that this dependency is cleared
-  if (window.define) {
-    var nameBase = 'chunk_' + componentName;
-    define(nameBase + 0, function() {});
-    require([nameBase + 0]);
-  }
-  {{/if}}
 };
-
-{{#if exportAMD}}
-// Report the modules that we export and what chunks must load to load them.
-if (window.define) {
-  for (var componentName in moduleExports) {
-    var exports = moduleExports[componentName],
-        chunks = moduleChunks[componentName];
-
-    for (var name in exports) {
-      (function(componentName, name) {
-        define(name, ['chunk_' + componentName + chunks[exports[name]]], function() {
-          return installedComponents[componentName](name);
-        });
-      })(componentName, name);
-    }
-  }
-}
-{{/if}}
 
 // cssLoader
 __webpack_components__.cs = function(componentName, chunkId) {
