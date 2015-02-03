@@ -4,8 +4,7 @@ var __webpack_components__ = this.__webpack_components__ = {},
     installedModules = {},
     cssSheets = {},
 
-    jsPaths = {{jsChunkNames}},
-    cssPaths = {{cssChunkNames}};
+    jsPaths = {{jsChunkNames}};
 
 // Exposing for testing/debugging purposes.
 __webpack_components__.ex = moduleExports;
@@ -170,7 +169,10 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
   }
 };
 
+{{#if includeCssLoader}}
 // cssLoader
+var cssPaths = {{cssChunkNames}};
+
 __webpack_components__.cs = function(componentName, chunkId) {
   var fileId = componentName + '_' + chunkId,
       path = cssPaths[componentName][chunkId];
@@ -198,3 +200,4 @@ __webpack_components__.cs = function(componentName, chunkId) {
     return cssSheets[fileId];
   {{/if}}
 };
+{{/if}}
