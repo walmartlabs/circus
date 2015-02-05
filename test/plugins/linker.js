@@ -137,33 +137,36 @@ describe('linker plugin', function() {
   describe('alias', function() {
     it('should alias modules', function(done) {
       testAlias({bar: 'bak'}, function(status) {
-        expect(status.compilation.errors.length).to.equal(0);
+        expect(status.compilation.errors.length).to.equal(1);
+        expect(status.compilation.errors[0].name).to.equal('ModuleNotFoundError');
         expect(status.compilation.warnings.length).to.equal(0);
 
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
         expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
-        expect(output).to.not.match(/Bar/);
+        expect(output).to.not.match(/"n":"Bar"/);
 
         done();
       });
     });
     it('should be case insensitive with alias modules', function(done) {
       testAlias({Bar: 'bak'}, function(status) {
-        expect(status.compilation.errors.length).to.equal(0);
+        expect(status.compilation.errors.length).to.equal(1);
+        expect(status.compilation.errors[0].name).to.equal('ModuleNotFoundError');
         expect(status.compilation.warnings.length).to.equal(0);
 
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
         expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
-        expect(output).to.not.match(/Bar/);
+        expect(output).to.not.match(/"n":"Bar"/);
 
         done();
       });
     });
     it('should alias based on length', function(done) {
       testAlias({bar: 'bak', 'bar/bar': 'bak'}, function(status) {
-        expect(status.compilation.errors.length).to.equal(0);
+        expect(status.compilation.errors.length).to.equal(1);
+        expect(status.compilation.errors[0].name).to.equal('ModuleNotFoundError');
         expect(status.compilation.warnings.length).to.equal(0);
 
         // Verify the loader boilerplate
@@ -176,7 +179,7 @@ describe('linker plugin', function() {
     });
     it('should alias only module root', function(done) {
       testAlias({bar$: 'bak'}, function(status) {
-        expect(status.compilation.errors.length).to.equal(2);
+        expect(status.compilation.errors.length).to.equal(3);
         expect(status.compilation.warnings.length).to.equal(0);
 
         // Verify the loader boilerplate
