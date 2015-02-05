@@ -143,6 +143,20 @@ describe('linker plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
         expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
+        expect(output).to.not.match(/Bar/);
+
+        done();
+      });
+    });
+    it('should be case insensitive with alias modules', function(done) {
+      testAlias({Bar: 'bak'}, function(status) {
+        expect(status.compilation.errors.length).to.equal(0);
+        expect(status.compilation.warnings.length).to.equal(0);
+
+        // Verify the loader boilerplate
+        var output = fs.readFileSync(outputDir + '/bundle.js').toString();
+        expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
+        expect(output).to.not.match(/Bar/);
 
         done();
       });
@@ -162,7 +176,7 @@ describe('linker plugin', function() {
     });
     it('should alias only module root', function(done) {
       testAlias({bar$: 'bak'}, function(status) {
-        expect(status.compilation.errors.length).to.equal(1);
+        expect(status.compilation.errors.length).to.equal(2);
         expect(status.compilation.warnings.length).to.equal(0);
 
         // Verify the loader boilerplate
@@ -192,6 +206,10 @@ describe('linker plugin', function() {
               1: {
                 chunk: 0,
                 name: 'bak/bar'
+              },
+              2: {
+                chunk: 0,
+                name: 'bak/bad'
               }
             },
             published: {'bundle.js': 'bundle.js'},
