@@ -2,7 +2,40 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v1.2.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v2.0.0...master)
+
+## v2.0.0 - February 6th, 2015
+- [#31](https://github.com/walmartlabs/circus/issues/31) - Context require statements case the linker to throw an error ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#28](https://github.com/walmartlabs/circus/issues/28) - Linker does not work when alias has capitalization ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#27](https://github.com/walmartlabs/circus/issues/27) - Bootstrap chunk is include in circus.json file ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#26](https://github.com/walmartlabs/circus/issues/26) - It's possible to export duplicate names ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#24](https://github.com/walmartlabs/circus/issues/24) - Should allow for config-based external name generation ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#22](https://github.com/walmartlabs/circus/issues/22) - Bootstrap loading needs to be documented ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#21](https://github.com/walmartlabs/circus/issues/21) - Resolve aliases are not able to point to linked modules ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#20](https://github.com/walmartlabs/circus/issues/20) - AMD requires are not properly linked ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#18](https://github.com/walmartlabs/circus/pull/18) - Convert infrastructure to utilize bootstrapper ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#25](https://github.com/walmartlabs/circus/issues/25) - Allow for non-referenced chunks
+- [#19](https://github.com/walmartlabs/circus/issues/19) - Module exporter fails with context requires
+- [#17](https://github.com/walmartlabs/circus/issues/17) - Create bootstrap file
+- [#15](https://github.com/walmartlabs/circus/issues/15) - Failure due to missing components isn't always obvious
+- Allow for bootstrap only projects - 423a294
+- Pull AMD integration out into standalone project - bb20916
+- Handle array main instances in bower - 9189a84
+- Optimize bookkeeping output for inlined bootstrap - 9368cec
+- Fix external name resolution for direct main refs - e0f29c7
+- Ignore local path spec in package main lookup - ce22c31
+- Give bower priority in package resolution - 5a68b08
+- Fix resolve alias export naming pattern - ab957b8
+- Provide failover for missing bootstrap or vars - 081df68
+- Make module exports aware of package configs - 3273e8d
+- Properly handle exports with ! paths - 45d25f1
+- Minify javascript on publish - b2ce7cc
+
+Compatibility notes:
+- This changes the structure of the init logic dramatically. The build now creates bootstrap logic that handles all file references across all components. It also limits a given page to only having one bootstrap loaded at a given time, which avoids a number of potential versioning issues.
+- AMD adapters have been moved to the circus-amd project
+
+[Commits](https://github.com/walmartlabs/circus/compare/v1.2.1...v2.0.0)
 
 ## v1.2.1 - January 13th, 2015
 - Force compression in rework output - 87f1ad1
