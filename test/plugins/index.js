@@ -164,8 +164,12 @@ describe('pack plugin', function() {
         expect(status.compilation.errors).to.be.empty;
         expect(status.compilation.warnings).to.be.empty;
 
+        // Verify that we aren't exporting the duplicate name
+        var output = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
+        expect(output.modules[0]).to.not.exist;
+
         // Verify the loader boilerplate
-        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+        output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
         expect(output).to.match(/"circus":0/);
         expect(output).to.not.match(/"fixtures\/packages":0/);
@@ -190,8 +194,12 @@ describe('pack plugin', function() {
         expect(status.compilation.errors).to.be.empty;
         expect(status.compilation.warnings).to.be.empty;
 
+        // Verify that we aren't exporting the duplicate name
+        var output = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
+        expect(output.modules[2]).to.not.exist;
+
         // Verify the loader boilerplate
-        var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
+        output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
         expect(output).to.not.match(/"fixtures\/packages":0/);
         expect(output).to.match(/"handlebars\/runtime":0/);
