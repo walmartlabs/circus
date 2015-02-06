@@ -75,6 +75,10 @@ describe('bootstrap', function() {
         expect(status.compilation.errors).to.be.empty;
         expect(status.compilation.warnings).to.be.empty;
 
+        output = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
+        expect(output.chunks).to.have.length(1);
+        expect(output.bootstrap).to.equal('bootstrap.js');
+
         // Verify the bootstrap
         output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
         expect(output).to.match(/componentPaths = \{"vendor":"vendor.js","circus":"bundle.js"\}/);
