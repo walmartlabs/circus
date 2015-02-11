@@ -282,7 +282,7 @@ describe('pack plugin', function() {
       var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
       expect(output).to.match(/cssPaths = \{"circus":\["[0-9a-f]{3}\.0\.bundle\.css"]/);
-      expect(output).to.match(/__webpack_components__.cs = function\s*\(/);
+      expect(output).to.match(/function cssLoader\(/);
 
       done();
     });

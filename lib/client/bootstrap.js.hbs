@@ -162,6 +162,13 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
   installedComponents[componentName] = requireFn;
   installedChunks[componentName] = initialChunks;
 
+  {{#if includeCssLoader}}
+    // Expose the css loader
+    requireFn.cs = function(chunkId) {
+      cssLoader(componentName, chunkId);
+    };
+  {{/if}}
+
   requireFn(0);
 
   while (callbacks && callbacks.length) {
@@ -170,10 +177,9 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
 };
 
 {{#if includeCssLoader}}
-// cssLoader
 var cssPaths = {{cssChunkNames}};
 
-__webpack_components__.cs = function(componentName, chunkId) {
+function cssLoader(componentName, chunkId) {
   var fileId = componentName + '_' + chunkId,
       path = cssPaths[componentName][chunkId];
 
