@@ -33,6 +33,7 @@ describe('linker plugin', function() {
 
       components: {
         zeus: {
+          chunks: [],
           modules: {
             0: {
               chunk: 0,
@@ -81,6 +82,7 @@ describe('linker plugin', function() {
 
       components: {
         zeus: {
+          chunks: [],
           modules: {
             0: {
               chunk: 0,
@@ -95,6 +97,7 @@ describe('linker plugin', function() {
           entry: 'bundle.js'
         },
         zap: {
+          chunks: [],
           modules: {
             1: {
               chunk: 0,
@@ -201,6 +204,7 @@ describe('linker plugin', function() {
 
         components: {
           zeus: {
+            chunks: [],
             modules: {
               0: {
                 chunk: 0,

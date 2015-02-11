@@ -114,6 +114,7 @@ describe('css chunk plugin', function() {
 
       components: {
         zeus: {
+          chunks: [],
           modules: {
             0: {
               chunk: 0,
