@@ -10,11 +10,9 @@ if (window[{{jsonpFunction}}]) {
   MIT License http://www.opensource.org/licenses/mit-license.php
   Author Tobias Koppers @sokra
 }}
-window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreModules) {
+function __webpack_components__(componentName, chunkIds, chunkDeps, moreModules) {
   // Ensure that the entry chunk is loaded before we do anything
-  loadComponent(componentName, function() {
-    var component = installedComponents[componentName];
-
+  loadComponent(componentName, function(component) {
     component.ec/*ensureComponent*/(chunkDeps, function() {
       var moduleId, chunkId, i = 0, callbacks = [];
 
@@ -30,16 +28,22 @@ window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreMod
       for (moduleId in moreModules) {
         component.m[moduleId] = moreModules[moduleId];
       }
+
+      // If we have the component entry module, then run it
+      if (moreModules[0]) {
+        component(0);
+      }
+
       while (callbacks.length) {
         callbacks.shift().call(null, component);
       }
     });
-  });
+  }, !chunkIds[0]);
 };
+window[{{jsonpFunction}}] = __webpack_components__;
 
 
-var __webpack_components__ = this.__webpack_components__ = {},
-    installedComponents = __webpack_components__.c = {},
+var installedComponents = __webpack_components__.c = {},
     installedChunks = {},
     installedModules = {},
     cssSheets = {},
@@ -69,9 +73,14 @@ function loadScript(src, fileId, componentName) {
     $('body').append('<script type="text/javascript" type="utf-8" src="' + resolveUrl(src) + '"'
           + ' data-circus-jsid="' + fileId + '">');
   {{else}}
+    var script = document.querySelector('[data-circus-jsid=' + fileId + ']');
+    if (script) {
+      return;
+    }
+
     // Load the actual script
     var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
+    script = document.createElement('script');
     script.type = 'text/javascript';
     script.charset = 'utf-8';
     script.src = resolveUrl(src);
@@ -81,8 +90,23 @@ function loadScript(src, fileId, componentName) {
 }
 
 
+function lookupChunkId(componentName, chunkId, moduleId) {
+  var exports = moduleExports[componentName],
+      chunks = moduleChunks[componentName];
+
+  if (chunks === true) {
+    return 0;
+  } else if (exports[chunkId] != null) {
+    moduleId = exports[chunkId];
+  }
+  if (chunks[moduleId] != null) {
+    chunkId = chunks[moduleId];
+  }
+  return chunkId;
+}
+
 // Retrieves a currently loaded external module.
-__webpack_components__.l/*ink*/ = function(componentName, module) {
+function linkComponent(componentName, module) {
   var component = installedComponents[componentName];
 
   if (!component || !component.call) {
@@ -90,17 +114,18 @@ __webpack_components__.l/*ink*/ = function(componentName, module) {
   }
 
   return component(module);
-};
+}
 
 // ensureComponent
-function ensureComponent(id, linkedModules, componentNames, callback) {
+function ensureComponent(componentName, id, callback) {
   // Allow array inputs.
   if (id.length === 0) {
     setTimeout(callback, 0);
+    return;
   } else if (isArray(id)) {
     var run = 0;
     for (var i = 0, len = id.length; i < len; i++) {
-      ensureComponent(id[i], linkedModules, componentNames, function() {
+      ensureComponent(componentName, id[i], function() {
         if (++run === len) {
           callback();
         }
@@ -109,49 +134,46 @@ function ensureComponent(id, linkedModules, componentNames, callback) {
     return;
   }
 
-  var module = linkedModules[id],
-      componentId = module.c/*omponent*/,
+  var module = linkedModules[componentName][id],
+      componentId = module[0]/*component*/,
       componentName = componentNames[componentId];
 
-  loadComponent(componentName, function() {
-    var component = installedComponents[componentName];
-
+  loadComponent(componentName, function(component) {
     // Once the component is loaded, then ensure that the necessary chunks are
     // loaded as well.
     if (component && component.e) {
-      component.e/*nsure*/(module.n/*ame*/, callback);
+      component.e/*nsure*/(lookupChunkId(componentName, undefined, module[1]/*id*/), callback);
     } else {
       // Or we have a component that consists of only one chunk
       callback();
     }
   });
 }
-__webpack_components__.ec = ensureComponent;
 
-__webpack_components__.e/*nsure*/ = function(requireFn, componentName, chunkId, callback) {
-  var installed = installedChunks[componentName],
-      exports = moduleExports[componentName],
-      chunks = moduleChunks[componentName];
+function ensureChunk(requireFn, componentName, chunkId, callback) {
+  chunkId = lookupChunkId(componentName, chunkId);
 
-  if (exports[chunkId] != null) {
-    chunkId = chunks === true ? 0 : chunks[exports[chunkId]];
-  }
-
+  var installed = installedChunks[componentName];
   if (installed[chunkId] === 0) {
     return callback.call(null, requireFn);
   }
 
+  var scriptName = jsPaths[componentName][chunkId];
+
   // an array means "currently loading".
   if(installed[chunkId] !== undefined) {
     installed[chunkId].push(callback);
-  } else {
+  } else if (scriptName) {
     // start chunk loading
     installed[chunkId] = [callback];
-    loadScript(jsPaths[componentName][chunkId], chunkId, componentName);
+    loadScript(scriptName, chunkId, componentName);
+  } else {
+    // The chunk is inlined with the bootstrap
+    callback();
   }
-};
+}
 
-__webpack_components__.r/*equire*/ = function(requireFn, componentName, moduleId) {
+function require(requireFn, componentName, moduleId) {
   var exports = moduleExports[componentName];
   if (exports[moduleId] != null) {
     moduleId = exports[moduleId];
@@ -178,30 +200,23 @@ __webpack_components__.r/*equire*/ = function(requireFn, componentName, moduleId
 
   // Return the exports of the module
   return module.exports;
-};
+}
 
 
 // Component loading: Loads the entry point for a particular component, which can
 // then load any necessary chunks and other required components.
-function loadComponent(componentName, callback) {
-  var callbacks = installedComponents[componentName];
-  if (isArray(callbacks)) {
-    callbacks.push(callback);
-  } else if (callbacks) {
-    callback();
-  } else {
-    installedComponents[componentName] = [callback];
-    loadScript(componentPaths[componentName], 0, componentName);
+function loadComponent(componentName, callback, entryLoading) {
+  var component = installedComponents[componentName];
+  if (component) {
+    return callback(component);
   }
-}
-__webpack_components__.lc = loadComponent;
 
-// componentComplete
-__webpack_components__.cc = function(componentName, initialChunks, requireFn) {
-  var callbacks = installedComponents[componentName];
-  installedComponents[componentName] = requireFn;
-  installedChunks[componentName] = initialChunks;
+  function requireFn(moduleId) {
+    return require(requireFn, componentName, moduleId);
+  }
+  requireFn.m/*odules*/ = [];
 
+  // Extend the require function with our implementation details
   {{#if includeCssLoader}}
     // Expose the css loader
     requireFn.cs = function(chunkId) {
@@ -209,12 +224,38 @@ __webpack_components__.cc = function(componentName, initialChunks, requireFn) {
     };
   {{/if}}
 
-  requireFn(0);
+  requireFn.e/*nsure*/ = function(chunkId, callback) {
+    ensureChunk(requireFn, componentName, chunkId, callback);
+  };
 
-  while (callbacks && callbacks.length) {
-    callbacks.shift()();
+  if (componentNames.length) {
+    // Retrieves a currently loaded external module.
+    requireFn.l/*ink*/ = function(id) {
+      var module = linkedModules[componentName][id];
+      return linkComponent(componentNames[module[0]/*component*/], module[1]/*id*/);
+    };
+
+    // Loads the external component hosting a given module.
+    requireFn.ec/*ensureComponent*/ = function(id, callback) {
+      ensureComponent(componentName, id, callback);
+    };
+  } else {
+    requireFn.ec/*ensureComponent*/ = function(id, callback) {
+      // Stub to simplify upstream handling.
+      callback();
+    };
   }
-};
+
+  installedComponents[componentName] = requireFn;
+  installedChunks[componentName] = {};
+  if (entryLoading) {
+    callback(requireFn);
+  } else {
+    requireFn.e(0, function() {
+      callback(requireFn);
+    });
+  }
+}
 
 {{#if includeCssLoader}}
 var cssPaths = {{cssChunkNames}};
@@ -245,5 +286,5 @@ function cssLoader(componentName, chunkId) {
 
     return cssSheets[fileId];
   {{/if}}
-};
+}
 {{/if}}

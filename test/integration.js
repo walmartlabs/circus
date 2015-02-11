@@ -821,7 +821,7 @@ describe('loader integration', function() {
         });
       });
     });
-    it('should load externals from resolved packages', function(done) {
+    it('should load externals from existing scripts', function(done) {
       var html = fs.readFileSync(__dirname + '/client/existing-script.html');
       fs.writeFileSync(outputDir + '/index.html', html);
 
@@ -871,8 +871,8 @@ describe('loader integration', function() {
             expect(loaded.scripts[3]).to.match(/vendor.js$/);
 
             expect(loaded.log).to.eql([
+              'App: _: true Handlebars: true Vendor: true',
               '_: true Handlebars: true',
-              'App: _: true Handlebars: true Vendor: true'
             ]);
 
             done();
@@ -1003,7 +1003,7 @@ describe('loader integration', function() {
           expect(status.compilation.errors).to.be.empty;
           expect(status.compilation.warnings).to.be.empty;
 
-          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
           expect(output).to.match(/componentNames = \["vendor"\]/);
 
           done();
@@ -1052,7 +1052,7 @@ describe('loader integration', function() {
           expect(status.compilation.errors).to.be.empty;
           expect(status.compilation.warnings).to.be.empty;
 
-          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
           expect(output).to.match(/componentNames = \["vendor"\]/);
 
           done();
@@ -1103,7 +1103,7 @@ describe('loader integration', function() {
           expect(status.compilation.errors).to.be.empty;
           expect(status.compilation.warnings).to.be.empty;
 
-          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
           expect(output).to.match(/componentNames = \["vendor"\]/);
 
           done();
@@ -1156,7 +1156,7 @@ describe('loader integration', function() {
           ]);
           expect(status.compilation.warnings).to.be.empty;
 
-          var output = fs.readFileSync(outputDir + '/1/bundle.js').toString();
+          var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
           expect(output).to.not.match(/componentNames = \["vendor"\]/);
 
           done();

@@ -317,7 +317,7 @@ describe('pack plugin', function() {
       var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
 
       expect(output).to.match(/cssPaths = \{"circus":\["[0-9a-f]{3}\.[0-9a-f]{4}.0\.bundle\.css","[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.css"\]/);
-      expect(output).to.match(/jsPaths = \{"circus":\[0,"[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js"\]/);
+      expect(output).to.match(/jsPaths = \{"circus":\["bundle.js","[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js"\]/);
 
       done();
     });

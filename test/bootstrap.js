@@ -55,7 +55,7 @@ describe('bootstrap', function() {
 
       // Verify the bootstrap
       var output = fs.readFileSync(outputDir + '/vendor/bootstrap.js').toString();
-      expect(output).to.match(/componentPaths = \{"vendor":"vendor.js"\}/);
+      expect(output).to.match(/jsPaths = \{"vendor":\["vendor.js"/);
 
       webpack(Pack.config({
         entry: entry,
@@ -81,7 +81,7 @@ describe('bootstrap', function() {
 
         // Verify the bootstrap
         output = fs.readFileSync(outputDir + '/bootstrap.js').toString();
-        expect(output).to.match(/componentPaths = \{"vendor":"vendor.js","circus":"bundle.js"\}/);
+        expect(output).to.match(/jsPaths = \{"circus":\["bundle.js"\],"vendor":\["vendor.js","[0-9a-f]+\.1\.vendor\.js"\]/);
 
         runPhantom(function(err, loaded) {
           expect(err).to.not.exist;
@@ -129,7 +129,7 @@ describe('bootstrap', function() {
 
       // Verify the bootstrap
       var output = fs.readFileSync(outputDir + '/vendor/bootstrap.js').toString();
-      expect(output).to.match(/componentPaths = \{"vendor":"vendor.js"\}/);
+      expect(output).to.match(/jsPaths = \{"vendor":\["vendor.js"/);
 
       webpack(Pack.config({
         entry: entry,
@@ -153,7 +153,7 @@ describe('bootstrap', function() {
 
         // Verify the bootstrap
         output = fs.readFileSync(outputDir + '/bundle.js').toString();
-        expect(output).to.match(/componentPaths = \{"vendor":"vendor.js"\}/);
+        expect(output).to.match(/jsPaths = \{"circus":\[0\],"vendor":\["vendor.js","[0-9a-f]+\.1\.vendor\.js"\]/);
 
         runPhantom(function(err, loaded) {
           expect(err).to.not.exist;

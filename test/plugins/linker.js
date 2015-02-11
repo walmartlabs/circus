@@ -78,7 +78,7 @@ describe('linker plugin', function() {
 
     webpack({
       entry: entry,
-      output: {path: outputDir},
+      output: {bootstrap: true, component: 'test', path: outputDir},
 
       components: {
         zeus: {
@@ -98,6 +98,9 @@ describe('linker plugin', function() {
         },
         zap: {
           chunks: [],
+          usedModules: [
+            {component: 'zeus', name: 'underscore'}
+          ],
           modules: {
             1: {
               chunk: 0,
@@ -125,11 +128,10 @@ describe('linker plugin', function() {
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-      expect(output).to.match(/linkedModules = .*\{"c":0,"n":"underscore"\}/);
-      expect(output).to.not.match(/_ = __webpack_require__\.l\/\*ink\*\/\(0\)/);
+      expect(output).to.match(/linkedModules = .*"test":\[\[0,2\],\[1,1\]\]/);
+      expect(output).to.match(/linkedModules = .*"zap":\[\[0,2\]\]/);
 
       output = fs.readFileSync(outputDir + '/1.bundle.js').toString();
-      expect(output).to.not.match(/linkedModules/);
       expect(output).to.match(/_ = __webpack_require__\.l\/\*ink\*\/\(0\)/);
       expect(output).to.match(/Handlebars = __webpack_require__\.l\/\*ink\*\/\(1\)/);
 
@@ -146,8 +148,8 @@ describe('linker plugin', function() {
 
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-        expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
-        expect(output).to.not.match(/"n":"Bar"/);
+        expect(output).to.match(/moduleExports.*"bak":\d,.*"bak\/bar":\d/);
+        expect(output).to.not.match(/"Bar"/);
 
         done();
       });
@@ -160,8 +162,8 @@ describe('linker plugin', function() {
 
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-        expect(output).to.match(/linkedModules.*"n":"bak".*"n":"bak\/bar"/);
-        expect(output).to.not.match(/"n":"Bar"/);
+        expect(output).to.match(/moduleExports.*"bak":\d,.*"bak\/bar":\d/);
+        expect(output).to.not.match(/"Bar"/);
 
         done();
       });
@@ -174,8 +176,10 @@ describe('linker plugin', function() {
 
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-        expect(output).to.match(/linkedModules.*"n":"bak"/);
-        expect(output).to.not.match(/"n":"bak\/bar"/);
+        expect(output).to.match(/moduleExports.*"bak":\d/);
+        // This could be a bit unstable but these magic numbers are checking that the 
+        // bak/bar is not referenced
+        expect(output).to.not.match(/linkedModules.*"alias":\[.*\[0,1\]/);
 
         done();
       });
@@ -187,8 +191,10 @@ describe('linker plugin', function() {
 
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
-        expect(output).to.match(/linkedModules.*"n":"bak"/);
-        expect(output).to.not.match(/"n":"bak\/bar"/);
+        expect(output).to.match(/moduleExports.*"bak":\d/);
+        // This could be a bit unstable but these magic numbers are checking that the 
+        // bak/bar and bar/bad modules are not referenced
+        expect(output).to.not.match(/linkedModules.*"alias":\[.*\[0,[12]\]/);
 
         done();
       });
@@ -200,7 +206,7 @@ describe('linker plugin', function() {
 
       webpack({
         entry: entry,
-        output: {path: outputDir},
+        output: {bootstrap: true, component: 'alias', path: outputDir},
 
         components: {
           zeus: {
