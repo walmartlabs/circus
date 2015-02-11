@@ -94,7 +94,7 @@ __webpack_components__.e/*nsure*/ = function(requireFn, componentName, chunkId, 
       chunks = moduleChunks[componentName];
 
   if (exports[chunkId] != null) {
-    chunkId = chunks[exports[chunkId]];
+    chunkId = chunks === true ? 0 : chunks[exports[chunkId]];
   }
 
   if (installed[chunkId] === 0) {
