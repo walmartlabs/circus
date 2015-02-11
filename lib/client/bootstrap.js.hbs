@@ -1,3 +1,43 @@
+if (window[{{jsonpFunction}}]) {
+  throw new Error('Duplicate bootstrap defined');
+}
+
+// install a JSONP callback for chunk loading
+{{!
+  Derived from:
+  https://github.com/webpack/webpack/blob/master/lib/JsonpMainTemplatePlugin.js
+
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+}}
+window[{{jsonpFunction}}] = function(componentName, chunkIds, chunkDeps, moreModules) {
+  // Ensure that the entry chunk is loaded before we do anything
+  loadComponent(componentName, function() {
+    var component = installedComponents[componentName];
+
+    component.ec/*ensureComponent*/(chunkDeps, function() {
+      var moduleId, chunkId, i = 0, callbacks = [];
+
+      // add "moreModules" to the modules object,
+      // then flag all "chunkIds" as loaded and fire callback
+      for (; i < chunkIds.length; i++) {
+        chunkId = chunkIds[i];
+
+        // Queue any pending callbacks and then mark as loaded
+        callbacks.push.apply(callbacks, installedChunks[componentName][chunkId] || []);
+        installedChunks[componentName][chunkId] = 0;
+      }
+      for (moduleId in moreModules) {
+        component.m[moduleId] = moreModules[moduleId];
+      }
+      while (callbacks.length) {
+        callbacks.shift().call(null, component);
+      }
+    });
+  });
+};
+
+
 var __webpack_components__ = this.__webpack_components__ = {},
     installedComponents = __webpack_components__.c = {},
     installedChunks = {},
