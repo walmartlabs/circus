@@ -316,6 +316,7 @@ describe('loader integration', function() {
 
       expect(Object.keys(status.compilation.assets).sort()).to.eql([
         '0.bundle.css',
+        '0.bundle.css.map',
         'bootstrap.js',
         'bootstrap.js.map',
         'bundle.js',
@@ -355,7 +356,9 @@ describe('loader integration', function() {
 
       expect(Object.keys(status.compilation.assets).sort()).to.eql([
         '0.bundle.css',
+        '0.bundle.css.map',
         '1.bundle.css',
+        '1.bundle.css.map',
         '1.bundle.js',
         '1.bundle.js.map',
         'bootstrap.js',
@@ -796,14 +799,12 @@ describe('loader integration', function() {
 
           expect(Object.keys(status.compilation.assets).sort()).to.eql([
             '1.vendor.js',
-            '1.vendor.js.map',
             'bootstrap.js',
             'bootstrap.js.map',
             'bundle.js',
             'bundle.js.map',
             'circus.json',
-            'vendor.js',
-            'vendor.js.map'
+            'vendor.js'
           ]);
 
           setTimeout(function() {

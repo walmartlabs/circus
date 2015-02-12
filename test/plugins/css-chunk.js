@@ -157,6 +157,7 @@ describe('css chunk plugin', function() {
       // Verify the file records
       expect(Object.keys(status.compilation.assets).sort()).to.eql([
         '0.bundle.css',
+        '0.bundle.css.map',
         'bootstrap.js',
         'bootstrap.js.map',
         'bundle.js',
@@ -199,7 +200,7 @@ describe('css chunk plugin', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       // Verify the file records
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '79.0.49.bundle.7938.css']);
+      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '79.0.92.bundle.7938.css']);
 
       done();
     });
