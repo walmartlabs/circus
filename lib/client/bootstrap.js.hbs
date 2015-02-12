@@ -22,8 +22,8 @@ function __webpack_components__(componentName, chunkIds, chunkDeps, moreModules)
         chunkId = chunkIds[i];
 
         // Queue any pending callbacks and then mark as loaded
-        callbacks.push.apply(callbacks, installedChunks[componentName][chunkId] || []);
-        installedChunks[componentName][chunkId] = 0;
+        callbacks.push.apply(callbacks, component.ic/*installedChunks*/[chunkId] || []);
+        component.ic/*installedChunks*/[chunkId] = 0;
       }
       for (moduleId in moreModules) {
         component.m[moduleId] = moreModules[moduleId];
@@ -44,8 +44,6 @@ window[{{jsonpFunction}}] = __webpack_components__;
 
 
 var installedComponents = __webpack_components__.c = {},
-    installedChunks = {},
-    installedModules = {},
     cssSheets = {},
 
     jsPaths = {{jsChunkNames}};
@@ -153,7 +151,7 @@ function ensureComponent(componentName, id, callback) {
 function ensureChunk(requireFn, componentName, chunkId, callback) {
   chunkId = lookupChunkId(componentName, chunkId);
 
-  var installed = installedChunks[componentName];
+  var installed = requireFn.ic/*installedChunks*/;
   if (installed[chunkId] === 0) {
     return callback.call(null, requireFn);
   }
@@ -178,15 +176,15 @@ function require(requireFn, componentName, moduleId) {
   if (exports[moduleId] != null) {
     moduleId = exports[moduleId];
   }
-  var uniqueId = componentName + '_' + moduleId;
+  var installedModules = requireFn.im/*installedModules*/;
 
   // Check if module is in cache
-  if (installedModules[uniqueId]) {
-    return installedModules[uniqueId].exports;
+  if (installedModules[moduleId]) {
+    return installedModules[moduleId].exports;
   }
 
   // Create a new module (and put it into the cache)
-  var module = installedModules[uniqueId] = {
+  var module = installedModules[moduleId] = {
     exports: {},
     id: moduleId,
     loaded: false
@@ -215,6 +213,8 @@ function loadComponent(componentName, callback, entryLoading) {
     return require(requireFn, componentName, moduleId);
   }
   requireFn.m/*odules*/ = [];
+  requireFn.ic/*installedChunks*/ = {};
+  requireFn.im/*installedModules*/ = {};
 
   // Extend the require function with our implementation details
   {{#if includeCssLoader}}
@@ -247,7 +247,6 @@ function loadComponent(componentName, callback, entryLoading) {
   }
 
   installedComponents[componentName] = requireFn;
-  installedChunks[componentName] = {};
   if (entryLoading) {
     callback(requireFn);
   } else {
