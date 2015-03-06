@@ -2,7 +2,25 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v2.0.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.0...master)
+
+## v3.0.0 - March 6th, 2015
+- [#29](https://github.com/walmartlabs/circus/issues/29) - moduleChunks should optimize for single chunk case ([@kpdecker](https://api.github.com/users/kpdecker))
+- Include the current component in name list - face1e9
+- Omit null values from moduleChunk arrays - cde76bc
+- Move bookkeeping objects into requireFn - 97b51ff
+- Cleanup asset chunk ids - 0e96f93
+- Convert content code to avoid main template render - c37d9b9
+- Make code chunks children of bootstrap chunk - 74a9b3c
+- Fix improper jshint change - 2f44392
+- Move jsonp callback into bootstrap template - d061a96
+- Move cssLoader init into componentComplete handler - f737449
+
+Compatibility notes:
+- This changes the build format so only the bootstrap module emits boilerplate code. Should not have any user facing impact, but all libraries do need to be rebuilt under this format.
+
+
+[Commits](https://github.com/walmartlabs/circus/compare/v2.0.0...v3.0.0)
 
 ## v2.0.0 - February 6th, 2015
 - [#31](https://github.com/walmartlabs/circus/issues/31) - Context require statements case the linker to throw an error ([@kpdecker](https://api.github.com/users/kpdecker))
