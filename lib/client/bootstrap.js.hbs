@@ -212,6 +212,7 @@ function loadComponent(componentName, callback, entryLoading) {
   function requireFn(moduleId) {
     return require(requireFn, componentName, moduleId);
   }
+  requireFn.p/*ath*/ = __webpack_components__.p;
   requireFn.m/*odules*/ = [];
   requireFn.ic/*installedChunks*/ = {};
   requireFn.im/*installedModules*/ = {};
