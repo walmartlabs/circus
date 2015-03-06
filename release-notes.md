@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v3.0.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.1...master)
+
+## v3.0.1 - March 6th, 2015
+- Fix moduleChunks short circuit with inlined boot - 8132edb
+
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.0...v3.0.1)
 
 ## v3.0.0 - March 6th, 2015
 - [#29](https://github.com/walmartlabs/circus/issues/29) - moduleChunks should optimize for single chunk case ([@kpdecker](https://api.github.com/users/kpdecker))
