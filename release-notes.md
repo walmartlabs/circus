@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v3.0.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.2...master)
+
+## v3.0.2 - March 6th, 2015
+- Expose path on require function - 5b21e68
+
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.1...v3.0.2)
 
 ## v3.0.1 - March 6th, 2015
 - Fix moduleChunks short circuit with inlined boot - 8132edb
