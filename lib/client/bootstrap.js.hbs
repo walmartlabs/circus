@@ -228,7 +228,7 @@ function loadComponent(componentName, callback, entryLoading) {
     ensureChunk(requireFn, componentName, chunkId, callback);
   };
 
-  if (componentNames.length) {
+  if (componentNames.length > 1) {
     // Retrieves a currently loaded external module.
     requireFn.l/*ink*/ = function(id) {
       var module = linkedModules[componentName][id];

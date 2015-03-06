@@ -1005,7 +1005,7 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
-          expect(output).to.match(/componentNames = \["vendor"\]/);
+          expect(output).to.match(/componentNames = \["vendor","circus"\]/);
 
           done();
         });
@@ -1054,7 +1054,7 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
-          expect(output).to.match(/componentNames = \["vendor"\]/);
+          expect(output).to.match(/componentNames = \["vendor","circus"\]/);
 
           done();
         });
@@ -1105,7 +1105,7 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           var output = fs.readFileSync(outputDir + '/1/bootstrap.js').toString();
-          expect(output).to.match(/componentNames = \["vendor"\]/);
+          expect(output).to.match(/componentNames = \["vendor","circus"\]/);
 
           done();
         });
