@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v3.0.2...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.3...master)
+
+## v3.0.3 - March 9th, 2015
+- Ensure all components are loaded for to test exec - 568b098
+
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.2...v3.0.3)
 
 ## v3.0.2 - March 6th, 2015
 - Expose path on require function - 5b21e68
