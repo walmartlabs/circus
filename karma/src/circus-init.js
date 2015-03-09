@@ -10,10 +10,8 @@ __karma__.loaded = function() {
   // If there are any pending webpack components then we want to defer test exec until they are complete
   var required = 1;
   for (var name in __webpack_components__.c) {
-    if (Array.isArray(__webpack_components__.c[name])) {
-      required++;
-      __webpack_components__.c[name].push(exec);
-    }
+    required++;
+    __webpack_components__.c[name].e(0, exec);
   }
   exec();
 };
