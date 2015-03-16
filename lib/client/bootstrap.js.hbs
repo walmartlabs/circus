@@ -71,7 +71,7 @@ function loadScript(src, fileId, componentName) {
     $('body').append('<script type="text/javascript" type="utf-8" src="' + resolveUrl(src) + '"'
           + ' data-circus-jsid="' + fileId + '">');
   {{else}}
-    var script = document.querySelector('[data-circus-jsid=' + fileId + ']');
+    var script = document.querySelector('[data-circus-jsid="' + fileId + '"]');
     if (script) {
       return;
     }
@@ -271,7 +271,7 @@ function cssLoader(componentName, chunkId) {
   {{#if fruitLoops}}
     cssSheets[fileId] = $('head').append('<link rel="stylesheet" href="' + resolveUrl(path) + '" data-circus-cssid="' + fileId + '">');
   {{else}}
-    cssSheets[fileId] = document.querySelector('[data-circus-cssid=' + fileId + ']');
+    cssSheets[fileId] = document.querySelector('[data-circus-cssid="' + fileId + '"]');
 
     if (!cssSheets[fileId]) {
       var styleElement = cssSheets[fileId] = document.createElement('link');
