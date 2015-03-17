@@ -2,7 +2,19 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v3.0.3...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.0...master)
+
+## v4.0.0 - March 17th, 2015
+- [#32](https://github.com/walmartlabs/circus/issues/32) - Include circus version in the manifest ([@kpdecker](https://api.github.com/users/kpdecker))
+- Use safer queries for existing resource lookup - 1ec80ca
+- Add chunk dependency listing plugin - f3db930
+- Include component names in circus.json - a88e572
+- Use componentId for chunk dependencies - 3090396
+
+Compatibility notes:
+- The manifest build version is now checked for greater stability. Major changes to the circus build tool will require all packages be rebuilt.
+
+[Commits](https://github.com/walmartlabs/circus/compare/v3.0.3...v4.0.0)
 
 ## v3.0.3 - March 9th, 2015
 - Ensure all components are loaded for to test exec - 568b098
