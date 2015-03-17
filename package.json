@@ -22,6 +22,7 @@
     "recast": "^0.9.12",
     "rework": "^1.0.1",
     "rework-plugin-url": "^1.0.1",
+    "semver": "^4.3.1",
     "source-map-resolve": "^0.3.1",
     "uglify-js": "^2.4.16",
     "webpack-core": "^0.4.8"

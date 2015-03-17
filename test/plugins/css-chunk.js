@@ -6,7 +6,8 @@ var CssChunkPlugin = require('../../lib/plugins/css-chunk'),
 var expect = require('chai').expect,
     temp = require('temp'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    package = require('../../package.json');
 
 describe('css chunk plugin', function() {
   var outputDir;
@@ -114,6 +115,7 @@ describe('css chunk plugin', function() {
 
       components: {
         zeus: {
+          circusVersion: package.version,
           chunks: [],
           modules: {
             0: {

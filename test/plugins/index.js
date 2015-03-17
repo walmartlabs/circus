@@ -4,7 +4,8 @@ var Pack = require('../../lib'),
 var expect = require('chai').expect,
     temp = require('temp'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    package = require('../../package.json');
 
 describe('pack plugin', function() {
   var outputDir;
@@ -234,6 +235,7 @@ describe('pack plugin', function() {
 
         components: {
           zeus: {
+            circusVersion: package.version,
             chunks: [],
             modules: {
               0: {
@@ -262,6 +264,76 @@ describe('pack plugin', function() {
 
         done();
       });
+    });
+    it('should fail if there is a major version mismatch', function() {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      expect(function() {
+        Pack.config({
+          entry: entry,
+
+          components: {
+            zeus: {
+              circusVersion: '1.0.0',
+              chunks: [],
+              modules: {
+                0: {
+                  chunk: 0,
+                  name: 'foo'
+                },
+                1: {
+                  chunk: 0,
+                  name: 'handlebars/runtime'
+                }
+              },
+              published: {'bundle.js': 'bundle.js'},
+              entry: 'bundle.js'
+            }
+          },
+
+          output: {
+            path: outputDir,
+            externals: {
+              'fixtures/bang': 'handlebars/runtime'
+            }
+          }
+        });
+      }).to.throw(/Component zeus compiled with unsupported version of circus: 1.0.0/);
+    });
+    it('should work with minor version mismatch', function() {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      expect(function() {
+        Pack.config({
+          entry: entry,
+
+          components: {
+            zeus: {
+              circusVersion: package.version.replace(/\d+$/, '9999'),
+              chunks: [],
+              modules: {
+                0: {
+                  chunk: 0,
+                  name: 'foo'
+                },
+                1: {
+                  chunk: 0,
+                  name: 'handlebars/runtime'
+                }
+              },
+              published: {'bundle.js': 'bundle.js'},
+              entry: 'bundle.js'
+            }
+          },
+
+          output: {
+            path: outputDir,
+            externals: {
+              'fixtures/bang': 'handlebars/runtime'
+            }
+          }
+        });
+      }).to.not.throw();
     });
   });
 

@@ -5,7 +5,8 @@ var ChunkDependenciesPlugin = require('../../lib/plugins/chunk-dependencies'),
 var expect = require('chai').expect,
     temp = require('temp'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    package = require('../../package.json');
 
 describe('chunk dependencies plugin', function() {
   var outputDir;
@@ -96,6 +97,7 @@ describe('chunk dependencies plugin', function() {
 
       components: {
         zeus: {
+          circusVersion: package.version,
           chunks: [{js: 'external!', css: 'externaltoo!'}, {js: 'not this!'}],
           modules: {
             0: {
@@ -148,6 +150,7 @@ describe('chunk dependencies plugin', function() {
 
       components: {
         zeus: {
+          circusVersion: package.version,
           chunks: [{js: 'external!', css: 'externaltoo!'}, {js: 'not this!'}],
           modules: {
             0: {
@@ -163,6 +166,7 @@ describe('chunk dependencies plugin', function() {
           entry: 'bundle.js'
         },
         zap: {
+          circusVersion: package.version,
           chunks: [{js: 'external!', css: 'externaltoo!'}, {js: 'not this!'}],
           usedModules: [
             {component: 'zeus', name: 'underscore'}

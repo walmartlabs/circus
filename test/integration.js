@@ -7,7 +7,8 @@ var childProcess = require('child_process'),
     fs = require('fs'),
     temp = require('temp'),
     path = require('path'),
-    phantom = require('phantomjs');
+    phantom = require('phantomjs'),
+    package = require('../package.json');
 
 describe('loader integration', function() {
   var outputDir;
@@ -145,6 +146,9 @@ describe('loader integration', function() {
       ]);
 
       var pack = JSON.parse(fs.readFileSync(outputDir + '/circus.json').toString());
+      expect(pack.circusVersion)
+          .to.exist
+          .to.equal(package.version);
       expect(_.pluck(pack.modules, 'name').sort()).to.eql([
         'circus/bang',
         'circus/packages',
