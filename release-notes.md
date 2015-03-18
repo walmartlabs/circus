@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v4.0.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.1...master)
+
+## v4.0.1 - March 18th, 2015
+- Avoid exception on rebuild of css external files - 5bf6009
+
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.0...v4.0.1)
 
 ## v4.0.0 - March 17th, 2015
 - [#32](https://github.com/walmartlabs/circus/issues/32) - Include circus version in the manifest ([@kpdecker](https://api.github.com/users/kpdecker))
