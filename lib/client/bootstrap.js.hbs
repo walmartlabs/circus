@@ -288,3 +288,13 @@ function cssLoader(componentName, chunkId) {
   {{/if}}
 }
 {{/if}}
+
+
+// Via http://dustindiaz.com/smallest-domready-ever
+function ready(callback) {
+  if (/in/.test(document.readyState)) {
+    setTimeout(function() { ready(callback); }, 9);
+  } else {
+    callback();
+  }
+}
