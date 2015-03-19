@@ -2,7 +2,15 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v4.0.3...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.4...master)
+
+## v4.0.4 - March 19th, 2015
+- Bulletproof component loading in karma tests - 34da0a1
+- Fix race condition in loading of inlined bootstrap - 3bfbbe5
+- Safely handle interactive state in dom ready - 5db0c73
+- Fix component chunk loading for dependencies - b1c14b6
+
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.3...v4.0.4)
 
 ## v4.0.3 - March 19th, 2015
 - Do not throw unsupported error for lower versions - 0330cdc
