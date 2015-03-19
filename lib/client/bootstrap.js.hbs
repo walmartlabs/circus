@@ -42,6 +42,8 @@ function __webpack_components__(componentName, chunkIds, chunkDeps, moreModules)
 };
 window[{{jsonpFunction}}] = __webpack_components__;
 
+// Expose for test init
+__webpack_components__.n = componentNames;
 
 var installedComponents = __webpack_components__.c = {},
     cssSheets = {},
@@ -260,6 +262,7 @@ function loadComponent(componentName, callback, entryLoading) {
     });
   }
 }
+__webpack_components__.lc = loadComponent;
 
 {{#if includeCssLoader}}
 var cssPaths = {{cssChunkNames}};
