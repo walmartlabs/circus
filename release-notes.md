@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v4.0.1...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.2...master)
+
+## v4.0.2 - March 19th, 2015
+- Prevent duplicate scripts prior to DOM ready - 42260ca
+
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.1...v4.0.2)
 
 ## v4.0.1 - March 18th, 2015
 - Avoid exception on rebuild of css external files - 5bf6009
