@@ -300,7 +300,7 @@ describe('pack plugin', function() {
         });
       }).to.throw(/Component zeus compiled with unsupported version of circus: 1.0.0/);
     });
-    it('should work with minor version mismatch', function() {
+    it('should work with patch version mismatch', function() {
       var entry = path.resolve(__dirname + '/../fixtures/packages.js');
 
       expect(function() {
@@ -310,6 +310,42 @@ describe('pack plugin', function() {
           components: {
             zeus: {
               circusVersion: package.version.replace(/\d+$/, '9999'),
+              chunks: [],
+              modules: {
+                0: {
+                  chunk: 0,
+                  name: 'foo'
+                },
+                1: {
+                  chunk: 0,
+                  name: 'handlebars/runtime'
+                }
+              },
+              published: {'bundle.js': 'bundle.js'},
+              entry: 'bundle.js'
+            }
+          },
+
+          output: {
+            path: outputDir,
+            externals: {
+              'fixtures/bang': 'handlebars/runtime'
+            }
+          }
+        });
+      }).to.not.throw();
+    });
+    it('should work with lower minor version mismatch', function() {
+      var entry = path.resolve(__dirname + '/../fixtures/packages.js');
+
+      // Note this test does not do anything when the version is *.0.0
+      expect(function() {
+        Pack.config({
+          entry: entry,
+
+          components: {
+            zeus: {
+              circusVersion: package.version.replace(/\d+\.\d+$/, '0.0'),
               chunks: [],
               modules: {
                 0: {
