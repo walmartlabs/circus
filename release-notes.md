@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v4.0.2...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.3...master)
+
+## v4.0.3 - March 19th, 2015
+- Do not throw unsupported error for lower versions - 0330cdc
+
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.2...v4.0.3)
 
 ## v4.0.2 - March 19th, 2015
 - Prevent duplicate scripts prior to DOM ready - 42260ca
