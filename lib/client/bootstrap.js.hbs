@@ -161,13 +161,14 @@ function ensureChunk(requireFn, componentName, chunkId, callback) {
   // an array means "currently loading".
   if(installed[chunkId] !== undefined) {
     installed[chunkId].push(callback);
-  } else if (scriptName) {
-    // start chunk loading
-    installed[chunkId] = [callback];
-    loadScript(scriptName, chunkId, componentName);
   } else {
-    // The chunk is inlined with the bootstrap
-    callback();
+    // Script is either inlined in the bootstrop or will be loaded in the next step
+    installed[chunkId] = [callback];
+
+    if (scriptName) {
+      // start chunk loading
+      loadScript(scriptName, chunkId, componentName);
+    }
   }
 }
 
@@ -247,7 +248,10 @@ function loadComponent(componentName, callback, entryLoading) {
     };
   }
 
+  // We create this immediately. All callers should utilize the component.e method to
+  // make sure that they wait until the component is functionally loaded.
   installedComponents[componentName] = requireFn;
+
   if (entryLoading) {
     callback(requireFn);
   } else {
