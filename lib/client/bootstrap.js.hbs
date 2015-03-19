@@ -292,7 +292,8 @@ function cssLoader(componentName, chunkId) {
 
 // Via http://dustindiaz.com/smallest-domready-ever
 function ready(callback) {
-  if (/in/.test(document.readyState)) {
+  var readyState = document.readyState;
+  if (readyState === 'uninitialized' || readyState === 'loading') {
     setTimeout(function() { ready(callback); }, 9);
   } else {
     callback();
