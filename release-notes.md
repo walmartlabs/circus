@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v4.0.4...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.1.0...master)
+
+## v4.1.0 - March 24th, 2015
+- Add resource list plugin - b90a602
+- Do not associate linked assets with bootstrap - 5689f9b
+
+[Commits](https://github.com/walmartlabs/circus/compare/v4.0.4...v4.1.0)
 
 ## v4.0.4 - March 19th, 2015
 - Bulletproof component loading in karma tests - 34da0a1
