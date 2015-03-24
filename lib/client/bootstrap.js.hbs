@@ -220,6 +220,8 @@ function loadComponent(componentName, callback, entryLoading) {
   requireFn.ic/*installedChunks*/ = {};
   requireFn.im/*installedModules*/ = {};
 
+  requireFn.ru/*resolveUrl*/ = resolveUrl;
+
   // Extend the require function with our implementation details
   {{#if includeCssLoader}}
     // Expose the css loader
