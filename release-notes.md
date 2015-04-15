@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/circus/compare/v4.1.0...master)
+[Commits](https://github.com/walmartlabs/circus/compare/v4.1.1...master)
+
+## v4.1.1 - April 15th, 2015
+- Relax test file name checks - 5a88b37
+- Fix tests under Webpack 1.8 - d9cba50
+- Fix execution under latest webpack - 8b9d3ac
+
+[Commits](https://github.com/walmartlabs/circus/compare/v4.1.0...v4.1.1)
 
 ## v4.1.0 - March 24th, 2015
 - Add resource list plugin - b90a602
