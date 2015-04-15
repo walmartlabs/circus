@@ -803,12 +803,14 @@ describe('loader integration', function() {
 
           expect(Object.keys(status.compilation.assets).sort()).to.eql([
             '1.vendor.js',
+            '1.vendor.js.map',
             'bootstrap.js',
             'bootstrap.js.map',
             'bundle.js',
             'bundle.js.map',
             'circus.json',
-            'vendor.js'
+            'vendor.js',
+            'vendor.js.map'
           ]);
 
           setTimeout(function() {

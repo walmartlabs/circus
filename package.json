@@ -25,7 +25,7 @@
     "semver": "^4.3.1",
     "source-map-resolve": "^0.3.1",
     "uglify-js": "^2.4.16",
-    "webpack-core": "^0.4.8"
+    "webpack-core": "^0.6.0"
   },
   "devDependencies": {
     "backbone": "^1.1.2",
