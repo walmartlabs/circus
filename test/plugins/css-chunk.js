@@ -159,7 +159,6 @@ describe('css chunk plugin', function() {
       // Verify the file records
       expect(Object.keys(status.compilation.assets).sort()).to.eql([
         '0.bundle.css',
-        '0.bundle.css.map',
         'bootstrap.js',
         'bootstrap.js.map',
         'bundle.js',
