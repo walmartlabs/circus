@@ -201,7 +201,9 @@ describe('css chunk plugin', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       // Verify the file records
-      expect(Object.keys(status.compilation.assets)).to.eql(['bundle.js', '79.0.2e.bundle.7938.css']);
+      var assets = Object.keys(status.compilation.assets);
+      expect(assets[0]).to.match(/bundle.js/);
+      expect(assets[1]).to.match(/[0-9a-f]{2}.0.[0-9a-f]{2}.bundle.[0-9a-f]{4}.css/);
 
       done();
     });
