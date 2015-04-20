@@ -6,7 +6,9 @@ var Chai = require('chai'),
     fs = require('fs'),
     temp = require('temp'),
     path = require('path'),
-    sinon = require('sinon');
+    sinon = require('sinon'),
+
+    SourceMapResolve = require('source-map-resolve');
 
 Chai.use(require('sinon-chai'));
 
@@ -28,6 +30,9 @@ describe('publish', function() {
   });
   afterEach(function() {
     temp.cleanupSync();
+    if (SourceMapResolve.resolveSourceMap.restore) {
+      SourceMapResolve.resolveSourceMap.restore();
+    }
   });
 
   it('should rewrite css asset references', function(done) {
@@ -283,6 +288,68 @@ describe('publish', function() {
       Circus.publish({
         buildDir: outputDir,
         sourceMap: false,
+
+        publish: spy,
+        callback: function(err) {
+          expect(err).to.match(/foo/);
+
+          done();
+        }
+      });
+    });
+  });
+  it('should handle publish errors with source maps', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/require-packages.js');
+
+    webpack(Circus.config({
+      context: path.resolve(__dirname + '/fixtures'),
+      entry: entry,
+      output: {
+        path: outputDir
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      var spy = sinon.spy(function(file, data, callback) {
+        callback(new Error('foo'));
+      });
+
+      Circus.publish({
+        buildDir: outputDir,
+
+        publish: spy,
+        callback: function(err) {
+          expect(err).to.match(/foo/);
+
+          done();
+        }
+      });
+    });
+  });
+  it('should handle resolve source map errors', function(done) {
+    var entry = path.resolve(__dirname + '/fixtures/require-packages.js');
+
+    sinon.stub(SourceMapResolve, 'resolveSourceMap', function(data, path, readFile, callback) {
+      callback(new Error('foo'));
+    });
+
+    webpack(Circus.config({
+      context: path.resolve(__dirname + '/fixtures'),
+      entry: entry,
+      output: {
+        path: outputDir
+      }
+    }), function(err, status) {
+      expect(err).to.not.exist;
+      expect(status.compilation.errors).to.be.empty;
+      expect(status.compilation.warnings).to.be.empty;
+
+      var spy = sinon.spy();
+
+      Circus.publish({
+        buildDir: outputDir,
 
         publish: spy,
         callback: function(err) {
