@@ -419,7 +419,8 @@ describe('pack plugin', function() {
       expect(assets[4]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.css/);
       expect(assets[5]).to.match(/circus.json/);
       expect(assets[6]).to.match(/bundle.js.map/);
-      expect(assets[7]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js.map/);
+      expect(assets[7]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.0\.bundle\.css.map/);
+      expect(assets[8]).to.match(/[0-9a-f]{3}\.[0-9a-f]{4}\.1\.bundle\.js.map/);
 
       // Verify the loader boilerplate
       var output = fs.readFileSync(outputDir + '/bootstrap.js').toString();

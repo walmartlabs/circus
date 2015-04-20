@@ -79,6 +79,7 @@ describe('publish', function() {
           expect(output.published).to.eql({
             'e46d046421eba561b2d062319480f69a.gif': 'e46d046421eba561b2d062319480f69a.foo',
             '0.bundle.css': '0.bundle.foo',
+            '0.bundle.css.map': '0.bundle.css.map',
             'bundle.js': 'bundle.foo',
             'bundle.js.map': 'bundle.js.foo'
           });
