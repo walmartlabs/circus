@@ -136,7 +136,7 @@
     "camelcase": 2,
     "comma-spacing": [2, {"before": false, "after": true}],
     "comma-style": [2, "last"],
-    "consistent-this": [1, "self"],
+    "consistent-this": 0,
     "eol-last": 2,
     "func-names": 0,
     "func-style": [2, "declaration"],
