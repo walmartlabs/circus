@@ -1,3 +1,4 @@
+/*eslint-disable camelcase */
 var ChunkDependenciesPlugin = require('../../lib/plugins/chunk-dependencies'),
     Pack = require('../../lib'),
     webpack = require('webpack');
@@ -48,7 +49,7 @@ describe('chunk dependencies plugin', function() {
           css: [],
           js: [
             {href: 'bootstrap.js', id: 'circus_1'},
-            {href: 'bundle.js', id: 'circus_0'},
+            {href: 'bundle.js', id: 'circus_0'}
           ]
         }
       });
@@ -78,7 +79,7 @@ describe('chunk dependencies plugin', function() {
         circus_0: {
           css: [],
           js: [
-            {href: 'bundle.js', id: 'circus_0'},
+            {href: 'bundle.js', id: 'circus_0'}
           ]
         }
       });
@@ -131,7 +132,7 @@ describe('chunk dependencies plugin', function() {
           js: [
             {href: 'bootstrap.js', id: 'circus_1'},
             {href: 'external!', id: 'zeus_0'},
-            {href: 'bundle.js', id: 'circus_0'},
+            {href: 'bundle.js', id: 'circus_0'}
           ]
         }
       });
@@ -160,7 +161,7 @@ describe('chunk dependencies plugin', function() {
             2: {
               chunk: 0,
               name: 'underscore'
-            },
+            }
           },
           published: {'bundle.js': 'bundle.js'},
           entry: 'bundle.js'
@@ -193,7 +194,7 @@ describe('chunk dependencies plugin', function() {
         test_0: {
           css: [],
           js: [
-            {href: 'bundle.js', id: 'test_0'},
+            {href: 'bundle.js', id: 'test_0'}
           ]
         },
         test_1: {
@@ -203,7 +204,7 @@ describe('chunk dependencies plugin', function() {
           js: [
             {href: 'bundle.js', id: 'test_0'},
             {href: 'external!', id: 'zap_0'},
-            {href: '1.bundle.js', id: 'test_1'},
+            {href: '1.bundle.js', id: 'test_1'}
           ]
         }
       });

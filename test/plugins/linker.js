@@ -91,7 +91,7 @@ describe('linker plugin', function() {
             2: {
               chunk: 0,
               name: 'underscore'
-            },
+            }
           },
           published: {'bundle.js': 'bundle.js'},
           entry: 'bundle.js'
@@ -177,7 +177,7 @@ describe('linker plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
         expect(output).to.match(/moduleExports.*"bak":\d/);
-        // This could be a bit unstable but these magic numbers are checking that the 
+        // This could be a bit unstable but these magic numbers are checking that the
         // bak/bar is not referenced
         expect(output).to.not.match(/linkedModules.*"alias":\[.*\[0,1\]/);
 
@@ -192,7 +192,7 @@ describe('linker plugin', function() {
         // Verify the loader boilerplate
         var output = fs.readFileSync(outputDir + '/bundle.js').toString();
         expect(output).to.match(/moduleExports.*"bak":\d/);
-        // This could be a bit unstable but these magic numbers are checking that the 
+        // This could be a bit unstable but these magic numbers are checking that the
         // bak/bar and bar/bad modules are not referenced
         expect(output).to.not.match(/linkedModules.*"alias":\[.*\[0,[12]\]/);
 

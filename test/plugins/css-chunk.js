@@ -163,7 +163,7 @@ describe('css chunk plugin', function() {
         'bootstrap.js.map',
         'bundle.js',
         'bundle.js.map',
-        'circus.json',
+        'circus.json'
       ]);
 
       // Verify the actual css content

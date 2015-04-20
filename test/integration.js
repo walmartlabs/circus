@@ -66,6 +66,8 @@ describe('loader integration', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       runPhantom(function(err, loaded) {
+        expect(err).to.not.exist;
+
         // Opposite order as the loader injects into the top of head
         expect(loaded.scripts.length).to.eql(3);
         expect(loaded.scripts[0]).to.match(/\/bundle\.js$/);
@@ -103,6 +105,8 @@ describe('loader integration', function() {
       expect(status.compilation.warnings).to.be.empty;
 
       runPhantom(function(err, loaded) {
+        expect(err).to.not.exist;
+
         // Opposite order as the loader injects into the top of head
         expect(loaded.scripts.length).to.eql(3);
         expect(loaded.scripts[0]).to.match(/\/bundle\.js$/);
@@ -165,11 +169,13 @@ describe('loader integration', function() {
 
       pack.root = outputDir;
       Pack.loadConfigs(outputDir, function(err, configs) {
+        expect(err).to.not.exist;
         expect(configs).to.eql({
           $default: pack
         });
 
         runPhantom(function(err, loaded) {
+          expect(err).to.not.exist;
           expect(loaded.log).to.eql([
             '_: true Handlebars: true'
           ]);
@@ -224,11 +230,13 @@ describe('loader integration', function() {
 
       pack.root = outputDir;
       Pack.loadConfigs(outputDir, function(err, configs) {
+        expect(err).to.not.exist;
         expect(configs).to.eql({
           $default: pack
         });
 
         runPhantom(function(err, loaded) {
+          expect(err).to.not.exist;
           expect(loaded.log).to.eql([
             '_: true Handlebars: true'
           ]);
@@ -281,11 +289,13 @@ describe('loader integration', function() {
 
       pack.root = outputDir;
       Pack.loadConfigs(outputDir, function(err, configs) {
+        expect(err).to.not.exist;
         expect(configs).to.eql({
           $default: pack
         });
 
         runPhantom(function(err, loaded) {
+          expect(err).to.not.exist;
           expect(loaded.log).to.eql([
             '_: true Handlebars: true'
           ]);
@@ -324,7 +334,7 @@ describe('loader integration', function() {
         'bootstrap.js.map',
         'bundle.js',
         'bundle.js.map',
-        'circus.json',
+        'circus.json'
       ]);
 
       // Verify the actual css content
@@ -436,6 +446,8 @@ describe('loader integration', function() {
           expect(output).to.not.match(/foo.js/);
 
           runPhantom(function(err, loaded) {
+            expect(err).to.not.exist;
+
             expect(loaded.scripts.length).to.equal(4);
             expect(loaded.scripts[0]).to.match(/bundle.js$/);
             expect(loaded.scripts[1]).to.match(/vendor.js$/);
@@ -543,6 +555,8 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           runPhantom(function(err, loaded) {
+            expect(err).to.not.exist;
+
             expect(loaded.scripts.length).to.equal(4);
             expect(loaded.scripts[0]).to.match(/bundle.js$/);
             expect(loaded.scripts[1]).to.match(/1\.bundle.js$/);
@@ -607,6 +621,8 @@ describe('loader integration', function() {
           expect(output).to.not.match(/foo.js/);
 
           runPhantom(function(err, loaded) {
+            expect(err).to.not.exist;
+
             expect(loaded.scripts.length).to.equal(4);
             expect(loaded.scripts[0]).to.match(/bundle.js$/);
             expect(loaded.scripts[1]).to.match(/vendor.js$/);
@@ -671,6 +687,8 @@ describe('loader integration', function() {
           expect(output).to.not.match(/foo.js/);
 
           runPhantom(function(err, loaded) {
+            expect(err).to.not.exist;
+
             expect(loaded.scripts.length).to.equal(4);
             expect(loaded.scripts[0]).to.match(/bundle.js$/);
             expect(loaded.scripts[1]).to.match(/vendor.js$/);
@@ -738,6 +756,8 @@ describe('loader integration', function() {
           expect(output).to.not.match(/foo.js/);
 
           runPhantom(function(err, loaded) {
+            expect(err).to.not.exist;
+
             expect(loaded.scripts.length).to.equal(4);
             expect(loaded.scripts[0]).to.match(/bundle.js$/);
             expect(loaded.scripts[1]).to.match(/vendor.js$/);
@@ -868,6 +888,8 @@ describe('loader integration', function() {
           expect(status.compilation.warnings).to.be.empty;
 
           runPhantom(function(err, loaded) {
+            expect(err).to.not.exist;
+
             expect(loaded.scripts.length).to.equal(4);
             expect(loaded.scripts[0]).to.match(/bundle.js$/);
             expect(loaded.scripts[1]).to.match(/1\.vendor.js$/);
@@ -876,7 +898,7 @@ describe('loader integration', function() {
 
             expect(loaded.log).to.eql([
               'App: _: true Handlebars: true Vendor: true',
-              '_: true Handlebars: true',
+              '_: true Handlebars: true'
             ]);
 
             done();
@@ -942,6 +964,7 @@ describe('loader integration', function() {
         config2.root = outputDir + '/2';
 
         Pack.loadConfigs(outputDir, function(err, configs) {
+          expect(err).to.not.exist;
           expect(configs).to.eql({
             1: config1,
             2: config2

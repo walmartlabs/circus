@@ -1,0 +1,13 @@
+{
+  "globals": {
+    "expect": true
+  },
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "no-path-concat": 0,
+
+    "no-unused-expressions": 0      // Assert statements trigger this
+  }
+}

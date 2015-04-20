@@ -1,5 +1,4 @@
-var _ = require('lodash'),
-    Circus = require('../lib'),
+var Circus = require('../lib'),
     webpack = require('webpack');
 
 var Chai = require('chai'),
@@ -151,7 +150,7 @@ describe('publish', function() {
     });
   });
 
-  describe('source map', function () {
+  describe('source map', function() {
     it('should provide source map locally', function(done) {
       var entry = path.resolve(__dirname + '/fixtures/require-packages.js');
 

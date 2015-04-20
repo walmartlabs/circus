@@ -1,9 +1,9 @@
 module.exports = {
   source: [
-    'lib/**/*.js',
+    'lib/**/*.js'
   ],
   gulp: [
-    'gulp/**/*.js',
+    'gulp/**/*.js'
   ],
   tests: [
     'test/**/*.js',

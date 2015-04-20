@@ -4,12 +4,12 @@ var gulp = require('gulp'),
     istanbul = require('gulp-istanbul'),
     mocha = require('gulp-mocha');
 
-gulp.task('test', function() {
+gulp.task('test', ['lint'], function() {
   return gulp.src(config.tests, {read: false})
       .pipe(mocha());
 });
 
-gulp.task('coverage', function(done) {
+gulp.task('coverage', ['lint'], function(done) {
   gulp.src(config.source)
     .pipe(istanbul())
     .on('finish', function() {
