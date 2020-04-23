@@ -19,7 +19,7 @@
     "handlebars": "^2.0.0",
     "loader-utils": "^0.2.5",
     "lodash": "^2.4.1",
-    "recast": "^0.9.12",
+    "recast": "^0.18.8",
     "rework": "^1.0.1",
     "rework-plugin-url": "^1.0.1",
     "semver": "^4.3.1",
